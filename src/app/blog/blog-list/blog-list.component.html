@@ -1,0 +1,8 @@
+<ul>
+    @for (article of articles(); track article.id) {
+        <li>
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.content }}</p>
+        </li>
+    }
+</ul>
