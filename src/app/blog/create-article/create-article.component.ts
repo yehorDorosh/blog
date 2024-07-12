@@ -24,7 +24,7 @@ export class CreateArticleComponent {
     console.log(this.form.value);
 
     const subscription = this.httpClient.post(
-        `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken()}`,
+        `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
         this.form.value
       ).subscribe({
       next: (response) => {

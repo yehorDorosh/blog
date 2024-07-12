@@ -28,14 +28,14 @@ export class UserService {
     this.startTokenCheckInterval();
   }
 
-  getToken = computed(() => {
+  get getToken() {
     const user = this.user;
     if (user) {
       return user.idToken;
     } else {
       return '';
     }
-  })
+  }
 
   logout() {
     this.user = null;
