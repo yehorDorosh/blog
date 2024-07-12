@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../user/user.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-create-article',
@@ -23,7 +24,7 @@ export class CreateArticleComponent {
     console.log(this.form.value);
 
     const subscription = this.httpClient.post(
-        `https://travel-blog-193d4-default-rtdb.europe-west1.firebasedatabase.app/blog.json?auth=${this.userService.getToken()}`,
+        `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken()}`,
         this.form.value
       ).subscribe({
       next: (response) => {

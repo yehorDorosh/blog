@@ -22,7 +22,6 @@ export class UserService {
   }
 
   setUser(user: User) {
-    user.expiresIn = '10'
     this.user = user;
     localStorage.setItem('user', JSON.stringify(user));
    this.setLogoutDate(user); 

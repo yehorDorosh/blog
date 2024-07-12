@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../user.service';
 import { User } from '../user.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-signup-form',
@@ -22,7 +23,7 @@ export class SignupFormComponent {
 
   onSubmit() {
     const subscription = this.httpClient.post<User>(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCd83hTFxcsxZvT-EpCrzi9HTQM9kfgW8s',
+        `${environment.authApiUrlRegister}?key=${environment.firebaseApiKey}`,
         {
           email: this.form.value.email,
           password: this.form.value.password,
