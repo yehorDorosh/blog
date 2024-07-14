@@ -37,7 +37,11 @@
             "prerender": true,
             "ssr": {
               "entry": "server.ts"
-            }
+            },
+            "allowedCommonJsDependencies": [
+              "multer",
+              "fast-xml-parser"
+            ]
           },
           "configurations": {
             "production": {
@@ -76,7 +80,8 @@
               "buildTarget": "blog:build:production"
             },
             "development": {
-              "buildTarget": "blog:build:development"
+              "buildTarget": "blog:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

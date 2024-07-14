@@ -4,4 +4,10 @@ export const environment = {
     authApiUrlRegister: '',
     firebaseApiKey: '',
     realBaseApiUrl: '',
+    r2: {
+        accessKeyId: '',
+        secretAccessKey: '',
+        endpoint: '',
+        bucket: '',
+    }
 };

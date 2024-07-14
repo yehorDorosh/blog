@@ -4,6 +4,11 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
+import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import multer from 'multer';
+import fs from 'fs';
+import { Readable } from 'stream';
+import { environment } from './src/environments/environment';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -23,6 +28,77 @@ export function app(): express.Express {
   server.get('*.*', express.static(browserDistFolder, {
     maxAge: '1y'
   }));
+
+
+  // Cloudflare R2 Storage
+  const s3 = new S3Client({
+    region: "auto",
+    credentials: {
+      accessKeyId: environment.r2.accessKeyId,
+      secretAccessKey: environment.r2.secretAccessKey,
+    },
+    endpoint: environment.r2.endpoint,
+  });
+
+  // Configure multer for file handling
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname);
+    }
+  });
+
+  const upload = multer({ storage: storage });
+
+  // API Endpoints
+  // Endpoint to upload an image
+  server.post('/api/upload-image', upload.single('image'), async (req, res, next) => {
+    if (!req.file) {
+      return res.status(422).send('No file uploaded.');
+    }
+
+    const fileContent = fs.readFileSync(req.file.path);
+
+    const command = new PutObjectCommand({
+      Bucket: environment.r2.bucket,
+      Key: req.file.originalname,
+      Body: fileContent,
+      ContentType: req.file.mimetype,
+    });
+
+    try {
+      const response = await s3.send(command);
+      fs.unlink(req.file.path, (err) => {next(err)});
+      return res.send(response);
+    } catch (err) {
+      console.error('Error uploading file:', err);
+      return res.status(500).send('Error uploading file.');
+    }
+  });
+
+  server.get('/api/image/:key', async (req, res) => {
+    const command = new GetObjectCommand({
+      Bucket: 'blog',
+      Key: req.params.key,
+      
+    });
+  
+    try {
+      const { Body, ContentType } = await s3.send(command);
+  
+      if (Body instanceof Readable) {
+        res.writeHead(200, { 'Content-Type': ContentType || 'application/octet-stream' });
+        Body.pipe(res);
+      } else {
+        res.status(500).send('Error fetching image');
+      }
+    } catch (err) {
+      console.error('Error fetching image:', err);
+      res.status(500).send('Error fetching image');
+    }
+  });
 
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {

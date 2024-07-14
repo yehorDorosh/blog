@@ -21,9 +21,13 @@ export class BlogListComponent implements OnInit {
     this.loading.set(true);
     const subscription = this.httpClient.get<BlogArticleResponse>(`${environment.realBaseApiUrl}/blog.json`).subscribe({
       next: (response) => {
-        this.articles.set(Object.keys(response).map(id => {
-          return { id, ...response[id] };
-        }))
+        if (!response) {
+          this.articles.set([])
+        } else {
+          this.articles.set(Object.keys(response).map(id => {
+            return { id, ...response[id] };
+          }));
+        }
       },
       error: (error) => {
         console.error(error);

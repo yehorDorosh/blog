@@ -14,18 +14,47 @@ import { environment } from '../../../environments/environment';
 export class CreateArticleComponent {
   private httpClient = inject(HttpClient);
   private userService = inject(UserService);
+  private selectedFile: File | null = null;
 
   form = new FormGroup({
     title: new FormControl(''),
-    content: new FormControl('')
+    content: new FormControl(''),
   });
 
-  onSubmit() {
-    console.log(this.form.value);
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
 
-    const subscription = this.httpClient.post(
+  onSubmit() {
+    const formData = new FormData();
+    formData.append('image', this.selectedFile!);
+
+    const subscriptionServer = this.httpClient.post(
+      `/api/upload-image`,
+      formData,
+    ).subscribe({
+    next: (response) => {
+      console.log(response);
+    },
+    error: (error) => {
+      console.error(error);
+    },
+    complete: () => {
+      subscriptionServer.unsubscribe();
+    }
+  });
+
+    return;
+    const subscriptionDB = this.httpClient.post(
         `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
-        this.form.value
+        {
+          title: this.form.value.title,
+          content: this.form.value.content,
+          image: this.selectedFile?.name
+        }
       ).subscribe({
       next: (response) => {
         console.log(response);
@@ -34,7 +63,7 @@ export class CreateArticleComponent {
         console.error(error);
       },
       complete: () => {
-        subscription.unsubscribe();
+        subscriptionDB.unsubscribe();
       }
     });
   }

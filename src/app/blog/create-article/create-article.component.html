@@ -7,5 +7,9 @@
         <label for="content">Content</label>
         <textarea class="form-control" name="content" formControlName="content"></textarea>
     </div>
+    <div class="form-group">
+        <label for="author">Image</label>
+        <input type="file" name="image" (change)="onFileSelected($event)" />
+    </div>
     <button type="submit" class="btn btn-primary">Create article</button>
 </form>
