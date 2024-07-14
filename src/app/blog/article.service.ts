@@ -46,6 +46,7 @@ export class ArticleService {
       },
       error: (error) => {
         console.error(error);
+        this.deleteArticle(articleId);
       },
       complete: () => {
         subscription.unsubscribe();
@@ -63,10 +64,11 @@ export class ArticleService {
       }
     ).subscribe({
       next: (response) => {
-        console.log('Add image name to article', response);
+        console.log('Save image name to article', response);
       },
       error: (error) => {
         console.error(error);
+        this.deleteArticle(articleId, imageName);
       },
       complete: () => {
         subscription.unsubscribe();
@@ -74,13 +76,13 @@ export class ArticleService {
     });
   }
 
-  deleteArticle(articleId: string, imageName: string) {
+  deleteArticle(articleId: string, imageName?: string) {
     const subscription = this.httpClient.delete<null>(
       `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`
     ).subscribe({
       next: (response) => {
         console.log('Delete article', response);
-        this.deleteImage(imageName);
+        if(imageName) this.deleteImage(imageName);
       },
       error: (error) => {
         console.error(error);

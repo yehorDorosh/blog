@@ -35,7 +35,8 @@ export class SignupFormComponent {
           email: response.email,
           idToken: response.idToken,
           expiresIn: response.expiresIn,
-          localId: response.localId
+          localId: response.localId,
+          logOutDate: null
         });
       },
       error: (error) => {

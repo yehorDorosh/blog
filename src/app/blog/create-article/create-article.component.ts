@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ArticleService } from '../article.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-article',
@@ -14,8 +15,12 @@ export class CreateArticleComponent {
   private articleService = inject(ArticleService);
 
   form = new FormGroup({
-    title: new FormControl(''),
-    content: new FormControl(''),
+    title: new FormControl('', { 
+      validators: [Validators.required],
+     }),
+    content: new FormControl('', {
+      validators: [Validators.required],
+    }),
   });
 
   onFileSelected(event: Event) {
@@ -26,9 +31,12 @@ export class CreateArticleComponent {
   }
 
   onSubmit() {
+    if (this.form.invalid || !this.selectedFile) {
+      return;
+    }
     this.articleService.createArticle({
-      title: this.form.get('title')!.value!,
-      content: this.form.get('content')!.value!,
+      title: this.form.value.title!,
+      content: this.form.value.content!,
       pageheroImg: this.selectedFile!,
     });
   }

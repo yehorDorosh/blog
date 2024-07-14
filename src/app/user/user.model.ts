@@ -3,4 +3,5 @@ export interface User {
     expiresIn: string;
     idToken: string;
     localId: string;
+    logOutDate: null | Date;
 }

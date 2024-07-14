@@ -12,19 +12,23 @@ export class UserService {
 
   constructor() {
     afterNextRender(() => {
-      const user = localStorage.getItem('user');
-      if (user) {
-        this.user = JSON.parse(user);
-        this.setLogoutDate(this.user!);
-        this.startTokenCheckInterval();
+      const userString = localStorage.getItem('user');
+      if (userString) {
+        this.user = JSON.parse(userString);
+        if (this.user) {
+          this.user.logOutDate = new Date(this.user.logOutDate + '');
+          this.logoutDate = this.user.logOutDate;
+          this.startTokenCheckInterval();
+        }
       }
     });
   }
 
   setUser(user: User) {
     this.user = user;
+    this.setLogoutDate(user);
+    user.logOutDate = this.logoutDate;
     localStorage.setItem('user', JSON.stringify(user));
-   this.setLogoutDate(user); 
     this.startTokenCheckInterval();
   }
 
