@@ -1,9 +1,5 @@
 <ul>
     @for (article of articles(); track article.id) {
-        <li>
-            <h2>{{ article.title }}</h2>
-            <p>{{ article.content }}</p>
-            <img [src]="article.img.pagehero" alt="{{ article.title }}" />
-        </li>
+        <app-article-preview [article]="article" />
     }
 </ul>

@@ -4,7 +4,7 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
-import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import multer from 'multer';
 import fs from 'fs';
 import { Readable } from 'stream';
@@ -84,7 +84,6 @@ export function app(): express.Express {
     const command = new GetObjectCommand({
       Bucket: 'blog',
       Key: `${req.params.id}/${req.params.key}`,
-      
     });
   
     try {
@@ -99,6 +98,21 @@ export function app(): express.Express {
     } catch (err) {
       console.error('Error fetching image:', err);
       res.status(500).send('Error fetching image');
+    }
+  });
+
+  server.delete('/api/image/:id/:key', async (req, res) => {
+    const command = new DeleteObjectCommand({
+      Bucket: 'blog',
+      Key: `${req.params.id}/${req.params.key}`,
+    });
+  
+    try {
+      const response = await s3.send(command);
+      res.send(response);
+    } catch (err) {
+      console.error('Error deleting image:', err);
+      res.status(500).send('Error deleting image');
     }
   });
 

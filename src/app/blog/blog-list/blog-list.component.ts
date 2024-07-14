@@ -2,11 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { type BlogArticleResponse, type BlogArticle } from '../blog.model';
+import { ArticlePreviewComponent } from './article-preview/article-preview.component';
 
 @Component({
   selector: 'app-blog-list',
   standalone: true,
-  imports: [],
+  imports: [ArticlePreviewComponent],
   templateUrl: './blog-list.component.html',
   styleUrl: './blog-list.component.scss'
 })
