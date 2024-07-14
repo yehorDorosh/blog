@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../../user/user.service';
 import { environment } from '../../../environments/environment';
+import { ImageType, type FireBaseResponse } from '../blog.model';
 
 @Component({
   selector: 'app-create-article',
@@ -29,41 +30,64 @@ export class CreateArticleComponent {
   }
 
   onSubmit() {
-    const formData = new FormData();
-    formData.append('image', this.selectedFile!);
-
-    const subscriptionServer = this.httpClient.post(
-      `/api/upload-image`,
-      formData,
-    ).subscribe({
-    next: (response) => {
-      console.log(response);
-    },
-    error: (error) => {
-      console.error(error);
-    },
-    complete: () => {
-      subscriptionServer.unsubscribe();
-    }
-  });
-
-    return;
-    const subscriptionDB = this.httpClient.post(
+    const subscriptionDB = this.httpClient.post<FireBaseResponse>(
         `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
         {
           title: this.form.value.title,
           content: this.form.value.content,
-          image: this.selectedFile?.name
         }
       ).subscribe({
       next: (response) => {
-        console.log(response);
+        console.log('Save article', response);
+        this.uploadImage(response.name);
       },
       error: (error) => {
         console.error(error);
       },
       complete: () => {
         subscriptionDB.unsubscribe();
+      }
+    });
+  }
+
+  private uploadImage(articleId: string) {
+    const formData = new FormData();
+    formData.append('image', this.selectedFile!);
+
+    const subscription = this.httpClient.post(
+      `/api/upload-image?id=${articleId}`,
+      formData,
+    ).subscribe({
+      next: (response) => {
+        console.log('Upload image', response);
+        this.saveImageName(articleId, 'pagehero', this.selectedFile!.name);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        subscription.unsubscribe();
+      }
+    });
+  }
+
+  private saveImageName(articleId: string, imageType: ImageType, imageName: string) {
+    const subscription = this.httpClient.patch(
+      `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
+      {
+        img: {
+          [imageType]: `/api/image/${articleId}/${imageName}`,
+        }
+      }
+    ).subscribe({
+      next: (response) => {
+        console.log('Add image name to article', response);
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        subscription.unsubscribe();
       }
     });
   }

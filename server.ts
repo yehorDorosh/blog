@@ -55,7 +55,9 @@ export function app(): express.Express {
   // API Endpoints
   // Endpoint to upload an image
   server.post('/api/upload-image', upload.single('image'), async (req, res, next) => {
-    if (!req.file) {
+    const articleId = req.query['id'] as string;
+  
+    if (!req.file || !articleId) {
       return res.status(422).send('No file uploaded.');
     }
 
@@ -63,7 +65,7 @@ export function app(): express.Express {
 
     const command = new PutObjectCommand({
       Bucket: environment.r2.bucket,
-      Key: req.file.originalname,
+      Key: `${articleId}/${req.file.originalname}`,
       Body: fileContent,
       ContentType: req.file.mimetype,
     });
@@ -78,10 +80,10 @@ export function app(): express.Express {
     }
   });
 
-  server.get('/api/image/:key', async (req, res) => {
+  server.get('/api/image/:id/:key', async (req, res) => {
     const command = new GetObjectCommand({
       Bucket: 'blog',
-      Key: req.params.key,
+      Key: `${req.params.id}/${req.params.key}`,
       
     });
   

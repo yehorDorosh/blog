@@ -3,6 +3,7 @@
         <li>
             <h2>{{ article.title }}</h2>
             <p>{{ article.content }}</p>
+            <img [src]="article.img.pagehero" alt="{{ article.title }}" />
         </li>
     }
 </ul>
