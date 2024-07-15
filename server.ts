@@ -41,6 +41,10 @@ export function app(): express.Express {
   });
 
   // Configure multer for file handling
+  // create folder if it doesn't exist
+  if (!fs.existsSync('uploads')) {
+    fs.mkdirSync('uploads');
+  }
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/');
