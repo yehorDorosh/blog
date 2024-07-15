@@ -1,0 +1,8 @@
+
+@if (formSwitcher() === 'signup') {
+    <app-signup-form />
+} @else {
+    <app-login-form />
+}
+
+<button (click)="onSwitchForm()">Switch to {{ formSwitcher() === 'signup' ? 'login' : 'signup' }}</button>

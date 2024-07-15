@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { UserService } from '../user.service';
 import { User } from '../user.model';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -15,6 +16,7 @@ import { environment } from '../../../environments/environment';
 export class LoginFormComponent {
   private httpClient = inject(HttpClient);
   private userService = inject(UserService);
+  private router = inject(Router);
 
   form = new FormGroup({
     email: new FormControl(''),
@@ -38,6 +40,7 @@ export class LoginFormComponent {
           localId: response.localId,
           logOutDate: null
         });
+        this.router.navigate(['/']);
       },
       error: (error) => {
         console.error(error);
