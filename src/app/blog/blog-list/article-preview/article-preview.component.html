@@ -1,6 +1,5 @@
 <li>
-    <button (click)="onDeleteArticle()">Delete</button>
-    <h2>{{ article().title }}</h2>
-    <p>{{ article().content }}</p>
-    <img [src]="article().img.pagehero" alt="{{ article().title }}" />
+    <a [routerLink]="['/blog', article().id]">
+        <h2>{{ article().title }}</h2>
+    </a>
 </li>

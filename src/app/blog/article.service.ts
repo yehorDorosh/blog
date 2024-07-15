@@ -1,18 +1,52 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal, DestroyRef, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { UserService } from '../user/user.service';
-import { type ImageType, type FireBaseResponse } from './blog.model';
+import { type ImageType, type FireBaseResponse, type BlogArticle, type BlogArticleResponse } from './blog.model';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ArticleService {
+export class ArticleService implements OnInit {
   private httpClient = inject(HttpClient);
   private userService = inject(UserService);
+  private destroyRef = inject(DestroyRef);
+
+  private getArticlesSubscription!: Subscription;
+
+  articles = signal<BlogArticle[]>([]);
+
+  ngOnInit() {
+    this.getArticles();
+    this.destroyRef.onDestroy(() => {
+      this.getArticlesSubscription.unsubscribe();
+    });
+  }
+
+  getArticles() {
+    this.getArticlesSubscription = this.httpClient.get<BlogArticleResponse>(`${environment.realBaseApiUrl}/blog.json`)
+    .subscribe({
+      next: (response) => {
+        if (!response) {
+          this.articles.set([])
+        } else {
+          this.articles.set(Object.keys(response).map(id => {
+            return { id, ...response[id] };
+          }));
+        }
+      },
+      error: (error) => {
+        console.error(error);
+      },
+      complete: () => {
+        console.log('Get articles completed.');
+      }
+    });
+  }
 
   createArticle(data: { title: string, content: string, pageheroImg: File }) {
-    const subscriptionDB = this.httpClient.post<FireBaseResponse>(
+    const subscription = this.httpClient.post<FireBaseResponse>(
       `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
       {
         title: data.title,
@@ -27,7 +61,7 @@ export class ArticleService {
       console.error(error);
     },
     complete: () => {
-      subscriptionDB.unsubscribe();
+      subscription.unsubscribe();
     }
   });
   }
@@ -65,6 +99,7 @@ export class ArticleService {
     ).subscribe({
       next: (response) => {
         console.log('Save image name to article', response);
+        this.getArticles();
       },
       error: (error) => {
         console.error(error);
@@ -98,6 +133,7 @@ export class ArticleService {
       `${imageName}`).subscribe({
       next: (response) => {
         console.log('Remove image.', response);
+        this.getArticles();
       },
       error: (error) => {
         console.error(error);
@@ -107,4 +143,6 @@ export class ArticleService {
       }
     });
   }
+
+  
 }

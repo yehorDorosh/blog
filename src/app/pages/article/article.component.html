@@ -1,1 +1,8 @@
-<p>article works!</p>
+<article>
+    @if (article()) {
+        <button (click)="onDeleteArticle()">Delete</button>
+        <h2>{{ article()!.title }}</h2>
+        <p>{{ article()!.content }}</p>
+        <img [src]="article()!.img.pagehero" alt="{{ article()!.title }}" />
+    }
+</article> 

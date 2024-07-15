@@ -1,8 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { type BlogArticleResponse, type BlogArticle } from '../blog.model';
+import { Component, OnInit, inject } from '@angular/core';
 import { ArticlePreviewComponent } from './article-preview/article-preview.component';
+import { ArticleService } from '../article.service';
 
 @Component({
   selector: 'app-blog-list',
@@ -12,35 +10,10 @@ import { ArticlePreviewComponent } from './article-preview/article-preview.compo
   styleUrl: './blog-list.component.scss'
 })
 export class BlogListComponent implements OnInit {
-  private httpClient = inject(HttpClient);
-  private destroyRef = inject(DestroyRef);
-
-  loading = signal(false);
-  articles = signal<BlogArticle[]>([]);
+  articleService = inject(ArticleService);
 
   ngOnInit(): void {
-    this.loading.set(true);
-    const subscription = this.httpClient.get<BlogArticleResponse>(`${environment.realBaseApiUrl}/blog.json`).subscribe({
-      next: (response) => {
-        if (!response) {
-          this.articles.set([])
-        } else {
-          this.articles.set(Object.keys(response).map(id => {
-            return { id, ...response[id] };
-          }));
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        this.loading.set(false);
-      }
-    });
-
-    this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
-    });
+    this.articleService.getArticles();
   }
 
 }
