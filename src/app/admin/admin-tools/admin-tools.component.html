@@ -1,0 +1,7 @@
+<div>
+    @if (userService.isLoggedIn() && paramNodeId()) {
+        <a [routerLink]="['/blog', paramNodeId()]">Preview</a>
+        <a [routerLink]="['/admin', 'node', paramNodeId()]">Edit</a>
+        <button (click)="onDeleteArticle()">Delete</button>
+    }
+</div>

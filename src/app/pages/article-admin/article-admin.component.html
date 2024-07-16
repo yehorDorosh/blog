@@ -1,7 +1,7 @@
-<app-header [paramNodeId]="paramArticleId()" />
+<app-header [paramNodeId]="paramNodeId()" />
 
 <article>
-    @if (article()) { 
+    @if (article()) {
         <h2>{{ article()!.title }}</h2>
         <p>{{ article()!.content }}</p>
         <img [src]="article()!.img.pagehero" alt="{{ article()!.title }}" />

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from '../user/user.service';
 import { type ImageType, type FireBaseResponse, type BlogArticle, type BlogArticleResponse } from './blog.model';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class ArticleService implements OnInit {
   private httpClient = inject(HttpClient);
   private userService = inject(UserService);
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   private getArticlesSubscription!: Subscription;
 
@@ -99,6 +101,7 @@ export class ArticleService implements OnInit {
     ).subscribe({
       next: (response) => {
         console.log('Save image name to article', response);
+        this.router.navigate(['blog', articleId]);
         this.getArticles();
       },
       error: (error) => {

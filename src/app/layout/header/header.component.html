@@ -1,8 +1,10 @@
 <header>
-    <a routerLink="/user">Admin Panel</a>
+    <a routerLink="/">Home</a>
+    <a routerLink="/user">Login/SignUp</a>
     @if (userService.isLoggedIn()) {
         <button (click)="onLogout()">Logout</button>
-    } @else {
-        
+        <a routerLink="/admin">Admin Panel</a>
     }
 </header>
+
+<app-admin-tools [paramNodeId]="paramNodeId()" />
