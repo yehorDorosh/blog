@@ -1,9 +1,14 @@
 <app-header [paramNodeId]="paramNodeId()" />
 
+@if (article()) {
+
+<app-article-editor [article]="article()!" />
+
 <article>
-    @if (article()) {
-        <h2>{{ article()!.title }}</h2>
-        <p>{{ article()!.content }}</p>
-        <img [src]="article()!.img.pagehero" alt="{{ article()!.title }}" />
-    }
-</article> 
+    
+    <h2>{{ article()!.title }}</h2>
+    <p>{{ article()!.content }}</p>
+    <img [src]="article()!.img.pagehero" alt="{{ article()!.title }}" />
+    
+</article>
+}
