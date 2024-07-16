@@ -2,11 +2,12 @@ import { Component, input, inject, OnInit, signal } from '@angular/core';
 import { type BlogArticle } from '../../blog/blog.model'
 import { ArticleService } from '../../blog/article.service';
 import { Router } from '@angular/router';
+import { HeaderComponent } from "../../layout/header/header.component";
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [],
+  imports: [HeaderComponent],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss'
 })

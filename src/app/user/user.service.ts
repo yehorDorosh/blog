@@ -1,4 +1,5 @@
-import { Injectable, afterNextRender, computed, signal } from '@angular/core';
+import { Injectable, afterNextRender, inject, computed, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { type User } from './user.model';
 
@@ -6,26 +7,33 @@ import { type User } from './user.model';
   providedIn: 'root'
 })
 export class UserService {
-  user: User | null = null;
-  logoutDate: Date | null = null;
+  private router = inject(Router);
+
+  private logoutDate: Date | null = null;
   private intervalId: NodeJS.Timeout | null = null;
+
+  user = signal<User | null>(null);
 
   constructor() {
     afterNextRender(() => {
       const userString = localStorage.getItem('user');
       if (userString) {
-        this.user = JSON.parse(userString);
-        if (this.user) {
-          this.user.logOutDate = new Date(this.user.logOutDate + '');
-          this.logoutDate = this.user.logOutDate;
+        const user = JSON.parse(userString) as User;
+        if (user && user.logOutDate) {
+          this.user.set({...user, logOutDate: new Date(user.logOutDate)});
+          this.logoutDate = new Date(user.logOutDate);
           this.startTokenCheckInterval();
         }
       }
-    });
+    })
   }
 
+  isLoggedIn = computed(() => {
+    return !!this.user();
+  });
+
   setUser(user: User) {
-    this.user = user;
+    this.user.set(user);
     this.setLogoutDate(user);
     user.logOutDate = this.logoutDate;
     localStorage.setItem('user', JSON.stringify(user));
@@ -33,7 +41,7 @@ export class UserService {
   }
 
   get getToken() {
-    const user = this.user;
+    const user = this.user();
     if (user) {
       return user.idToken;
     } else {
@@ -42,14 +50,16 @@ export class UserService {
   }
 
   logout() {
-    this.user = null;
+    this.user.set(null);
     localStorage.removeItem('user');
     this.clearInterval();
+    this.router.navigate(['/']);
   }
 
   private startTokenCheckInterval() {
     this.clearInterval();
     this.intervalId = setInterval(() => {
+      // console.log((+this.logoutDate! - +new Date())/1000/60);
       if (this.logoutDate && new Date() >= this.logoutDate) {
         console.log('Token expired. Logging out...');
         this.logout();
@@ -67,5 +77,4 @@ export class UserService {
   private setLogoutDate(user: User) {
     this.logoutDate = new Date(new Date().getTime() + +user.expiresIn * 1000);
   }
-
 }

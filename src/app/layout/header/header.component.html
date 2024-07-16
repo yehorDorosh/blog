@@ -1,0 +1,8 @@
+<header>
+    <a routerLink="/user">Admin Panel</a>
+    @if (userService.isLoggedIn()) {
+        <button (click)="onLogout()">Logout</button>
+    } @else {
+        
+    }
+</header>
