@@ -4,6 +4,7 @@ export interface BlogArticle {
   content: string;
   img: {
     pageHero: string;
+    editorImages: string[];
   };
 }
 

@@ -6,6 +6,7 @@ import { BlogArticle } from '../blog.model';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-article-editor',
@@ -60,8 +61,7 @@ export class ArticleEditorComponent implements OnInit {
       },
     ],
     uploadUrl: 'v1/image',
-    upload: (file: File) =>
-      this.articleService.uploadImageEditor('common', file),
+    upload: this.uploadEditorImage.bind(this),
     uploadWithCredentials: false,
     sanitize: false,
     toolbarPosition: 'top',
@@ -70,22 +70,41 @@ export class ArticleEditorComponent implements OnInit {
 
   ngOnInit() {}
 
+  uploadEditorImage(file: File) {
+    const id = this.articleService.articleId();
+    if (!id) return throwError(() => new Error('Article ID not found'));
+    return this.articleService.uploadImageEditor(id, file);
+  }
+
   onPageHeroSelected(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
+    const id = this.articleService.articleId();
+    if (input.files && input.files.length > 0 && id) {
       this.pageHeroFileName = input.files[0].name;
-      const id = this.articleService.articleId;
       this.articleService.uploadImage(id, input.files[0]);
     }
   }
 
   onSubmit() {
-    const id = this.articleService.articleId;
+    const id = this.articleService.articleId();
+    if (!id) return;
     this.articleService.saveArticle(
       id,
       this.title,
       this.content,
       this.pageHeroFileName
     );
+  }
+
+  onCancel() {
+    const id = this.articleService.articleId();
+    if (this.pageHeroFileName)
+      this.articleService.deleteImage(
+        `/api/image/${id}/${this.pageHeroFileName}`
+      );
+    this.articleService.editorImages.forEach((image) => {
+      this.articleService.deleteImage(image);
+    });
+    if (id) this.articleService.deleteArticle(id);
   }
 }

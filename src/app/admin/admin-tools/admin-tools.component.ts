@@ -23,10 +23,7 @@ export class AdminToolsComponent {
       .articles()
       .find((article) => article.id === this.paramNodeId());
     if (article) {
-      this.articleService.deleteArticle(article.id!, article.img.pageHero);
-      this.router.navigate(['../'], {
-        replaceUrl: true,
-      });
+      this.articleService.deleteArticle(article.id!);
     }
   }
 }

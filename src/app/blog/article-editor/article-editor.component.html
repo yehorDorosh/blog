@@ -12,4 +12,5 @@
         <angular-editor name="content" [placeholder]="'Enter text here...'" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
 </form>

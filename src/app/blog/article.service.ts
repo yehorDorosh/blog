@@ -24,7 +24,8 @@ export class ArticleService implements OnInit {
 
   private getArticlesSubscription!: Subscription;
 
-  articleId = '';
+  editorImages: string[] = [];
+  articleId = signal<string | null>(null);
   articles = signal<BlogArticle[]>([]);
 
   ngOnInit() {
@@ -67,7 +68,7 @@ export class ArticleService implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Create new empty article.', response);
-          this.articleId = response.name;
+          this.articleId.set(response.name);
         },
         error: (error) => {
           console.error(error);
@@ -114,12 +115,14 @@ export class ArticleService implements OnInit {
             isR2Response(response) &&
             response.$metadata.httpStatusCode === 200
           ) {
+            const imageUrl = `/api/image/${articleId}/${file.name}`;
             const modifiedResponse = new HttpResponse({
               body: {
-                imageUrl: `/api/image/common/${file.name}`,
+                imageUrl,
               },
             });
-            console.log('$metadata' in response);
+            this.editorImages.push(imageUrl);
+            console.log('Image from editor uploaded.');
             return modifiedResponse;
           } else {
             return response;
@@ -144,6 +147,7 @@ export class ArticleService implements OnInit {
           content,
           img: {
             pageHero: `/api/image/${articleId}/${pageHero}`,
+            editorImages: this.editorImages,
           },
         }
       )
@@ -155,7 +159,7 @@ export class ArticleService implements OnInit {
         },
         error: (error) => {
           console.error(error);
-          this.deleteArticle(articleId, pageHero);
+          this.deleteArticle(articleId);
         },
         complete: () => {
           subscription.unsubscribe();
@@ -163,15 +167,27 @@ export class ArticleService implements OnInit {
       });
   }
 
-  deleteArticle(articleId: string, imageName?: string) {
+  deleteArticle(articleId: string) {
     const subscription = this.httpClient
       .delete<null>(
         `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`
       )
       .subscribe({
         next: (response) => {
+          const article = this.articles().find(
+            (article) => article.id === articleId
+          );
+          if (article) {
+            this.deleteImage(article.img.pageHero);
+            article.img.editorImages.forEach((img) => {
+              this.deleteImage(img);
+            });
+          }
+
           console.log('Delete article', response);
-          if (imageName) this.deleteImage(imageName);
+          this.router.navigate(['../'], {
+            replaceUrl: true,
+          });
         },
         error: (error) => {
           console.error(error);
