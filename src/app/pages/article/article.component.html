@@ -3,7 +3,7 @@
 <article>
     @if (article()) { 
         <h2>{{ article()!.title }}</h2>
-        <p>{{ article()!.content }}</p>
-        <img [src]="article()!.img.pagehero" alt="{{ article()!.title }}" />
+        <div [innerHTML]="article()!.content | sanitizeHtml"></div>
+        <img [src]="article()!.img.pageHero" alt="{{ article()!.title }}" />
     }
 </article> 

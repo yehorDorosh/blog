@@ -1,5 +1,5 @@
 import { Component, input, inject } from '@angular/core';
-import { UserService } from "../../user/user.service";
+import { UserService } from '../../user/user.service';
 import { RouterLink } from '@angular/router';
 import { ArticleService } from '../../blog/article.service';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './admin-tools.component.html',
-  styleUrl: './admin-tools.component.scss'
+  styleUrl: './admin-tools.component.scss',
 })
 export class AdminToolsComponent {
   userService = inject(UserService);
@@ -19,9 +19,11 @@ export class AdminToolsComponent {
   paramNodeId = input<string>();
 
   onDeleteArticle() {
-    const article = this.articleService.articles().find(article => article.id === this.paramNodeId());
+    const article = this.articleService
+      .articles()
+      .find((article) => article.id === this.paramNodeId());
     if (article) {
-      this.articleService.deleteArticle(article.id!, article.img.pagehero);
+      this.articleService.deleteArticle(article.id!, article.img.pageHero);
       this.router.navigate(['../'], {
         replaceUrl: true,
       });

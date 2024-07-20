@@ -1,15 +1,15 @@
 <form (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" class="form-control" name="title" [ngModel]="title" >
+        <input type="text" class="form-control" name="title" [(ngModel)]="title" >
+    </div>
+    <div class="form-group">
+        <label for="author">Page Hero Image</label>
+        <input type="file" name="image" (change)="onPageHeroSelected($event)" />
     </div>
     <div class="form-group">
         <label for="content">Content</label>
         <angular-editor name="content" [placeholder]="'Enter text here...'" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
-    </div>
-    <div class="form-group">
-        <label for="author">Page Hero Image</label>
-        <input type="file" name="image" (change)="onFileSelected($event)" />
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>

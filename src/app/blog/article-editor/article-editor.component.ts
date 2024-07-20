@@ -1,9 +1,9 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ArticleService } from '../article.service';
 import { BlogArticle } from '../blog.model';
 
-import { HttpClientModule} from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
@@ -15,11 +15,13 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   styleUrl: './article-editor.component.scss',
 })
 export class ArticleEditorComponent implements OnInit {
-  title: string = '';
-  content = '';
   private articleService = inject(ArticleService);
 
-  article = input.required<BlogArticle>();
+  article = input<BlogArticle>();
+
+  title = '';
+  content = '';
+  pageHeroFileName = '';
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -37,10 +39,10 @@ export class ArticleEditorComponent implements OnInit {
     defaultFontName: '',
     defaultFontSize: '',
     fonts: [
-      {class: 'arial', name: 'Arial'},
-      {class: 'times-new-roman', name: 'Times New Roman'},
-      {class: 'calibri', name: 'Calibri'},
-      {class: 'comic-sans-ms', name: 'Comic Sans MS'}
+      { class: 'arial', name: 'Arial' },
+      { class: 'times-new-roman', name: 'Times New Roman' },
+      { class: 'calibri', name: 'Calibri' },
+      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
     ],
     customClasses: [
       {
@@ -49,7 +51,7 @@ export class ArticleEditorComponent implements OnInit {
       },
       {
         name: 'redText',
-        class: 'redText'
+        class: 'redText',
       },
       {
         name: 'titleText',
@@ -58,21 +60,32 @@ export class ArticleEditorComponent implements OnInit {
       },
     ],
     uploadUrl: 'v1/image',
-    // upload: (file: File) => {  },
+    upload: (file: File) =>
+      this.articleService.uploadImageEditor('common', file),
     uploadWithCredentials: false,
     sanitize: false,
     toolbarPosition: 'top',
-    toolbarHiddenButtons: [
-      ['bold', 'italic'],
-      ['fontSize']
-    ]
+    toolbarHiddenButtons: [['bold', 'italic'], ['fontSize']],
   };
 
   ngOnInit() {}
 
-  onFileSelected(event: Event) {}
+  onPageHeroSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.pageHeroFileName = input.files[0].name;
+      const id = this.articleService.articleId;
+      this.articleService.uploadImage(id, input.files[0]);
+    }
+  }
 
   onSubmit() {
-    console.log(this.content);
+    const id = this.articleService.articleId;
+    this.articleService.saveArticle(
+      id,
+      this.title,
+      this.content,
+      this.pageHeroFileName
+    );
   }
 }

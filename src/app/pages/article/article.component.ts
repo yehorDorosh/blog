@@ -1,14 +1,15 @@
 import { Component, input, inject, OnInit, signal } from '@angular/core';
-import { type BlogArticle } from '../../blog/blog.model'
+import { type BlogArticle } from '../../blog/blog.model';
 import { ArticleService } from '../../blog/article.service';
-import { HeaderComponent } from "../../layout/header/header.component";
+import { HeaderComponent } from '../../layout/header/header.component';
+import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, SanitizeHtmlPipe],
   templateUrl: './article.component.html',
-  styleUrl: './article.component.scss'
+  styleUrl: './article.component.scss',
 })
 export class ArticleComponent implements OnInit {
   articleService = inject(ArticleService);
@@ -17,7 +18,9 @@ export class ArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.articleService.getArticles();
-    const article = this.articleService.articles().find(article => article.id === this.paramArticleId())
+    const article = this.articleService
+      .articles()
+      .find((article) => article.id === this.paramArticleId());
     if (article) {
       this.article.set(article);
     }

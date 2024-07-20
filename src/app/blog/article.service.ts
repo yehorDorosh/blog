@@ -1,13 +1,20 @@
 import { Injectable, inject, signal, DestroyRef, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { UserService } from '../user/user.service';
-import { type ImageType, type FireBaseResponse, type BlogArticle, type BlogArticleResponse } from './blog.model';
-import { Subscription } from 'rxjs';
+import {
+  type FireBaseResponse,
+  type BlogArticle,
+  type BlogArticleResponse,
+  isR2Response,
+} from './blog.model';
+import { map, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { UploadResponse } from '@kolkov/angular-editor';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ArticleService implements OnInit {
   private httpClient = inject(HttpClient);
@@ -17,6 +24,7 @@ export class ArticleService implements OnInit {
 
   private getArticlesSubscription!: Subscription;
 
+  articleId = '';
   articles = signal<BlogArticle[]>([]);
 
   ngOnInit() {
@@ -27,113 +35,155 @@ export class ArticleService implements OnInit {
   }
 
   getArticles() {
-    this.getArticlesSubscription = this.httpClient.get<BlogArticleResponse>(`${environment.realBaseApiUrl}/blog.json`)
-    .subscribe({
-      next: (response) => {
-        if (!response) {
-          this.articles.set([])
-        } else {
-          this.articles.set(Object.keys(response).map(id => {
-            return { id, ...response[id] };
-          }));
-        }
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        console.log('Get articles completed.');
-      }
-    });
+    this.getArticlesSubscription = this.httpClient
+      .get<BlogArticleResponse>(`${environment.realBaseApiUrl}/blog.json`)
+      .subscribe({
+        next: (response) => {
+          if (!response) {
+            this.articles.set([]);
+          } else {
+            this.articles.set(
+              Object.keys(response).map((id) => {
+                return { id, ...response[id] };
+              })
+            );
+          }
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          console.log('Get articles completed.');
+        },
+      });
   }
 
-  createArticle(data: { title: string, content: string, pageheroImg: File }) {
-    const subscription = this.httpClient.post<FireBaseResponse>(
-      `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
-      {
-        title: data.title,
-        content: data.content,
-      }
-    ).subscribe({
-    next: (response) => {
-      console.log('Save article', response);
-      this.uploadImage(response.name, data.pageheroImg);
-    },
-    error: (error) => {
-      console.error(error);
-    },
-    complete: () => {
-      subscription.unsubscribe();
-    }
-  });
+  createEmptyArticle() {
+    const subscription = this.httpClient
+      .post<FireBaseResponse>(
+        `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
+        {}
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Create new empty article.', response);
+          this.articleId = response.name;
+        },
+        error: (error) => {
+          console.error(error);
+          this.router.navigate(['admin']);
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        },
+      });
   }
 
-  private uploadImage(articleId: string, file: File) {
+  uploadImage(articleId: string, file: File) {
     const formData = new FormData();
     formData.append('image', file);
 
-    const subscription = this.httpClient.post(
-      `/api/upload-image?id=${articleId}`,
-      formData,
-    ).subscribe({
-      next: (response) => {
-        console.log('Upload image', response);
-        this.saveImageName(articleId, 'pagehero', file.name);
-      },
-      error: (error) => {
-        console.error(error);
-        this.deleteArticle(articleId);
-      },
-      complete: () => {
-        subscription.unsubscribe();
-      }
-    });
+    const subscription = this.httpClient
+      .post(`/api/upload-image?id=${articleId}`, formData)
+      .subscribe({
+        next: (response) => {
+          console.log('Upload image', response);
+        },
+        error: (error) => {
+          console.error(error);
+          this.deleteArticle(articleId);
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        },
+      });
   }
 
-  private saveImageName(articleId: string, imageType: ImageType, imageName: string) {
-    const subscription = this.httpClient.patch(
-      `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
-      {
-        img: {
-          [imageType]: `/api/image/${articleId}/${imageName}`,
+  uploadImageEditor(articleId: string, file: File) {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const observer = this.httpClient
+      .post<HttpEvent<UploadResponse>>(
+        `/api/upload-image?id=${articleId}`,
+        formData
+      )
+      .pipe(
+        map((response) => {
+          if (
+            isR2Response(response) &&
+            response.$metadata.httpStatusCode === 200
+          ) {
+            const modifiedResponse = new HttpResponse({
+              body: {
+                imageUrl: `/api/image/common/${file.name}`,
+              },
+            });
+            console.log('$metadata' in response);
+            return modifiedResponse;
+          } else {
+            return response;
+          }
+        })
+      );
+
+    return observer;
+  }
+
+  saveArticle(
+    articleId: string,
+    title: string,
+    content: string,
+    pageHero: string
+  ) {
+    const subscription = this.httpClient
+      .patch(
+        `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
+        {
+          title,
+          content,
+          img: {
+            pageHero: `/api/image/${articleId}/${pageHero}`,
+          },
         }
-      }
-    ).subscribe({
-      next: (response) => {
-        console.log('Save image name to article', response);
-        this.router.navigate(['blog', articleId]);
-        this.getArticles();
-      },
-      error: (error) => {
-        console.error(error);
-        this.deleteArticle(articleId, imageName);
-      },
-      complete: () => {
-        subscription.unsubscribe();
-      }
-    });
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Save article', response);
+          this.router.navigate(['blog', articleId]);
+          this.getArticles();
+        },
+        error: (error) => {
+          console.error(error);
+          this.deleteArticle(articleId, pageHero);
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        },
+      });
   }
 
   deleteArticle(articleId: string, imageName?: string) {
-    const subscription = this.httpClient.delete<null>(
-      `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`
-    ).subscribe({
-      next: (response) => {
-        console.log('Delete article', response);
-        if(imageName) this.deleteImage(imageName);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        subscription.unsubscribe();
-      }
-    });
+    const subscription = this.httpClient
+      .delete<null>(
+        `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Delete article', response);
+          if (imageName) this.deleteImage(imageName);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        },
+      });
   }
 
   deleteImage(imageName: string) {
-    const subscription = this.httpClient.delete(
-      `${imageName}`).subscribe({
+    const subscription = this.httpClient.delete(`${imageName}`).subscribe({
       next: (response) => {
         console.log('Remove image.', response);
         this.getArticles();
@@ -143,9 +193,7 @@ export class ArticleService implements OnInit {
       },
       complete: () => {
         subscription.unsubscribe();
-      }
+      },
     });
   }
-
-  
 }
