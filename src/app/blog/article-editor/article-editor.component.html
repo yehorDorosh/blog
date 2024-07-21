@@ -1,11 +1,17 @@
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit()" class="editor">
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" class="form-control" name="title" [(ngModel)]="title" >
     </div>
     <div class="form-group">
         <label for="author">Page Hero Image</label>
-        <input type="file" name="image" (change)="onPageHeroSelected($event)" />
+        @if (pageHeroPath) {
+            <img [src]="pageHeroPath" alt="Page Hero Image" class="editor__pagehero-preview" />
+            <button type="button" class="btn btn-danger" (click)="onRemovePageHero()">Remove</button>
+        } @else {
+            <input type="file" name="image" (change)="onPageHeroSelected($event)" />
+        }
+        
     </div>
     <div class="form-group">
         <label for="content">Content</label>

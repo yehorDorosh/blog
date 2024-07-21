@@ -22,7 +22,7 @@ export class ArticleEditorComponent implements OnInit {
 
   title = '';
   content = '';
-  pageHeroFileName = '';
+  pageHeroPath = '';
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -68,7 +68,14 @@ export class ArticleEditorComponent implements OnInit {
     toolbarHiddenButtons: [['bold', 'italic'], ['fontSize']],
   };
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.article && this.article() && this.article()?.id) {
+      this.title = this.article()!.title;
+      this.content = this.article()!.content;
+      this.pageHeroPath = this.article()!.img.pageHero;
+      this.articleService.articleId.set(this.article()!.id!);
+    }
+  }
 
   uploadEditorImage(file: File) {
     const id = this.articleService.articleId();
@@ -76,13 +83,20 @@ export class ArticleEditorComponent implements OnInit {
     return this.articleService.uploadImageEditor(id, file);
   }
 
-  onPageHeroSelected(event: Event) {
+  async onPageHeroSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const id = this.articleService.articleId();
     if (input.files && input.files.length > 0 && id) {
-      this.pageHeroFileName = input.files[0].name;
-      this.articleService.uploadImage(id, input.files[0]);
+      this.pageHeroPath = await this.articleService.uploadImage(
+        id,
+        input.files[0]
+      );
     }
+  }
+
+  onRemovePageHero() {
+    this.articleService.deleteImage(this.pageHeroPath);
+    this.pageHeroPath = '';
   }
 
   onSubmit() {
@@ -92,7 +106,7 @@ export class ArticleEditorComponent implements OnInit {
       id,
       this.title,
       this.content,
-      this.pageHeroFileName
+      this.pageHeroPath
     );
   }
 

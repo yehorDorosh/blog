@@ -84,20 +84,28 @@ export class ArticleService implements OnInit {
     const formData = new FormData();
     formData.append('image', file);
 
-    const subscription = this.httpClient
-      .post(`/api/upload-image?id=${articleId}`, formData)
-      .subscribe({
-        next: (response) => {
-          this.articleImages.push(`/api/image/${articleId}/${file.name}`);
-          console.log('Upload image', response);
-        },
-        error: (error) => {
-          console.error('Upload image error', error);
-        },
-        complete: () => {
-          subscription.unsubscribe();
-        },
-      });
+    const promise = new Promise<string>((resolve, reject) => {
+      const imagePath = `/api/image/${articleId}/${file.name}`;
+
+      const subscription = this.httpClient
+        .post(`/api/upload-image?id=${articleId}`, formData)
+        .subscribe({
+          next: (response) => {
+            this.articleImages.push(imagePath);
+            console.log('Upload image', response);
+            resolve(imagePath);
+          },
+          error: (error) => {
+            console.error('Upload image error', error);
+            reject(error);
+          },
+          complete: () => {
+            subscription.unsubscribe();
+          },
+        });
+    });
+
+    return promise;
   }
 
   uploadImageEditor(articleId: string, file: File) {
@@ -138,7 +146,7 @@ export class ArticleService implements OnInit {
     articleId: string,
     title: string,
     content: string,
-    pageHero: string
+    pageHeroPath: string
   ) {
     const subscription = this.httpClient
       .patch(
@@ -147,7 +155,7 @@ export class ArticleService implements OnInit {
           title,
           content,
           img: {
-            pageHero: `/api/image/${articleId}/${pageHero}`,
+            pageHero: pageHeroPath,
             editorImages: this.editorImages,
           },
         }
@@ -201,9 +209,12 @@ export class ArticleService implements OnInit {
       });
   }
 
-  deleteImage(imageName: string) {
-    const subscription = this.httpClient.delete(`${imageName}`).subscribe({
+  deleteImage(imagePath: string) {
+    const subscription = this.httpClient.delete(`${imagePath}`).subscribe({
       next: (response) => {
+        this.articleImages = this.articleImages.filter(
+          (img) => img !== imagePath
+        );
         console.log('Remove image.', response);
       },
       error: (error) => {

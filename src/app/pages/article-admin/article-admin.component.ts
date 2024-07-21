@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, computed } from '@angular/core';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { ArticleService } from '../../blog/article.service';
 import { type BlogArticle } from '../../blog/blog.model';
@@ -17,15 +17,14 @@ export class ArticleAdminComponent {
   router = inject(Router);
   articleService = inject(ArticleService);
   paramNodeId = input.required<string>();
-  article = signal<BlogArticle | undefined>(undefined);
+  article = computed<BlogArticle | undefined>(() => {
+    return this.articles().find((article) => article.id === this.paramNodeId());
+  });
+  articles = computed<BlogArticle[]>(() => {
+    return this.articleService.articles();
+  });
 
   ngOnInit(): void {
     this.articleService.getArticles();
-    const article = this.articleService
-      .articles()
-      .find((article) => article.id === this.paramNodeId());
-    if (article) {
-      this.article.set(article);
-    }
   }
 }
