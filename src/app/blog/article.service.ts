@@ -24,6 +24,7 @@ export class ArticleService implements OnInit {
 
   private getArticlesSubscription!: Subscription;
 
+  articleImages: string[] = [];
   editorImages: string[] = [];
   articleId = signal<string | null>(null);
   articles = signal<BlogArticle[]>([]);
@@ -88,6 +89,7 @@ export class ArticleService implements OnInit {
       .post(`/api/upload-image?id=${articleId}`, formData)
       .subscribe({
         next: (response) => {
+          this.articleImages.push(`/api/image/${articleId}/${file.name}`);
           console.log('Upload image', response);
         },
         error: (error) => {
@@ -154,7 +156,9 @@ export class ArticleService implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Save article', response);
-          this.router.navigate(['blog', articleId]);
+          this.router.navigate(['blog', articleId], {
+            state: { canLeave: true },
+          });
           this.getArticles();
         },
         error: (error) => {
@@ -187,6 +191,7 @@ export class ArticleService implements OnInit {
           console.log('Delete article', response);
           this.router.navigate(['../'], {
             replaceUrl: true,
+            state: { canLeave: true },
           });
         },
         error: (error) => {

@@ -98,10 +98,9 @@ export class ArticleEditorComponent implements OnInit {
 
   onCancel() {
     const id = this.articleService.articleId();
-    if (this.pageHeroFileName)
-      this.articleService.deleteImage(
-        `/api/image/${id}/${this.pageHeroFileName}`
-      );
+    this.articleService.articleImages.forEach((image) => {
+      this.articleService.deleteImage(image);
+    });
     this.articleService.editorImages.forEach((image) => {
       this.articleService.deleteImage(image);
     });
