@@ -30,7 +30,6 @@ export class ArticleService implements OnInit {
   articles = signal<BlogArticle[]>([]);
 
   ngOnInit() {
-    this.getArticles();
     this.destroyRef.onDestroy(() => {
       this.getArticlesSubscription.unsubscribe();
     });
@@ -93,8 +92,7 @@ export class ArticleService implements OnInit {
           console.log('Upload image', response);
         },
         error: (error) => {
-          console.error(error);
-          this.deleteArticle(articleId);
+          console.error('Upload image error', error);
         },
         complete: () => {
           subscription.unsubscribe();
@@ -127,6 +125,7 @@ export class ArticleService implements OnInit {
             console.log('Image from editor uploaded.');
             return modifiedResponse;
           } else {
+            console.error('Upload image error', response);
             return response;
           }
         })
@@ -194,7 +193,7 @@ export class ArticleService implements OnInit {
           });
         },
         error: (error) => {
-          console.error(error);
+          console.error('Delete article error', error);
         },
         complete: () => {
           subscription.unsubscribe();
@@ -206,10 +205,9 @@ export class ArticleService implements OnInit {
     const subscription = this.httpClient.delete(`${imageName}`).subscribe({
       next: (response) => {
         console.log('Remove image.', response);
-        this.getArticles();
       },
       error: (error) => {
-        console.error(error);
+        console.error('Remove image error', error);
       },
       complete: () => {
         subscription.unsubscribe();
