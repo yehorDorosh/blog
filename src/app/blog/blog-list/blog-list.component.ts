@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, afterNextRender, inject } from '@angular/core';
 import { ArticlePreviewComponent } from './article-preview/article-preview.component';
 import { ArticleService } from '../article.service';
 
@@ -7,13 +7,12 @@ import { ArticleService } from '../article.service';
   standalone: true,
   imports: [ArticlePreviewComponent],
   templateUrl: './blog-list.component.html',
-  styleUrl: './blog-list.component.scss'
+  styleUrl: './blog-list.component.scss',
 })
-export class BlogListComponent implements OnInit {
+export class BlogListComponent {
   articleService = inject(ArticleService);
 
   ngOnInit(): void {
     this.articleService.getArticles();
   }
-
 }

@@ -159,7 +159,6 @@ export class ArticleService implements OnInit {
           this.router.navigate(['blog', articleId], {
             state: { canLeave: true },
           });
-          this.getArticles();
         },
         error: (error) => {
           console.error(error);
@@ -183,7 +182,7 @@ export class ArticleService implements OnInit {
           );
           if (article) {
             this.deleteImage(article.img.pageHero);
-            article.img.editorImages.forEach((img) => {
+            article.img.editorImages?.forEach((img) => {
               this.deleteImage(img);
             });
           }
