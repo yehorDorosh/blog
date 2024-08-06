@@ -4,7 +4,14 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
-import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  GetObjectCommand,
+  PutObjectCommand,
+  DeleteObjectCommand,
+  DeleteObjectsCommand,
+  ListObjectsV2Command,
+} from '@aws-sdk/client-s3';
 import multer from 'multer';
 import fs from 'fs';
 import { Readable } from 'stream';
@@ -25,14 +32,16 @@ export function app(): express.Express {
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
-  server.get('*.*', express.static(browserDistFolder, {
-    maxAge: '1y'
-  }));
-
+  server.get(
+    '*.*',
+    express.static(browserDistFolder, {
+      maxAge: '1y',
+    })
+  );
 
   // Cloudflare R2 Storage
   const s3 = new S3Client({
-    region: "auto",
+    region: 'auto',
     credentials: {
       accessKeyId: environment.r2.accessKeyId,
       secretAccessKey: environment.r2.secretAccessKey,
@@ -51,50 +60,58 @@ export function app(): express.Express {
     },
     filename: function (req, file, cb) {
       cb(null, file.fieldname);
-    }
+    },
   });
 
   const upload = multer({ storage: storage });
 
   // API Endpoints
   // Endpoint to upload an image
-  server.post('/api/upload-image', upload.single('image'), async (req, res, next) => {
-    const articleId = req.query['id'] as string;
-  
-    if (!req.file || !articleId) {
-      return res.status(422).send('No file uploaded.');
+  server.post(
+    '/api/upload-image',
+    upload.single('image'),
+    async (req, res, next) => {
+      const articleId = req.query['id'] as string;
+
+      if (!req.file || !articleId) {
+        return res.status(422).send('No file uploaded.');
+      }
+
+      const fileContent = fs.readFileSync(req.file.path);
+
+      const command = new PutObjectCommand({
+        Bucket: environment.r2.bucket,
+        Key: `${articleId}/${req.file.originalname}`,
+        Body: fileContent,
+        ContentType: req.file.mimetype,
+      });
+
+      try {
+        const response = await s3.send(command);
+        fs.unlink(req.file.path, (err) => {
+          next(err);
+        });
+        return res.send(response);
+      } catch (err) {
+        console.error('Error uploading file:', err);
+        return res.status(500).send('Error uploading file.');
+      }
     }
-
-    const fileContent = fs.readFileSync(req.file.path);
-
-    const command = new PutObjectCommand({
-      Bucket: environment.r2.bucket,
-      Key: `${articleId}/${req.file.originalname}`,
-      Body: fileContent,
-      ContentType: req.file.mimetype,
-    });
-
-    try {
-      const response = await s3.send(command);
-      fs.unlink(req.file.path, (err) => {next(err)});
-      return res.send(response);
-    } catch (err) {
-      console.error('Error uploading file:', err);
-      return res.status(500).send('Error uploading file.');
-    }
-  });
+  );
 
   server.get('/api/image/:id/:key', async (req, res) => {
     const command = new GetObjectCommand({
       Bucket: 'blog',
       Key: `${req.params.id}/${req.params.key}`,
     });
-  
+
     try {
       const { Body, ContentType } = await s3.send(command);
-  
+
       if (Body instanceof Readable) {
-        res.writeHead(200, { 'Content-Type': ContentType || 'application/octet-stream' });
+        res.writeHead(200, {
+          'Content-Type': ContentType || 'application/octet-stream',
+        });
         Body.pipe(res);
       } else {
         res.status(500).send('Error fetching image');
@@ -105,18 +122,58 @@ export function app(): express.Express {
     }
   });
 
-  server.delete('/api/image/:id/:key', async (req, res) => {
-    const command = new DeleteObjectCommand({
-      Bucket: 'blog',
-      Key: `${req.params.id}/${req.params.key}`,
-    });
-  
+  server.delete('/api/image/:id/:key?', async (req, res) => {
+    let command;
+    if (!req.params.key) {
+      const listParams = {
+        Bucket: 'blog',
+        Prefix: req.params.id,
+      };
+
+      try {
+        const listedObjects = await s3.send(
+          new ListObjectsV2Command(listParams)
+        );
+
+        if (!listedObjects.Contents || listedObjects.Contents.length === 0) {
+          return res.status(404).send('No object found');
+        }
+
+        command = new DeleteObjectsCommand({
+          Bucket: 'blog',
+          Delete: {
+            Objects: listedObjects.Contents.map((object) => ({
+              Key: object.Key,
+            })),
+            Quiet: true,
+          },
+        });
+      } catch (err) {
+        console.error('Error deleting image:', err);
+        res
+          .status(500)
+          .send('Error deleting image. When trying to get list objects.');
+      }
+    } else {
+      command = new DeleteObjectCommand({
+        Bucket: 'blog',
+        Key: `${req.params.id}/${req.params.key}`,
+      });
+    }
+
     try {
-      const response = await s3.send(command);
-      res.send(response);
+      if (command && command instanceof DeleteObjectCommand) {
+        const response = await s3.send(command);
+        return res.send(response);
+      } else if (command && command instanceof DeleteObjectsCommand) {
+        const response = await s3.send(command);
+        return res.send(response);
+      } else {
+        return res.status(500).send('Error deleting image. No command.');
+      }
     } catch (err) {
       console.error('Error deleting image:', err);
-      res.status(500).send('Error deleting image');
+      return res.status(500).send('Error deleting image');
     }
   });
 

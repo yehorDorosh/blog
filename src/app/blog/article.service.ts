@@ -188,10 +188,7 @@ export class ArticleService implements OnInit {
             (article) => article.id === articleId
           );
           if (article) {
-            this.deleteImage(article.img.pageHero);
-            article.img.editorImages?.forEach((img) => {
-              this.deleteImage(img);
-            });
+            this.deleteImage(`/api/image/${articleId}`);
           }
 
           console.log('Delete article', response);

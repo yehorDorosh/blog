@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-article-editor',
@@ -17,6 +18,7 @@ import { throwError } from 'rxjs';
 })
 export class ArticleEditorComponent implements OnInit {
   private articleService = inject(ArticleService);
+  private router = inject(Router);
 
   article = input<BlogArticle>();
 
@@ -74,6 +76,7 @@ export class ArticleEditorComponent implements OnInit {
       this.content = this.article()!.content;
       this.pageHeroPath = this.article()!.img.pageHero;
       this.articleService.articleId.set(this.article()!.id!);
+      this.articleService.editorImages = this.article()!.img.editorImages || [];
     }
   }
 
@@ -111,13 +114,6 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   onCancel() {
-    const id = this.articleService.articleId();
-    this.articleService.articleImages.forEach((image) => {
-      this.articleService.deleteImage(image);
-    });
-    this.articleService.editorImages.forEach((image) => {
-      this.articleService.deleteImage(image);
-    });
-    if (id) this.articleService.deleteArticle(id);
+    this.router.navigate(['../'], { state: { canLeave: true } });
   }
 }
