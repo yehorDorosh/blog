@@ -122,6 +122,27 @@ export function app(): express.Express {
     }
   });
 
+  server.get('/api/image/:id', async (req, res) => {
+    const listParams = {
+      Bucket: 'blog',
+      Prefix: req.params.id,
+    };
+
+    try {
+      const listedObjects = await s3.send(new ListObjectsV2Command(listParams));
+
+      if (!listedObjects.Contents || listedObjects.Contents.length === 0) {
+        return res.status(404).send('No object found');
+      }
+
+      const images = listedObjects.Contents.map((object) => object.Key);
+      return res.send(images);
+    } catch (err) {
+      console.error('Error when getting list of articles imgs', err);
+      return res.status(500).send('Error when getting list of articles imgs.');
+    }
+  });
+
   server.delete('/api/image/:id/:key?', async (req, res) => {
     let command;
     if (!req.params.key) {

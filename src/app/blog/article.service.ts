@@ -23,15 +23,18 @@ export class ArticleService implements OnInit {
   private router = inject(Router);
 
   private getArticlesSubscription!: Subscription;
+  private getArticleImgsSubscription!: Subscription;
 
   articleImages: string[] = [];
   editorImages: string[] = [];
   articleId = signal<string | null>(null);
   articles = signal<BlogArticle[]>([]);
+  articleImageList = signal<string[]>([]);
 
   ngOnInit() {
     this.destroyRef.onDestroy(() => {
       this.getArticlesSubscription.unsubscribe();
+      this.getArticleImgsSubscription.unsubscribe();
     });
   }
 
@@ -206,12 +209,13 @@ export class ArticleService implements OnInit {
       });
   }
 
-  deleteImage(imagePath: string) {
+  deleteImage(imagePath: string, articleId?: string) {
     const subscription = this.httpClient.delete(`${imagePath}`).subscribe({
       next: (response) => {
         this.articleImages = this.articleImages.filter(
           (img) => img !== imagePath
         );
+        if (articleId) this.getAricleImgs(articleId);
         console.log('Remove image.', response);
       },
       error: (error) => {
@@ -221,5 +225,19 @@ export class ArticleService implements OnInit {
         subscription.unsubscribe();
       },
     });
+  }
+
+  getAricleImgs(articleId: string) {
+    this.getArticleImgsSubscription = this.httpClient
+      .get<string[]>(`/api/image/${articleId}`)
+      .subscribe({
+        next: (response) => {
+          console.log('Get article images', response);
+          this.articleImageList.set(response);
+        },
+        error: (error) => {
+          console.error('Get article images error', error);
+        },
+      });
   }
 }

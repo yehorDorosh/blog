@@ -2,4 +2,14 @@
 
 @if (article()) {
     <app-article-editor [article]="article()!" />
+
+    <ul>
+        @for (imgPath of articleImageList(); track imgPath) {
+          <li>
+            <p>{{ imgPath }}</p>
+            <img [src]="imgPath" class="img" />
+            <button  (click)="onDeleteImageListItem(imgPath)">Delete</button>
+          </li>
+        }
+    </ul>
 }

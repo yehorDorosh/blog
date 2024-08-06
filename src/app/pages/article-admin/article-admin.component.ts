@@ -23,8 +23,18 @@ export class ArticleAdminComponent {
   articles = computed<BlogArticle[]>(() => {
     return this.articleService.articles();
   });
+  articleImageList = computed<string[]>(() => {
+    return this.articleService
+      .articleImageList()
+      .map((imgPath) => '/api/image/' + imgPath);
+  });
 
   ngOnInit(): void {
     this.articleService.getArticles();
+    this.articleService.getAricleImgs(this.paramNodeId());
+  }
+
+  onDeleteImageListItem(imagePath: string) {
+    this.articleService.deleteImage(imagePath, this.paramNodeId());
   }
 }
