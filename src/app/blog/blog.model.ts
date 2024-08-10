@@ -1,7 +1,13 @@
+import { LangList } from '../lang-switcher/lang-switcher.model';
+
 export interface BlogArticle {
   id?: string;
-  title: string;
-  content: string;
+  title: {
+    [key in LangList]: string;
+  };
+  content: {
+    [key in LangList]: string;
+  };
   img: {
     pageHero: string;
     editorImages: string[];

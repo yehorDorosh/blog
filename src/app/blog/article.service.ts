@@ -12,6 +12,7 @@ import { map, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { UploadResponse } from '@kolkov/angular-editor';
 import { HttpResponse } from '@angular/common/http';
+import { LangList } from '../lang-switcher/lang-switcher.model';
 
 @Injectable({
   providedIn: 'root',
@@ -151,16 +152,23 @@ export class ArticleService implements OnInit {
     articleId: string,
     title: string,
     content: string,
-    pageHeroPath: string
+    pageHeroPath: string,
+    lang: LangList
   ) {
     if (!this.userService.getToken) return;
+
+    const article = this.articles().find((article) => article.id === articleId);
 
     const subscription = this.httpClient
       .patch(
         `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
         {
-          title,
-          content,
+          title: article
+            ? { ...article.title, [lang]: title }
+            : { [lang]: title },
+          content: article
+            ? { ...article.content, [lang]: content }
+            : { [lang]: content },
           img: {
             pageHero: pageHeroPath,
             editorImages: this.editorImages,

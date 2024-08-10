@@ -1,5 +1,12 @@
 <form (ngSubmit)="onSubmit()" class="editor">
     <div class="form-group">
+        <label for="articleLang">Language</label>
+        <select class="form-control" name="articleLang" (change)="onChangeEditorLang($event)">
+            <option *ngFor="let lang of langSwitcherService.langList" [value]="lang" [selected]="langSwitcherService.editorLang() === lang">{{ lang }}</option>
+        </select>
+        <span>{{ langSwitcherService.editorLang() }}</span>
+    </div>
+    <div class="form-group">
         <label for="title">Title</label>
         <input type="text" class="form-control" name="title" [(ngModel)]="title" >
     </div>

@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { LangSwitcherService } from './lang-switcher.service';
 
 @Component({
   selector: 'app-lang-switcher',
@@ -10,12 +11,13 @@ import { Router } from '@angular/router';
 })
 export class LangSwitcherComponent {
   router = inject(Router);
+  langSwitcherService = inject(LangSwitcherService);
 
-  changeLanguage(lang: string) {
-    const currentUrl = this.router.url;
-    const segments = currentUrl.split('/');
-    segments[1] = lang;
-    const newUrl = segments.join('/');
-    window.location.href = newUrl;
+  onInit() {
+    this.langSwitcherService.setLang();
+  }
+
+  changeLanguageHandler(lang: string) {
+    this.langSwitcherService.changeLanguage(lang);
   }
 }

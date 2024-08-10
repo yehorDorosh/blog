@@ -1,15 +1,9 @@
-import {
-  Component,
-  input,
-  inject,
-  OnInit,
-  signal,
-  computed,
-} from '@angular/core';
+import { Component, input, inject, OnInit, computed } from '@angular/core';
 import { type BlogArticle } from '../../blog/blog.model';
 import { ArticleService } from '../../blog/article.service';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
+import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 
 @Component({
   selector: 'app-article',
@@ -20,12 +14,16 @@ import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 })
 export class ArticleComponent implements OnInit {
   articleService = inject(ArticleService);
+  langSwitcherService = inject(LangSwitcherService);
+
   paramArticleId = input.required<string>();
+
   article = computed<BlogArticle | undefined>(() => {
     return this.articles().find(
       (article) => article.id === this.paramArticleId()
     );
   });
+
   articles = computed<BlogArticle[]>(() => {
     return this.articleService.articles();
   });

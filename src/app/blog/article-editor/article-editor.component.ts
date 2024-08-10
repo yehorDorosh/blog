@@ -2,23 +2,26 @@ import { Component, inject, input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ArticleService } from '../article.service';
 import { BlogArticle } from '../blog.model';
-
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
+import { LangList } from '../../lang-switcher/lang-switcher.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-article-editor',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, AngularEditorModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, AngularEditorModule],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
 })
 export class ArticleEditorComponent implements OnInit {
   private articleService = inject(ArticleService);
   private router = inject(Router);
+  langSwitcherService = inject(LangSwitcherService);
 
   article = input<BlogArticle>();
 
@@ -72,8 +75,9 @@ export class ArticleEditorComponent implements OnInit {
 
   ngOnInit() {
     if (this.article && this.article() && this.article()?.id) {
-      this.title = this.article()!.title;
-      this.content = this.article()!.content;
+      this.title = this.article()!.title[this.langSwitcherService.editorLang()];
+      this.content =
+        this.article()!.content[this.langSwitcherService.editorLang()];
       this.pageHeroPath = this.article()!.img.pageHero;
       this.articleService.articleId.set(this.article()!.id!);
       this.articleService.editorImages = this.article()!.img.editorImages || [];
@@ -109,11 +113,20 @@ export class ArticleEditorComponent implements OnInit {
       id,
       this.title,
       this.content,
-      this.pageHeroPath
+      this.pageHeroPath,
+      this.langSwitcherService.editorLang()
     );
   }
 
   onCancel() {
     this.router.navigate(['../'], { state: { canLeave: true } });
+  }
+
+  onChangeEditorLang(e: Event) {
+    const target = e.target as HTMLSelectElement;
+    this.langSwitcherService.editorLang.set(target.value as LangList);
+    this.title = this.article()!.title[this.langSwitcherService.editorLang()];
+    this.content =
+      this.article()!.content[this.langSwitcherService.editorLang()];
   }
 }
