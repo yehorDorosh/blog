@@ -63,6 +63,8 @@ export class ArticleService implements OnInit {
   }
 
   createEmptyArticle() {
+    if (!this.userService.getToken) return;
+
     const subscription = this.httpClient
       .post<FireBaseResponse>(
         `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
@@ -151,6 +153,8 @@ export class ArticleService implements OnInit {
     content: string,
     pageHeroPath: string
   ) {
+    if (!this.userService.getToken) return;
+
     const subscription = this.httpClient
       .patch(
         `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
@@ -181,6 +185,8 @@ export class ArticleService implements OnInit {
   }
 
   deleteArticle(articleId: string) {
+    if (!this.userService.getToken) return;
+
     const subscription = this.httpClient
       .delete<null>(
         `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`

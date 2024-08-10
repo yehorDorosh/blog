@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:blog": "node dist/blog/server/server.mjs"
+    "serve:ssr:blog": "node dist/blog/server/en/server.mjs",
+    "translate": "ng extract-i18n --output-path src/locale --format xlf"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +34,7 @@
     "@angular-devkit/build-angular": "^17.3.8",
     "@angular/cli": "^17.3.8",
     "@angular/compiler-cli": "^17.3.0",
+    "@angular/localize": "^17.3.11",
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/multer": "^1.4.11",
