@@ -13,10 +13,6 @@ export class LangSwitcherComponent {
   router = inject(Router);
   langSwitcherService = inject(LangSwitcherService);
 
-  onInit() {
-    this.langSwitcherService.setLang();
-  }
-
   changeLanguageHandler(lang: string) {
     this.langSwitcherService.changeLanguage(lang);
   }

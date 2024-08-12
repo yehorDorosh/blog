@@ -13,9 +13,7 @@ export class LangSwitcherService {
   private router = inject(Router);
 
   setLang() {
-    const currentUrl = this.router.url;
-    const segments = currentUrl.split('/');
-    this.lang = segments[1] as LangList;
+    this.lang = document.documentElement.lang as LangList;
   }
 
   getLang() {
