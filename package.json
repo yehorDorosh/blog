@@ -4,10 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && node copy-proxy-server.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:blog": "node dist/blog/server/en/server.mjs",
+    "serve:ssr:blog": "node dist/blog/proxy-server.mjs",
     "translate": "ng extract-i18n --output-path src/locale --format xlf"
   },
   "private": true,

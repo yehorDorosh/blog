@@ -1,27 +1,32 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, afterNextRender } from '@angular/core';
 import { LangList } from './lang-switcher.model';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LangSwitcherService {
-  private lang: LangList = 'en';
+  lang = signal<LangList>('en');
   editorLang = signal<LangList>('en');
   langList: LangList[] = ['en', 'ru', 'uk'];
+  setLang = () => {};
 
-  private router = inject(Router);
+  private location = inject(Location);
 
-  setLang() {
-    this.lang = document.documentElement.lang as LangList;
-  }
-
-  getLang() {
-    return this.lang;
+  constructor() {
+    afterNextRender(() => {
+      this.setLang = () => {
+        const lang = this.location
+          .prepareExternalUrl('/')
+          .replace(/\//g, '') as LangList;
+        this.editorLang.set(lang);
+        this.lang.set(lang);
+      };
+    });
   }
 
   changeLanguage(lang: string) {
-    const currentUrl = this.router.url;
+    const currentUrl = window.location.pathname;
     const segments = currentUrl.split('/');
     segments[1] = lang;
     const newUrl = segments.join('/');

@@ -16,17 +16,21 @@ import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 export class ArticleAdminComponent {
   router = inject(Router);
   articleService = inject(ArticleService);
+
   paramNodeId = input.required<string>();
+
   article = computed<BlogArticle | undefined>(() => {
     return this.articles().find((article) => article.id === this.paramNodeId());
   });
+
   articles = computed<BlogArticle[]>(() => {
     return this.articleService.articles();
   });
+
   articleImageList = computed<string[]>(() => {
     return this.articleService
       .articleImageList()
-      .map((imgPath) => '/api/image/' + imgPath);
+      .map((imgPath) => `/api/image/${imgPath}`);
   });
 
   ngOnInit(): void {

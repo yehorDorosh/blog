@@ -17,10 +17,12 @@
         "sourceLocale": "en",
         "locales": {
           "ru": {
-            "translation": "src/locale/messages.ru.xlf"
+            "translation": "src/locale/messages.ru.xlf",
+            "baseHref": "/ru/"
           },
           "uk": {
-            "translation": "src/locale/messages.uk.xlf"
+            "translation": "src/locale/messages.uk.xlf",
+            "baseHref": "/uk/"
           }
         }
       },
@@ -80,7 +82,9 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.development.ts"
                 }
-              ]
+              ],
+              "localize": ["en"],
+              "baseHref": "/en/"
             }
           },
           "defaultConfiguration": "production"

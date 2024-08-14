@@ -4,6 +4,7 @@ import { ArticleService } from '../../blog/article.service';
 import { HeaderComponent } from '../../layout/header/header.component';
 import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
+import { LangList } from '../../lang-switcher/lang-switcher.model';
 
 @Component({
   selector: 'app-article',
@@ -17,6 +18,10 @@ export class ArticleComponent implements OnInit {
   langSwitcherService = inject(LangSwitcherService);
 
   paramArticleId = input.required<string>();
+
+  lang = computed<LangList>(() => {
+    return this.langSwitcherService.lang();
+  });
 
   article = computed<BlogArticle | undefined>(() => {
     return this.articles().find(
