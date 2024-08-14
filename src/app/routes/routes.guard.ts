@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { ArticleAdminComponent } from '../pages/article-admin/article-admin.component';
-import { CanDeactivateFn, Router } from '@angular/router';
+import { CanActivateFn, CanDeactivateFn, Router } from '@angular/router';
+import { UserService } from '../user/user.service';
 
 export const canDeactivateFnEditor: CanDeactivateFn<
   ArticleAdminComponent
@@ -26,4 +27,17 @@ export const canDeactivateFnEditor: CanDeactivateFn<
     }
   }
   return true;
+};
+
+export const isLogedInFn: CanActivateFn = () => {
+  console.log('isLogedInFn');
+  const router = inject(Router);
+  const userService = inject(UserService);
+
+  if (userService.isLoggedIn()) {
+    return true;
+  } else {
+    router.navigate(['/'], { replaceUrl: true });
+    return false;
+  }
 };

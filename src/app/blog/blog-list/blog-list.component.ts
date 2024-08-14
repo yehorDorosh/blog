@@ -1,4 +1,4 @@
-import { Component, OnInit, afterNextRender, inject } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { ArticlePreviewComponent } from './article-preview/article-preview.component';
 import { ArticleService } from '../article.service';
 
@@ -11,6 +11,14 @@ import { ArticleService } from '../article.service';
 })
 export class BlogListComponent {
   articleService = inject(ArticleService);
+
+  isAdminAccess = input<boolean>(false);
+
+  articlesList = computed(() => {
+    return this.articleService
+      .articles()
+      .filter((article) => article.published || this.isAdminAccess());
+  });
 
   ngOnInit(): void {
     this.articleService.getArticles();

@@ -28,6 +28,7 @@ export class ArticleEditorComponent implements OnInit {
   title = '';
   content = '';
   pageHeroPath = '';
+  published = false;
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -79,6 +80,7 @@ export class ArticleEditorComponent implements OnInit {
       this.content =
         this.article()!.content[this.langSwitcherService.editorLang()];
       this.pageHeroPath = this.article()!.img.pageHero;
+      this.published = this.article()!.published;
       this.articleService.articleId.set(this.article()!.id!);
       this.articleService.editorImages = this.article()!.img.editorImages || [];
     }
@@ -114,7 +116,8 @@ export class ArticleEditorComponent implements OnInit {
       this.title,
       this.content,
       this.pageHeroPath,
-      this.langSwitcherService.editorLang()
+      this.langSwitcherService.editorLang(),
+      this.published
     );
   }
 

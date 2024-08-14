@@ -1,5 +1,5 @@
 <ul>
-    @for (article of articleService.articles(); track article.id) {
+    @for (article of articlesList(); track article.id) {
         <app-article-preview [article]="article" />
     }
 </ul>

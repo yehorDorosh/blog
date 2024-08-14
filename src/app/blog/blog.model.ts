@@ -12,6 +12,7 @@ export interface BlogArticle {
     pageHero: string;
     editorImages: string[];
   };
+  published: boolean;
 }
 
 export interface BlogArticleResponse {

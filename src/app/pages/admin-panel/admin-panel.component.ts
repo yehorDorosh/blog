@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from "../../layout/header/header.component";
+import { HeaderComponent } from '../../layout/header/header.component';
 import { RouterLink } from '@angular/router';
+import { BlogListComponent } from '../../blog/blog-list/blog-list.component';
 
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [HeaderComponent, RouterLink],
+  imports: [HeaderComponent, RouterLink, BlogListComponent],
   templateUrl: './admin-panel.component.html',
-  styleUrl: './admin-panel.component.scss'
+  styleUrl: './admin-panel.component.scss',
 })
-export class AdminPanelComponent {
-
-}
+export class AdminPanelComponent {}

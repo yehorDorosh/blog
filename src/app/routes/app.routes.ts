@@ -5,7 +5,7 @@ import { AuthComponent } from '../pages/auth/auth.component';
 import { AdminPanelComponent } from '../pages/admin-panel/admin-panel.component';
 import { NewArticleAdminComponent } from '../pages/new-article-admin/new-article-admin.component';
 import { ArticleAdminComponent } from '../pages/article-admin/article-admin.component';
-import { canDeactivateFnEditor } from './routes.guard';
+import { canDeactivateFnEditor, isLogedInFn } from './routes.guard';
 
 export const routes: Routes = [
   {
@@ -23,15 +23,18 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminPanelComponent,
+    canActivate: [isLogedInFn],
   },
   {
     path: 'admin/new-article',
     component: NewArticleAdminComponent,
     canDeactivate: [canDeactivateFnEditor],
+    canActivate: [isLogedInFn],
   },
   {
     path: 'admin/node/:paramNodeId',
     component: ArticleAdminComponent,
     canDeactivate: [canDeactivateFnEditor],
+    canActivate: [isLogedInFn],
   },
 ];

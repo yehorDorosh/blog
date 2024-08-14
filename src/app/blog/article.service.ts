@@ -153,7 +153,8 @@ export class ArticleService implements OnInit {
     title: string,
     content: string,
     pageHeroPath: string,
-    lang: LangList
+    lang: LangList,
+    published: boolean
   ) {
     if (!this.userService.getToken) return;
 
@@ -173,6 +174,7 @@ export class ArticleService implements OnInit {
             pageHero: pageHeroPath,
             editorImages: this.editorImages,
           },
+          published,
         }
       )
       .subscribe({

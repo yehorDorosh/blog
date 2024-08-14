@@ -24,6 +24,10 @@
         <label for="content">Content</label>
         <angular-editor name="content" [placeholder]="'Enter text here...'" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
     </div>
+    <div class="form-group">
+        <input type="checkbox" id="published" name="is-published" [(ngModel)]="published" />
+        <label for="published">Published</label>
+    </div>
     <button type="submit" class="btn btn-primary">Save</button>
     <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
 </form>
