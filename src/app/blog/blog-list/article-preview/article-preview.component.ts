@@ -1,4 +1,4 @@
-import { Component, input, inject } from '@angular/core';
+import { Component, input, inject, computed } from '@angular/core';
 import { type BlogArticle } from '../../blog.model';
 import { ArticleService } from '../../article.service';
 import { RouterLink } from '@angular/router';
@@ -16,4 +16,10 @@ export class ArticlePreviewComponent {
   langSwitcherService = inject(LangSwitcherService);
 
   article = input.required<BlogArticle>();
+  lang = this.langSwitcherService.lang();
+
+  articleTitle = computed<string>(() => {
+    const title = this.article().title;
+    return title[this.lang] ?? title.en;
+  });
 }

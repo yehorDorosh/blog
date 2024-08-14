@@ -2,8 +2,8 @@
 
 <article>
     @if (article()) { 
-        <h2>{{ article()!.title[lang()] }}</h2>
-        <div [innerHTML]="article()!.content[lang()] | sanitizeHtml"></div>
+        <h1>{{ articleTitle() }}</h1>
+        <div [innerHTML]="articleContent() | sanitizeHtml"></div>
         <img [src]="article()!.img.pageHero" alt="{{ article()!.title }}" />
     }
 </article> 

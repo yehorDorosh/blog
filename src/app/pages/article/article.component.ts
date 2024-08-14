@@ -33,6 +33,16 @@ export class ArticleComponent implements OnInit {
     return this.articleService.articles();
   });
 
+  articleContent = computed<string>(() => {
+    const content = this.article()!.content;
+    return content[this.lang()] ?? content.en;
+  });
+
+  articleTitle = computed<string>(() => {
+    const title = this.article()!.title;
+    return title[this.lang()] ?? title.en;
+  });
+
   ngOnInit(): void {
     this.articleService.getArticles();
   }
