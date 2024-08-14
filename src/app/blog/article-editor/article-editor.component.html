@@ -8,7 +8,7 @@
     </div>
     <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" class="form-control" name="title" [(ngModel)]="title" >
+        <input type="text" class="form-control" name="title" [(ngModel)]="titleField" (ngModelChange)="onTitleFieldChange()" >
     </div>
     <div class="form-group">
         <label for="author">Page Hero Image</label>
@@ -22,7 +22,13 @@
     </div>
     <div class="form-group">
         <label for="content">Content</label>
-        <angular-editor name="content" [placeholder]="'Enter text here...'" [(ngModel)]="content" [config]="editorConfig"></angular-editor>
+        <angular-editor
+            name="content"
+            [placeholder]="'Enter text here...'"
+            [(ngModel)]="contentField"
+            [config]="editorConfig"
+            (ngModelChange)="onContentFieldChange()"
+        ></angular-editor>
     </div>
     <div class="form-group">
         <input type="checkbox" id="published" name="is-published" [(ngModel)]="published" />

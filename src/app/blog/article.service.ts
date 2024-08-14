@@ -7,6 +7,7 @@ import {
   type BlogArticle,
   type BlogArticleResponse,
   isR2Response,
+  TranslatableContent,
 } from './blog.model';
 import { map, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -150,8 +151,8 @@ export class ArticleService implements OnInit {
 
   saveArticle(
     articleId: string,
-    title: string,
-    content: string,
+    title: TranslatableContent,
+    content: TranslatableContent,
     pageHeroPath: string,
     lang: LangList,
     published: boolean
@@ -164,12 +165,8 @@ export class ArticleService implements OnInit {
       .patch(
         `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
         {
-          title: article
-            ? { ...article.title, [lang]: title }
-            : { [lang]: title },
-          content: article
-            ? { ...article.content, [lang]: content }
-            : { [lang]: content },
+          title,
+          content,
           img: {
             pageHero: pageHeroPath,
             editorImages: this.editorImages,

@@ -1,7 +1,7 @@
 import { Component, inject, input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ArticleService } from '../article.service';
-import { BlogArticle } from '../blog.model';
+import { BlogArticle, TranslatableContent } from '../blog.model';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
@@ -25,8 +25,18 @@ export class ArticleEditorComponent implements OnInit {
 
   article = input<BlogArticle>();
 
-  title = '';
-  content = '';
+  title: TranslatableContent = {
+    en: '',
+    ru: '',
+    uk: '',
+  };
+  titleField = '';
+  content: TranslatableContent = {
+    en: '',
+    ru: '',
+    uk: '',
+  };
+  contentField = '';
   pageHeroPath = '';
   published = false;
 
@@ -76,8 +86,11 @@ export class ArticleEditorComponent implements OnInit {
 
   ngOnInit() {
     if (this.article && this.article() && this.article()?.id) {
-      this.title = this.article()!.title[this.langSwitcherService.editorLang()];
-      this.content =
+      this.title = this.article()!.title;
+      this.titleField =
+        this.article()!.title[this.langSwitcherService.editorLang()];
+      this.content = this.article()!.content;
+      this.contentField =
         this.article()!.content[this.langSwitcherService.editorLang()];
       this.pageHeroPath = this.article()!.img.pageHero;
       this.published = this.article()!.published;
@@ -90,6 +103,14 @@ export class ArticleEditorComponent implements OnInit {
     const id = this.articleService.articleId();
     if (!id) return throwError(() => new Error('Article ID not found'));
     return this.articleService.uploadImageEditor(id, file);
+  }
+
+  onTitleFieldChange() {
+    this.title[this.langSwitcherService.editorLang()] = this.titleField;
+  }
+
+  onContentFieldChange() {
+    this.content[this.langSwitcherService.editorLang()] = this.contentField;
   }
 
   async onPageHeroSelected(event: Event) {
@@ -126,10 +147,18 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   onChangeEditorLang(e: Event) {
+    this.article()!.title[this.langSwitcherService.editorLang()] =
+      this.titleField;
+    this.article()!.content[this.langSwitcherService.editorLang()] =
+      this.contentField;
+
     const target = e.target as HTMLSelectElement;
+
     this.langSwitcherService.editorLang.set(target.value as LangList);
-    this.title = this.article()!.title[this.langSwitcherService.editorLang()];
-    this.content =
+
+    this.titleField =
+      this.article()!.title[this.langSwitcherService.editorLang()];
+    this.contentField =
       this.article()!.content[this.langSwitcherService.editorLang()];
   }
 }

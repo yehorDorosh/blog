@@ -1,13 +1,13 @@
 import { LangList } from '../lang-switcher/lang-switcher.model';
 
+export type TranslatableContent = {
+  [key in LangList]: string;
+};
+
 export interface BlogArticle {
   id?: string;
-  title: {
-    [key in LangList]: string;
-  };
-  content: {
-    [key in LangList]: string;
-  };
+  title: TranslatableContent;
+  content: TranslatableContent;
   img: {
     pageHero: string;
     editorImages: string[];
