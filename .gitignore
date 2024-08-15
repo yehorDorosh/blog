@@ -43,3 +43,4 @@ Thumbs.db
 
 environment.development.ts
 /uploads
+/server/security

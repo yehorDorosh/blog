@@ -30,7 +30,6 @@ export const canDeactivateFnEditor: CanDeactivateFn<
 };
 
 export const isLogedInFn: CanActivateFn = () => {
-  console.log('isLogedInFn');
   const router = inject(Router);
   const userService = inject(UserService);
 

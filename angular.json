@@ -54,7 +54,8 @@
             },
             "allowedCommonJsDependencies": [
               "multer",
-              "fast-xml-parser"
+              "fast-xml-parser",
+              "firebase-admin"
             ]
           },
           "configurations": {

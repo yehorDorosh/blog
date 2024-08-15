@@ -7,6 +7,8 @@ import bootstrap from './src/main.server';
 import { imageRouter } from './server/router/image-router';
 import { LOCALE_ID } from '@angular/core';
 import { REQUEST, RESPONSE } from './src/express.tokens';
+import admin from 'firebase-admin';
+import { environment } from './src/environments/environment';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -18,6 +20,13 @@ export function app(): express.Express {
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine();
+
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+      projectId: environment.fireBaseProjectId,
+    });
+  }
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);

@@ -7,6 +7,7 @@ import {
 } from '../api/image-api.js';
 import multer from 'multer';
 import fs from 'fs';
+import isAuth from '../midleware/is-auth.js';
 
 export const imageRouter = Router();
 
@@ -28,8 +29,8 @@ const upload = multer({ storage: storage });
 
 imageRouter.get('/image/:id/:key', getImage);
 
-imageRouter.post('/upload-image', upload.single('image'), uploadImage);
+imageRouter.post('/upload-image', isAuth, upload.single('image'), uploadImage);
 
-imageRouter.get('/image/:id', getImageList);
+imageRouter.get('/image/:id', isAuth, getImageList);
 
-imageRouter.delete('/image/:id/:key?', deleteImage);
+imageRouter.delete('/image/:id/:key?', isAuth, deleteImage);

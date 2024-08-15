@@ -1,10 +1,16 @@
-import { Injectable, afterNextRender, inject, computed, signal } from '@angular/core';
+import {
+  Injectable,
+  afterNextRender,
+  inject,
+  computed,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { type User } from './user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private router = inject(Router);
@@ -20,12 +26,12 @@ export class UserService {
       if (userString) {
         const user = JSON.parse(userString) as User;
         if (user && user.logOutDate) {
-          this.user.set({...user, logOutDate: new Date(user.logOutDate)});
+          this.user.set({ ...user, logOutDate: new Date(user.logOutDate) });
           this.logoutDate = new Date(user.logOutDate);
           this.startTokenCheckInterval();
         }
       }
-    })
+    });
   }
 
   isLoggedIn = computed(() => {

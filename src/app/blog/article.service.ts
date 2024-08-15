@@ -1,6 +1,6 @@
 import { Injectable, inject, signal, DestroyRef, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { UserService } from '../user/user.service';
 import {
   type FireBaseResponse,
@@ -91,11 +91,18 @@ export class ArticleService implements OnInit {
     const formData = new FormData();
     formData.append('image', file);
 
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${this.userService.getToken}`
+    );
+
     const promise = new Promise<string>((resolve, reject) => {
       const imagePath = `/api/image/${articleId}/${file.name}`;
 
       const subscription = this.httpClient
-        .post(`/api/upload-image?id=${articleId}`, formData)
+        .post(`/api/upload-image?id=${articleId}`, formData, {
+          headers,
+        })
         .subscribe({
           next: (response) => {
             this.articleImages.push(imagePath);
@@ -119,10 +126,16 @@ export class ArticleService implements OnInit {
     const formData = new FormData();
     formData.append('image', file);
 
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${this.userService.getToken}`
+    );
+
     const observer = this.httpClient
       .post<HttpEvent<UploadResponse>>(
         `/api/upload-image?id=${articleId}`,
-        formData
+        formData,
+        { headers }
       )
       .pipe(
         map((response) => {
@@ -223,26 +236,38 @@ export class ArticleService implements OnInit {
   }
 
   deleteImage(imagePath: string, articleId?: string) {
-    const subscription = this.httpClient.delete(`${imagePath}`).subscribe({
-      next: (response) => {
-        this.articleImages = this.articleImages.filter(
-          (img) => img !== imagePath
-        );
-        if (articleId) this.getAricleImgs(articleId);
-        console.log('Remove image.', response);
-      },
-      error: (error) => {
-        console.error('Remove image error', error);
-      },
-      complete: () => {
-        subscription.unsubscribe();
-      },
-    });
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${this.userService.getToken}`
+    );
+
+    const subscription = this.httpClient
+      .delete(`${imagePath}`, { headers })
+      .subscribe({
+        next: (response) => {
+          this.articleImages = this.articleImages.filter(
+            (img) => img !== imagePath
+          );
+          if (articleId) this.getAricleImgs(articleId);
+          console.log('Remove image.', response);
+        },
+        error: (error) => {
+          console.error('Remove image error', error);
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        },
+      });
   }
 
   getAricleImgs(articleId: string) {
+    const headers = new HttpHeaders().set(
+      'Authorization',
+      `Bearer ${this.userService.getToken}`
+    );
+
     this.getArticleImgsSubscription = this.httpClient
-      .get<string[]>(`/api/image/${articleId}`)
+      .get<string[]>(`/api/image/${articleId}`, { headers })
       .subscribe({
         next: (response) => {
           console.log('Get article images', response);
