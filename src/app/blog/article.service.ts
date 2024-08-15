@@ -42,7 +42,7 @@ export class ArticleService implements OnInit {
 
   getArticles() {
     this.getArticlesSubscription = this.httpClient
-      .get<BlogArticleResponse>(`${environment.realBaseApiUrl}/blog.json`)
+      .get<BlogArticleResponse>(`${environment.fireBase.apiUrl}/blog.json`)
       .subscribe({
         next: (response) => {
           if (!response) {
@@ -69,7 +69,7 @@ export class ArticleService implements OnInit {
 
     const subscription = this.httpClient
       .post<FireBaseResponse>(
-        `${environment.realBaseApiUrl}/blog.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/blog.json?auth=${this.userService.getToken}`,
         {}
       )
       .subscribe({
@@ -176,7 +176,7 @@ export class ArticleService implements OnInit {
 
     const subscription = this.httpClient
       .patch(
-        `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
         {
           title,
           content,
@@ -209,7 +209,7 @@ export class ArticleService implements OnInit {
 
     const subscription = this.httpClient
       .delete<null>(
-        `${environment.realBaseApiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`
+        `${environment.fireBase.apiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`
       )
       .subscribe({
         next: (response) => {

@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './login-form.component.html',
-  styleUrl: './login-form.component.scss'
+  styleUrl: './login-form.component.scss',
 })
 export class LoginFormComponent {
   private httpClient = inject(HttpClient);
@@ -20,34 +20,36 @@ export class LoginFormComponent {
 
   form = new FormGroup({
     email: new FormControl(''),
-    password: new FormControl('')
+    password: new FormControl(''),
   });
 
   onSubmit() {
-    const subscription = this.httpClient.post<User>(
-        `${environment.authApiUrlLogin}?key=${environment.firebaseApiKey}`,
+    const subscription = this.httpClient
+      .post<User>(
+        `${environment.fireBase.authApiUrlLogin}?key=${environment.fireBase.apiKey}`,
         {
           email: this.form.value.email,
           password: this.form.value.password,
-          returnSecureToken: true
+          returnSecureToken: true,
         }
-      ).subscribe({
-      next: (response) => {
-        this.userService.setUser({
-          email: response.email,
-          idToken: response.idToken,
-          expiresIn: response.expiresIn,
-          localId: response.localId,
-          logOutDate: null
-        });
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        subscription.unsubscribe();
-      }
-    });
+      )
+      .subscribe({
+        next: (response) => {
+          this.userService.setUser({
+            email: response.email,
+            idToken: response.idToken,
+            expiresIn: response.expiresIn,
+            localId: response.localId,
+            logOutDate: null,
+          });
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        },
+      });
   }
 }

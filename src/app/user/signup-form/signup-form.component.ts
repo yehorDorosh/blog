@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
   standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './signup-form.component.html',
-  styleUrl: './signup-form.component.scss'
+  styleUrl: './signup-form.component.scss',
 })
 export class SignupFormComponent {
   private httpClient = inject(HttpClient);
@@ -18,33 +18,35 @@ export class SignupFormComponent {
 
   form = new FormGroup({
     email: new FormControl(''),
-    password: new FormControl('')
+    password: new FormControl(''),
   });
 
   onSubmit() {
-    const subscription = this.httpClient.post<User>(
-        `${environment.authApiUrlRegister}?key=${environment.firebaseApiKey}`,
+    const subscription = this.httpClient
+      .post<User>(
+        `${environment.fireBase.authApiUrlRegister}?key=${environment.fireBase.apiKey}`,
         {
           email: this.form.value.email,
           password: this.form.value.password,
-          returnSecureToken: true
+          returnSecureToken: true,
         }
-      ).subscribe({
-      next: (response) => {
-        this.userService.setUser({
-          email: response.email,
-          idToken: response.idToken,
-          expiresIn: response.expiresIn,
-          localId: response.localId,
-          logOutDate: null
-        });
-      },
-      error: (error) => {
-        console.error(error);
-      },
-      complete: () => {
-        subscription.unsubscribe();
-      }
-    });
+      )
+      .subscribe({
+        next: (response) => {
+          this.userService.setUser({
+            email: response.email,
+            idToken: response.idToken,
+            expiresIn: response.expiresIn,
+            localId: response.localId,
+            logOutDate: null,
+          });
+        },
+        error: (error) => {
+          console.error(error);
+        },
+        complete: () => {
+          subscription.unsubscribe();
+        },
+      });
   }
 }

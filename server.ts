@@ -24,7 +24,7 @@ export function app(): express.Express {
   if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.applicationDefault(),
-      projectId: environment.fireBaseProjectId,
+      projectId: environment.fireBase.projectId,
     });
   }
 

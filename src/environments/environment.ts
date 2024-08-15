@@ -1,10 +1,12 @@
 export const environment = {
   production: true,
-  authApiUrlLogin: '',
-  authApiUrlRegister: '',
-  firebaseApiKey: '',
-  realBaseApiUrl: '',
-  fireBaseProjectId: '',
+  fireBase: {
+    authApiUrlLogin: '',
+    authApiUrlRegister: '',
+    apiKey: '',
+    apiUrl: '',
+    projectId: '',
+  },
   r2: {
     accessKeyId: '',
     secretAccessKey: '',
