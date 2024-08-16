@@ -8,12 +8,12 @@ import {
   type BlogArticleResponse,
   isR2Response,
   TranslatableContent,
+  TagId,
 } from './blog.model';
 import { map, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { UploadResponse } from '@kolkov/angular-editor';
 import { HttpResponse } from '@angular/common/http';
-import { LangList } from '../lang-switcher/lang-switcher.model';
 
 @Injectable({
   providedIn: 'root',
@@ -162,41 +162,48 @@ export class ArticleService implements OnInit {
     return observer;
   }
 
-  saveArticle(
-    articleId: string,
-    title: TranslatableContent,
-    content: TranslatableContent,
-    pageHeroPath: string,
-    lang: LangList,
-    published: boolean
-  ) {
+  saveArticle(articleData: {
+    articleId: string;
+    title: TranslatableContent;
+    content: TranslatableContent;
+    pageHeroPath: string;
+    published: boolean;
+    author: string;
+    date: Date;
+    tags: TagId[];
+  }) {
     if (!this.userService.getToken) return;
 
-    const article = this.articles().find((article) => article.id === articleId);
+    const article = this.articles().find(
+      (article) => article.id === articleData.articleId
+    );
 
     const subscription = this.httpClient
       .patch(
-        `${environment.fireBase.apiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/blog/${articleData.articleId}.json?auth=${this.userService.getToken}`,
         {
-          title,
-          content,
+          title: articleData.title,
+          content: articleData.content,
           img: {
-            pageHero: pageHeroPath,
+            pageHero: articleData.pageHeroPath,
             editorImages: this.editorImages,
           },
-          published,
+          published: articleData.published,
+          author: articleData.author,
+          date: articleData.date.toDateString(),
+          tags: articleData.tags,
         }
       )
       .subscribe({
         next: (response) => {
           console.log('Save article', response);
-          this.router.navigate(['blog', articleId], {
+          this.router.navigate(['blog', articleData.articleId], {
             state: { canLeave: true },
           });
         },
         error: (error) => {
           console.error(error);
-          this.deleteArticle(articleId);
+          this.deleteArticle(articleData.articleId);
         },
         complete: () => {
           subscription.unsubscribe();

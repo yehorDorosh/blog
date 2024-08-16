@@ -13,6 +13,22 @@ export interface BlogArticle {
     editorImages: string[];
   };
   published: boolean;
+  date: string;
+  author: string;
+  tags: TagId[];
+}
+
+export type TagId = string;
+
+export interface Tag {
+  id: TagId;
+  label: TranslatableContent;
+}
+
+export type Tags = Tag[];
+
+export interface GetTagsResponse {
+  [tagId: string]: Tag;
 }
 
 export interface BlogArticleResponse {

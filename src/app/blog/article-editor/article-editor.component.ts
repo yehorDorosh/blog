@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, computed, inject, input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ArticleService } from '../article.service';
 import { BlogArticle, TranslatableContent } from '../blog.model';
@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import { LangList } from '../../lang-switcher/lang-switcher.model';
 import { CommonModule } from '@angular/common';
+import { TagService } from '../../admin/tags-manager/tag.service';
 
 @Component({
   selector: 'app-article-editor',
@@ -21,6 +22,7 @@ import { CommonModule } from '@angular/common';
 export class ArticleEditorComponent implements OnInit {
   private articleService = inject(ArticleService);
   private router = inject(Router);
+  private tagService = inject(TagService);
   langSwitcherService = inject(LangSwitcherService);
 
   article = input<BlogArticle>();
@@ -39,6 +41,17 @@ export class ArticleEditorComponent implements OnInit {
   contentField = '';
   pageHeroPath = '';
   published = false;
+  author = 'admin';
+  date: string = new Date().toISOString().split('T')[0];
+
+  tagsList = computed(() => {
+    return this.tagService.tagsList().map((tag) => {
+      return {
+        ...tag,
+        selected: false,
+      };
+    });
+  });
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -85,6 +98,15 @@ export class ArticleEditorComponent implements OnInit {
   };
 
   ngOnInit() {
+    this.tagService.getTags(() => {
+      this.tagsList().forEach((tag) => {
+        const articleTag = this.article()!.tags.find(
+          (articleTag) => articleTag === tag.id
+        );
+        if (articleTag) tag.selected = true;
+      });
+    });
+
     if (this.article && this.article() && this.article()?.id) {
       this.title = this.article()!.title;
       this.titleField =
@@ -94,6 +116,8 @@ export class ArticleEditorComponent implements OnInit {
         this.article()!.content[this.langSwitcherService.editorLang()];
       this.pageHeroPath = this.article()!.img.pageHero;
       this.published = this.article()!.published;
+      this.author = this.article()!.author;
+      this.date = new Date(this.article()!.date).toISOString().split('T')[0];
       this.articleService.articleId.set(this.article()!.id!);
       this.articleService.editorImages = this.article()!.img.editorImages || [];
     }
@@ -132,14 +156,18 @@ export class ArticleEditorComponent implements OnInit {
   onSubmit() {
     const id = this.articleService.articleId();
     if (!id) return;
-    this.articleService.saveArticle(
-      id,
-      this.title,
-      this.content,
-      this.pageHeroPath,
-      this.langSwitcherService.editorLang(),
-      this.published
-    );
+    this.articleService.saveArticle({
+      articleId: id,
+      title: this.title,
+      content: this.content,
+      pageHeroPath: this.pageHeroPath,
+      published: this.published,
+      author: this.author,
+      date: new Date(this.date),
+      tags: this.tagsList()
+        .filter((tag) => tag.selected)
+        .map((tag) => tag.id),
+    });
   }
 
   onCancel() {

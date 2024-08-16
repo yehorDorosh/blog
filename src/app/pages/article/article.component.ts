@@ -5,17 +5,20 @@ import { HeaderComponent } from '../../layout/header/header.component';
 import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import { LangList } from '../../lang-switcher/lang-switcher.model';
+import { TagService } from '../../admin/tags-manager/tag.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [HeaderComponent, SanitizeHtmlPipe],
+  imports: [HeaderComponent, SanitizeHtmlPipe, DatePipe],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss',
 })
 export class ArticleComponent implements OnInit {
   articleService = inject(ArticleService);
   langSwitcherService = inject(LangSwitcherService);
+  tagService = inject(TagService);
 
   paramArticleId = input.required<string>();
 
@@ -43,7 +46,22 @@ export class ArticleComponent implements OnInit {
     return title[this.lang()] ?? title.en;
   });
 
+  tags = computed(() => {
+    return this.tagService.tagsList().filter((tag) => {
+      return this.article()!.tags.includes(tag.id);
+    });
+  });
+
+  author = computed<string>(() => {
+    return this.article()!.author;
+  });
+
+  date = computed<string>(() => {
+    return this.article()!.date;
+  });
+
   ngOnInit(): void {
     this.articleService.getArticles();
+    this.tagService.getTags();
   }
 }

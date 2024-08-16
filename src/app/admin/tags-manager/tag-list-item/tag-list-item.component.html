@@ -1,0 +1,12 @@
+<li>
+    <span>{{ tag().id }}</span>
+    @for (lang of langList(); track lang) {
+        <span>{{ tag().label[lang] }}</span>
+    }
+    <button type="button" class="btn btn-danger" (click)="onDeleteTag()">Delete</button>
+    <button type="button" class="btn btn-primary" (click)="onOpenEditor()">Edit</button>
+
+    @if (isEditorOpened()) {
+        <app-edit-tag-form [tag]="tag()" (onEditTag)="onOpenEditor()" />
+    }
+</li>

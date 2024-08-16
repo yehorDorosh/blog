@@ -1,7 +1,14 @@
 <app-header [paramNodeId]="paramArticleId()" />
 
 <article>
-    @if (article()) { 
+    @if (article()) {
+        <ul>
+            @for (tag of tags(); track tag.id) {
+                <li>{{ tag.label[lang()] }}</li>
+            }
+        </ul>
+        <p>{{ author() }}</p>
+        <p>{{ date() | date:'dd.MM.yyyy' }}</p>
         <h1>{{ articleTitle() }}</h1>
         <div [innerHTML]="articleContent() | sanitizeHtml"></div>
         <img [src]="article()!.img.pageHero" alt="{{ article()!.title }}" />
