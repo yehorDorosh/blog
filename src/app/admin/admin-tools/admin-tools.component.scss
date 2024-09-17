@@ -1,0 +1,11 @@
+@import "../../../styles/breakpoints.scss";
+
+.admin-panel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  background-color: var(--dark);
+  padding: 3rem;
+}

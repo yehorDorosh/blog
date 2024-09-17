@@ -1,7 +1,13 @@
-<div>
-    @if (userService.isLoggedIn() && paramNodeId()) {
-        <a [routerLink]="['/blog', paramNodeId()]">Preview</a>
-        <a [routerLink]="['/admin', 'node', paramNodeId()]">Edit</a>
-        <button (click)="onDeleteArticle()">Delete</button>
-    }
+<div class="admin-panel">
+  @if (userService.isLoggedIn() && paramNodeId()) {
+  <a [routerLink]="['/blog', paramNodeId()]" class="admin-panel-link"
+    >Preview</a
+  >
+  <a [routerLink]="['/admin', 'node', paramNodeId()]" class="admin-panel-link"
+    >Edit</a
+  >
+  <button (click)="onDeleteArticle()" class="admin-panel-link color-danger">
+    Delete
+  </button>
+  }
 </div>
