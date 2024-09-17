@@ -1,9 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+@import "./styles/palette.scss";
+@import "./styles/links.scss";
+@import "./styles/buttons.scss";
+@import "./styles/typography.scss";
+@import "./styles/breakpoints.scss";
+
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Ysabeau", "Roboto", sans-serif;
+  font-size: 1.6rem;
   margin: 0;
   padding: 0;
-  background-color: #f0f0f0;
+  background-color: var(--white);
 }
 
 .angular-editor-textarea {

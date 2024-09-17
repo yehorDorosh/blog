@@ -1,11 +1,22 @@
 <header>
-    <a routerLink="/">Home</a>
-    <a routerLink="/user">Login/SignUp</a>
+  <app-site-logo />
+  <nav [class.open]="openNavMenu()">
+    <a routerLink="/user" class="header-link" routerLinkActive="active"
+      >Login/SignUp</a
+    >
     @if (userService.isLoggedIn()) {
-        <button (click)="onLogout()">Logout</button>
-        <a routerLink="/admin">Admin Panel</a>
+    <a routerLink="/admin" class="header-link" routerLinkActive="active"
+      >Admin Panel</a
+    >
+    <button (click)="onLogout()">Logout</button>
     }
     <app-lang-switcher />
+    <app-close-button class="close-button" (click)="onCloseNavMenu()" />
+  </nav>
+  <app-burger
+    class="burger"
+    [class.open]="openNavMenu()"
+    (click)="onOpenNavMenu()"
+  />
 </header>
-
 <app-admin-tools [paramNodeId]="paramNodeId()" />
