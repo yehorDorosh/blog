@@ -1,0 +1,9 @@
+@import "../../../styles/breakpoints.scss";
+
+main {
+  margin-bottom: 3rem;
+
+  @include desk {
+    margin-bottom: 5rem;
+  }
+}

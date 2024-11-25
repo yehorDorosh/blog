@@ -1,5 +1,5 @@
+@if (userService.isLoggedIn() && paramNodeId()) {
 <div class="admin-panel">
-  @if (userService.isLoggedIn() && paramNodeId()) {
   <a [routerLink]="['/blog', paramNodeId()]" class="admin-panel-link"
     >Preview</a
   >
@@ -9,5 +9,5 @@
   <button (click)="onDeleteArticle()" class="admin-panel-link color-danger">
     Delete
   </button>
-  }
 </div>
+}

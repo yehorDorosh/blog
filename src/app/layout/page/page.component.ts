@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 
 @Component({
@@ -8,4 +8,6 @@ import { HeaderComponent } from '../header/header.component';
   templateUrl: './page.component.html',
   styleUrl: './page.component.scss',
 })
-export class PageComponent {}
+export class PageComponent {
+  paramNodeId = input<string>();
+}

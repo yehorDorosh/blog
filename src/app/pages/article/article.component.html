@@ -1,16 +1,35 @@
-<app-header [paramNodeId]="paramArticleId()" />
-
-<article>
+<app-page [paramNodeId]="paramArticleId()">
+  <div class="pagehero" ngProjectAs="top-content">
     @if (article()) {
-        <ul>
-            @for (tag of tags(); track tag.id) {
-                <li>{{ tag.label[lang()] }}</li>
-            }
-        </ul>
-        <p>{{ author() }}</p>
-        <p>{{ date() | date:'dd.MM.yyyy' }}</p>
-        <h1>{{ articleTitle() }}</h1>
-        <div [innerHTML]="articleContent() | sanitizeHtml"></div>
-        <img [src]="article()!.img.pageHero" alt="{{ article()!.title }}" />
+    <img
+      class="pagehero__banner"
+      [src]="article()!.img.pageHero"
+      alt="{{ article()!.title }}"
+    />
+    <h1 class="pagehero__title">{{ articleTitle() }}</h1>
     }
-</article> 
+  </div>
+  <article class="article">
+    @if (article()) {
+    <ul class="article__tags tags">
+      @for (tag of tags(); track tag.id) {
+      <li class="tags__tag">{{ tag.label[lang()] }}</li>
+      }
+    </ul>
+    <div class="article__data">
+      <p class="color-secondary">
+        <span i18n>Author</span><span>: </span>
+        <span>{{ author() }}</span>
+      </p>
+      <p class="color-secondary">
+        <span i18n>Date</span><span>: </span>
+        <span>{{ date() | date : "dd.MM.yyyy" }}</span>
+      </p>
+    </div>
+    <div
+      class="article__body post"
+      [innerHTML]="articleContent() | sanitizeHtml"
+    ></div>
+    }
+  </article>
+</app-page>

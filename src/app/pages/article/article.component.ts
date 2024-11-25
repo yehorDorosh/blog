@@ -7,11 +7,12 @@ import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import { LangList } from '../../lang-switcher/lang-switcher.model';
 import { TagService } from '../../admin/tags-manager/tag.service';
 import { DatePipe } from '@angular/common';
+import { PageComponent } from '../../layout/page/page.component';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [HeaderComponent, SanitizeHtmlPipe, DatePipe],
+  imports: [HeaderComponent, SanitizeHtmlPipe, DatePipe, PageComponent],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss',
 })

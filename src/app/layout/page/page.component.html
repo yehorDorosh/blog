@@ -1,5 +1,11 @@
-<app-header />
+<app-header [paramNodeId]="paramNodeId()" />
 
 <main>
-  <ng-content />
+  <div class="page">
+    <ng-content select="top-content" />
+
+    <div class="wrap">
+      <ng-content />
+    </div>
+  </div>
 </main>
