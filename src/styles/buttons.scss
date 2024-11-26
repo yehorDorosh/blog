@@ -1,4 +1,4 @@
-button {
+.btn {
   background-color: var(--primary);
   color: var(--white);
   border: none;
@@ -11,5 +11,13 @@ button {
 
   &:hover {
     background-color: var(--info);
+  }
+
+  &--danger {
+    background-color: var(--danger);
+
+    &:hover {
+      background-color: var(--dark);
+    }
   }
 }

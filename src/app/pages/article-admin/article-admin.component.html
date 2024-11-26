@@ -1,15 +1,20 @@
-<app-header [paramNodeId]="paramNodeId()" />
+<app-page>
+  @if (article()) {
+  <app-article-editor [article]="article()!" />
 
-@if (article()) {
-    <app-article-editor [article]="article()!" />
-
-    <ul>
-        @for (imgPath of articleImageList(); track imgPath) {
-          <li>
-            <p>{{ imgPath }}</p>
-            <img [src]="imgPath" class="img" />
-            <button  (click)="onDeleteImageListItem(imgPath)">Delete</button>
-          </li>
-        }
-    </ul>
-}
+  <ul class="img-list">
+    @for (imgPath of articleImageList(); track imgPath) {
+    <li class="img-list__item">
+      <img [src]="imgPath" class="img-list__img" />
+      <p class="img-list__path">{{ imgPath }}</p>
+      <button
+        class="img-list__delete-btn btn btn--danger"
+        (click)="onDeleteImageListItem(imgPath)"
+      >
+        Delete
+      </button>
+    </li>
+    }
+  </ul>
+  }
+</app-page>

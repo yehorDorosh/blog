@@ -1,9 +1,9 @@
 @import "../../../styles/breakpoints.scss";
 
-main {
-  margin-bottom: 3rem;
+.main-content {
+  padding-block: 2rem;
 
   @include desk {
-    margin-bottom: 5rem;
+    padding-block: 4rem;
   }
 }

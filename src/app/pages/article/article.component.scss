@@ -79,3 +79,12 @@
     border-radius: 2rem;
   }
 }
+
+.post {
+  & img {
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+    display: block;
+  }
+}

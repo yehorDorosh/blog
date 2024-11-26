@@ -1,7 +1,13 @@
-import { Component, input, inject, OnInit, computed } from '@angular/core';
+import {
+  Component,
+  input,
+  inject,
+  OnInit,
+  computed,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type BlogArticle } from '../../blog/blog.model';
 import { ArticleService } from '../../blog/article.service';
-import { HeaderComponent } from '../../layout/header/header.component';
 import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import { LangList } from '../../lang-switcher/lang-switcher.model';
@@ -12,9 +18,10 @@ import { PageComponent } from '../../layout/page/page.component';
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [HeaderComponent, SanitizeHtmlPipe, DatePipe, PageComponent],
+  imports: [SanitizeHtmlPipe, DatePipe, PageComponent],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss',
+  encapsulation: ViewEncapsulation.None,
 })
 export class ArticleComponent implements OnInit {
   articleService = inject(ArticleService);

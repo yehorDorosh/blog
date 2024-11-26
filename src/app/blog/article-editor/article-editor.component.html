@@ -1,62 +1,107 @@
 <form (ngSubmit)="onSubmit()" class="editor">
-    <div class="form-group">
-        <label for="articleLang">Language</label>
-        <select class="form-control" name="articleLang" (change)="onChangeEditorLang($event)">
-            <option *ngFor="let lang of langSwitcherService.langList" [value]="lang" [selected]="langSwitcherService.editorLang() === lang">{{ lang }}</option>
-        </select>
-        <span>{{ langSwitcherService.editorLang() }}</span>
-    </div>
+  <div class="form-group form-group--column">
+    <label for="articleLang">Language: </label>
+    <select
+      class="form-control input"
+      name="articleLang"
+      (change)="onChangeEditorLang($event)"
+    >
+      <option
+        *ngFor="let lang of langSwitcherService.langList"
+        [value]="lang"
+        [selected]="langSwitcherService.editorLang() === lang"
+      >
+        {{ lang }}
+      </option>
+    </select>
+  </div>
 
-    <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" class="form-control" name="title" [(ngModel)]="titleField" (ngModelChange)="onTitleFieldChange()" >
-    </div>
+  <div class="form-group form-group--column">
+    <label for="title">Title: </label>
+    <input
+      type="text"
+      class="form-control input input--long"
+      name="title"
+      [(ngModel)]="titleField"
+      (ngModelChange)="onTitleFieldChange()"
+    />
+  </div>
 
-    <div class="form-group">
-        <label for="author">Page Hero Image</label>
-        @if (pageHeroPath) {
-            <img [src]="pageHeroPath" alt="Page Hero Image" class="editor__pagehero-preview" />
-            <button type="button" class="btn btn-danger" (click)="onRemovePageHero()">Remove</button>
-        } @else {
-            <input type="file" name="image" (change)="onPageHeroSelected($event)" />
-        }
-    </div>
+  <div class="form-group">
+    <label for="author">Page Hero Image: </label>
+    @if (pageHeroPath) {
+    <img
+      [src]="pageHeroPath"
+      alt="Page Hero Image"
+      class="editor__pagehero-preview"
+    />
+    <button type="button" class="btn btn--danger" (click)="onRemovePageHero()">
+      Remove
+    </button>
+    } @else {
+    <input type="file" name="image" (change)="onPageHeroSelected($event)" />
+    }
+  </div>
 
-    <div class="form-group">
-        <label for="content">Content</label>
-        <angular-editor
-            name="content"
-            [placeholder]="'Enter text here...'"
-            [(ngModel)]="contentField"
-            [config]="editorConfig"
-            (ngModelChange)="onContentFieldChange()"
-        ></angular-editor>
-    </div>
+  <div class="form-group form-group--column">
+    <label for="content">Content</label>
+    <angular-editor
+      name="content"
+      [placeholder]="'Enter text here...'"
+      [(ngModel)]="contentField"
+      [config]="editorConfig"
+      (ngModelChange)="onContentFieldChange()"
+    ></angular-editor>
+  </div>
 
-    <div class="form-group">
-        <input type="checkbox" id="published" name="is-published" [(ngModel)]="published" />
-        <label for="published">Published</label>
-    </div>
+  <div class="form-group">
+    <input
+      type="checkbox"
+      id="published"
+      name="is-published"
+      [(ngModel)]="published"
+    />
+    <label for="published">Published</label>
+  </div>
 
-    <div class="form-group">
-        @for(tag of tagsList(); track tag.id) {
-            <input type="checkbox" id="tag{{ tag.id }}" name="tag{{ tag.label.en }}" [(ngModel)]="tag.selected" />
-            <label for="tag{{ tag.id }}">{{ tag.label[langSwitcherService.editorLang()] }}</label>
-        }
-    </div>
-    
-    <div class="form-group">
-        <label for="author">Author</label>
-        <input id="author" type="text" class="form-control" name="author" [(ngModel)]="author" />
-    </div>
+  <div class="form-group">
+    @for(tag of tagsList(); track tag.id) {
+    <input
+      type="checkbox"
+      id="tag{{ tag.id }}"
+      name="tag{{ tag.label.en }}"
+      [(ngModel)]="tag.selected"
+    />
+    <label for="tag{{ tag.id }}">{{
+      tag.label[langSwitcherService.editorLang()]
+    }}</label>
+    }
+  </div>
 
-    <div class="form-group">
-        <label for="date">Creation Date</label>
-        <input id="date" type="date" class="form-control" name="date" [(ngModel)]="date" />
-    </div>
+  <div class="form-group form-group--column">
+    <label for="author">Author:</label>
+    <input
+      id="author"
+      type="text"
+      class="form-control input"
+      name="author"
+      [(ngModel)]="author"
+    />
+  </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-    </div>
+  <div class="form-group form-group--column">
+    <label for="date">Creation Date: </label>
+    <input
+      id="date"
+      type="date"
+      class="form-control input"
+      name="date"
+      [(ngModel)]="date"
+    />
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn">Save</button>
+    <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+  </div>
 </form>
