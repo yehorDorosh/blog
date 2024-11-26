@@ -1,7 +1,9 @@
-<app-header />
+<app-page>
+  <p>
+    <a class="btn" routerLink="./new-article">New article</a>
+  </p>
 
-<a routerLink="./new-article">New article.</a>
+  <app-tags-manager />
 
-<app-tags-manager />
-
-<app-blog-list [isAdminAccess]="true" />
+  <app-blog-list [isAdminAccess]="true" />
+</app-page>

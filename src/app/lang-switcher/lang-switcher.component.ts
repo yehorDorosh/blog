@@ -1,12 +1,11 @@
 import { Component, inject, signal, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { LangSwitcherService } from './lang-switcher.service';
-import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-lang-switcher',
   standalone: true,
-  imports: [NgFor],
+  imports: [],
   templateUrl: './lang-switcher.component.html',
   styleUrl: './lang-switcher.component.scss',
 })

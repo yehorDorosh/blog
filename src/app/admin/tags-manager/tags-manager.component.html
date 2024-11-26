@@ -1,7 +1,9 @@
 <app-add-tag-form />
 
-<ul>
-    @for (tag of tags(); track tag.id) {
-        <app-tag-list-item [tag]="tag" [langList]="langList()" />
-    }
+<h3>Tags:</h3>
+
+<ul class="list">
+  @for (tag of tags(); track tag.id) {
+  <app-tag-list-item [tag]="tag" [langList]="langList()" />
+  }
 </ul>

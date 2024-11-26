@@ -1,18 +1,13 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from '../../layout/header/header.component';
 import { RouterLink } from '@angular/router';
 import { BlogListComponent } from '../../blog/blog-list/blog-list.component';
 import { TagsManagerComponent } from '../../admin/tags-manager/tags-manager.component';
+import { PageComponent } from '../../layout/page/page.component';
 
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [
-    HeaderComponent,
-    RouterLink,
-    BlogListComponent,
-    TagsManagerComponent,
-  ],
+  imports: [RouterLink, BlogListComponent, TagsManagerComponent, PageComponent],
   templateUrl: './admin-panel.component.html',
   styleUrl: './admin-panel.component.scss',
 })

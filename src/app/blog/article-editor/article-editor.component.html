@@ -1,6 +1,6 @@
 <form (ngSubmit)="onSubmit()" class="editor">
   <div class="form-group form-group--column">
-    <label for="articleLang">Language: </label>
+    <label class="label" for="articleLang">Language: </label>
     <select
       class="form-control input"
       name="articleLang"
@@ -17,7 +17,7 @@
   </div>
 
   <div class="form-group form-group--column">
-    <label for="title">Title: </label>
+    <label class="label" for="title">Title: </label>
     <input
       type="text"
       class="form-control input input--long"
@@ -28,7 +28,7 @@
   </div>
 
   <div class="form-group">
-    <label for="author">Page Hero Image: </label>
+    <label class="label" for="author">Page Hero Image: </label>
     @if (pageHeroPath) {
     <img
       [src]="pageHeroPath"
@@ -44,7 +44,7 @@
   </div>
 
   <div class="form-group form-group--column">
-    <label for="content">Content</label>
+    <label class="label" for="content">Content</label>
     <angular-editor
       name="content"
       [placeholder]="'Enter text here...'"
@@ -61,7 +61,7 @@
       name="is-published"
       [(ngModel)]="published"
     />
-    <label for="published">Published</label>
+    <label class="label" for="published">Published</label>
   </div>
 
   <div class="form-group">
@@ -72,14 +72,14 @@
       name="tag{{ tag.label.en }}"
       [(ngModel)]="tag.selected"
     />
-    <label for="tag{{ tag.id }}">{{
+    <label class="label" for="tag{{ tag.id }}">{{
       tag.label[langSwitcherService.editorLang()]
     }}</label>
     }
   </div>
 
   <div class="form-group form-group--column">
-    <label for="author">Author:</label>
+    <label class="label" for="author">Author:</label>
     <input
       id="author"
       type="text"
@@ -90,7 +90,7 @@
   </div>
 
   <div class="form-group form-group--column">
-    <label for="date">Creation Date: </label>
+    <label class="label" for="date">Creation Date: </label>
     <input
       id="date"
       type="date"

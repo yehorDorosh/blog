@@ -1,11 +1,11 @@
-<app-header />
+<app-page>
+  @if (formSwitcher() === 'signup') {
+  <app-signup-form />
+  } @else {
+  <app-login-form />
+  }
 
-@if (formSwitcher() === 'signup') {
-<app-signup-form />
-} @else {
-<app-login-form />
-}
-
-<button class="btn" (click)="onSwitchForm()">
-  Switch to {{ formSwitcher() === "signup" ? "login" : "signup" }}
-</button>
+  <button class="btn" (click)="onSwitchForm()">
+    Switch to {{ formSwitcher() === "signup" ? "login" : "signup" }}
+  </button>
+</app-page>

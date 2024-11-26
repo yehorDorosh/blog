@@ -1,13 +1,13 @@
 <form (ngSubmit)="addTag()">
   @for (lang of langList(); track $index) {
   <div class="form-group">
-    <label for="tagLabel{{ lang }}"
+    <label class="label" for="tagLabel{{ lang }}"
       >Tag name <span>{{ lang }}</span
       >*</label
     >
     <input
       type="text"
-      class="form-control"
+      class="form-control input"
       name="tagLabel{{ lang }}"
       [(ngModel)]="tagTranslations[lang]"
     />

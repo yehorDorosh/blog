@@ -1,14 +1,14 @@
 import { Component, signal } from '@angular/core';
-import { SignupFormComponent } from "../../user/signup-form/signup-form.component";
-import { LoginFormComponent } from "../../user/login-form/login-form.component";
-import { HeaderComponent } from "../../layout/header/header.component";
+import { SignupFormComponent } from '../../user/signup-form/signup-form.component';
+import { LoginFormComponent } from '../../user/login-form/login-form.component';
+import { PageComponent } from '../../layout/page/page.component';
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [SignupFormComponent, LoginFormComponent, HeaderComponent],
+  imports: [SignupFormComponent, LoginFormComponent, PageComponent],
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss'
+  styleUrl: './auth.component.scss',
 })
 export class AuthComponent {
   formSwitcher = signal<'login' | 'signup'>('login');
@@ -16,6 +16,6 @@ export class AuthComponent {
   onSwitchForm() {
     this.formSwitcher.update((value) => {
       return value === 'login' ? 'signup' : 'login';
-    })
+    });
   }
 }

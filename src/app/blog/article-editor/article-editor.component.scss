@@ -5,31 +5,3 @@
     object-fit: cover;
   }
 }
-
-.form-group {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 1rem;
-
-  &--column {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-label {
-  font-weight: 700;
-  font-size: 2rem;
-}
-
-.input {
-  padding: 1rem;
-  font-size: 1.6rem;
-  border: 1px solid var(--black);
-  border-radius: 1rem;
-
-  &--long {
-    width: 100%;
-  }
-}
