@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { LangSwitcherService } from '../../../lang-switcher/lang-switcher.service';
 
 @Component({
-  selector: 'app-article-preview',
+  selector: 'li[appArticlePreview]',
   standalone: true,
   imports: [RouterLink],
   templateUrl: './article-preview.component.html',
@@ -21,5 +21,9 @@ export class ArticlePreviewComponent {
   articleTitle = computed<string>(() => {
     const title = this.article().title;
     return title[this.lang] ?? title.en;
+  });
+
+  articleImg = computed<string>(() => {
+    return this.article().img.pageHero;
   });
 }

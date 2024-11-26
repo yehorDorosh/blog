@@ -1,5 +1,6 @@
-<li>
-    <a [routerLink]="['/blog', article().id]">
-        <h2>{{ articleTitle() }}</h2>
-    </a>
-</li>
+<a class="article__link" [routerLink]="['/blog', article().id]">
+  <img class="article__img" [src]="articleImg()" [alt]="articleTitle()" />
+  <div class="article__txt">
+    <h2 class="article__title">{{ articleTitle() }}</h2>
+  </div>
+</a>

@@ -1,5 +1,5 @@
-<ul>
-    @for (article of articlesList(); track article.id) {
-        <app-article-preview [article]="article" />
-    }
+<ul class="list">
+  @for (article of articlesList(); track article.id) {
+  <li class="article" appArticlePreview [article]="article"></li>
+  }
 </ul>
