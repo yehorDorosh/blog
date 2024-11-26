@@ -1,24 +1,9 @@
 @import "../../../../styles/breakpoints.scss";
 
-:host {
-  display: block;
-  border-radius: 1rem;
-  box-shadow: 0 0 5px 0px lightslategray;
-  width: 100%;
-
-  @include tab {
-    max-width: 60rem;
-  }
-}
-
 .article__link {
   text-decoration: none;
   color: var(--black);
   display: block;
-
-  &:hover {
-    color: var(--primary);
-  }
 }
 
 .article__title {

@@ -16,6 +16,7 @@ export class ArticlePreviewComponent {
   langSwitcherService = inject(LangSwitcherService);
 
   article = input.required<BlogArticle>();
+  simple = input<boolean>(false);
   lang = this.langSwitcherService.lang();
 
   articleTitle = computed<string>(() => {
@@ -25,5 +26,9 @@ export class ArticlePreviewComponent {
 
   articleImg = computed<string>(() => {
     return this.article().img.pageHero;
+  });
+
+  articleDate = computed<string>(() => {
+    return new Date(this.article().date).toLocaleDateString();
   });
 }

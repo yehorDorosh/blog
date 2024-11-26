@@ -1,5 +1,14 @@
-<ul class="list">
+@if (simple()) {
+<h2>Articles</h2>
+}
+
+<ul [class]="{ list: !simple(), 'list-simple': simple() }">
   @for (article of articlesList(); track article.id) {
-  <li class="article" appArticlePreview [article]="article"></li>
+  <li
+    [class]="{ article: !simple(), 'article-simple': simple() }"
+    appArticlePreview
+    [article]="article"
+    [simple]="simple()"
+  ></li>
   }
 </ul>

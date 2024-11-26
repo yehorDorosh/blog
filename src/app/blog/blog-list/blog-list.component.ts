@@ -13,6 +13,7 @@ export class BlogListComponent {
   articleService = inject(ArticleService);
 
   isAdminAccess = input<boolean>(false);
+  simple = input<boolean>(false);
 
   articlesList = computed(() => {
     return this.articleService
