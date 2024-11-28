@@ -24,6 +24,7 @@
     "@angular/ssr": "^17.3.8",
     "@aws-sdk/client-s3": "^3.614.0",
     "@kolkov/angular-editor": "^3.0.0-beta.0",
+    "@splidejs/splide": "^4.1.4",
     "express": "^4.18.2",
     "firebase-admin": "^12.3.1",
     "multer": "^1.4.5-lts.1",
