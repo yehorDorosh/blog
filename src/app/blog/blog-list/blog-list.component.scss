@@ -14,8 +14,4 @@
   border-radius: 1rem;
   box-shadow: 0 0 5px 0px lightslategray;
   width: 100%;
-
-  @include tab {
-    max-width: 60rem;
-  }
 }

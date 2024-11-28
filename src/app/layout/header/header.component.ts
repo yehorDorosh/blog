@@ -1,5 +1,4 @@
 import { Component, inject, input, signal } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { UserService } from '../../user/user.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AdminToolsComponent } from '../../admin/admin-tools/admin-tools.component';
@@ -18,7 +17,6 @@ import { CloseButtonComponent } from '../../ui/close-button/close-button.compone
     BurgerComponent,
     SiteLogoComponent,
     CloseButtonComponent,
-    NgIf,
     RouterLinkActive,
   ],
   templateUrl: './header.component.html',
