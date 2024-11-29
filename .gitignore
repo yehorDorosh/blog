@@ -42,5 +42,6 @@ testem.log
 Thumbs.db
 
 environment.development.ts
+environment.ts
 /uploads
 /server/security
