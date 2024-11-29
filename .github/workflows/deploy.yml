@@ -38,7 +38,7 @@ jobs:
             npm run build || true
 
             # Запустить приложение с помощью PM2
-            pm2 start /root/blog/dist/blog/proxy-server.mjs --name "blog-site"
+            pm2 start /root/blog/dist/blog/proxy-server.mjs --name "blog-site" --env PORT=80
 
             # Сохранить процесс PM2 (автозапуск)
             pm2 save
