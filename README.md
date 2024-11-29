@@ -42,3 +42,13 @@ windows
 ### Connect
 
 `ssh -i C:\Users\Egor\.ssh\id_rsa root@194.37.80.72`
+
+## PM2
+
+### Show all started nodejs process
+
+`pm2 list`
+
+### Show logs of the process
+
+`pm2 logs blog-site`

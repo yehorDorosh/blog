@@ -10,6 +10,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env: # Переменные окружения для всего задания
+      NODE_ENV: production
+      PORT: "80"
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -38,7 +42,7 @@ jobs:
             npm run build || true
 
             # Запустить приложение с помощью PM2
-            pm2 start dist/blog/proxy-server.mjs --name "blog-site"
+            pm2 start /root/blog/dist/blog/proxy-server.mjs --name "blog-site"
 
             # Сохранить процесс PM2 (автозапуск)
             pm2 save
