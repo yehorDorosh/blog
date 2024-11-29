@@ -11,7 +11,7 @@
   position: absolute;
   z-index: 2;
   inset: 0;
-  background-color: var(--transparent-light);
+  background-color: var(--transparent-medium);
 
   & .wrap {
     display: flex;
@@ -23,5 +23,6 @@
   &__headline {
     color: var(--white);
     font-size: 5rem;
+    text-align: center;
   }
 }

@@ -1,9 +1,9 @@
 <header>
   <app-site-logo />
   <nav [class.open]="openNavMenu()">
-    <a routerLink="/user" class="header-link" routerLinkActive="active"
+    <!-- <a routerLink="/user" class="header-link" routerLinkActive="active"
       >Login/SignUp</a
-    >
+    > -->
     @if (userService.isLoggedIn()) {
     <a routerLink="/admin" class="header-link" routerLinkActive="active"
       >Admin Panel</a

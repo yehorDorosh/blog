@@ -6,7 +6,7 @@
         <source>Author</source>
       </trans-unit>
       <trans-unit id="homepage.headline" datatype="html">
-        <source> Home page </source>
+        <source> Life&apos;s Secrets:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Montenegro &amp; Portugal </source>
         <note priority="1" from="description">An introduction header for this sample</note>
         <note priority="1" from="meaning">site header</note>
       </trans-unit>

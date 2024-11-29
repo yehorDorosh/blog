@@ -7,8 +7,8 @@
         <target>Автор</target>
       </trans-unit>
       <trans-unit id="homepage.headline" datatype="html">
-        <source> Home page </source>
-        <target> Домашняя страница </target>
+        <source> Life&apos;s Secrets:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Montenegro &amp; Portugal </source>
+        <target> Секреты жизни в<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Черногории и Португалии </target>
         <note priority="1" from="description">An introduction header for this sample</note>
         <note priority="1" from="meaning">site header</note>
       </trans-unit>
