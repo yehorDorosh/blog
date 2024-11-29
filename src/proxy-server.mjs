@@ -4,7 +4,7 @@ import { app as serverRu } from './server/ru/server.mjs';
 import { app as serverUk } from './server/uk/server.mjs';
 
 function run() {
-  const port = process.env.PORT || 4000;
+  const port = process.env.port || 4000;
   const server = express();
 
   server.use('/uk', serverUk());

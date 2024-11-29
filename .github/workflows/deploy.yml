@@ -10,10 +10,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env: # Переменные окружения для всего задания
-      NODE_ENV: production
-      PORT: "80"
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
