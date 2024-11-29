@@ -32,3 +32,13 @@ linux
 `export GOOGLE_APPLICATION_CREDENTIALS="/home/user/Downloads/service-account-file.json"`
 windows
 `$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\username\Downloads\service-account-file.json"`
+
+## SSH
+
+### Add pub key to server
+
+`type $env:USERPROFILE\.ssh\id_rsa.pub | ssh root@194.37.80.72 "cat >> .ssh/authorized_keys"`
+
+### Connect
+
+`ssh -i C:\Users\Egor\.ssh\id_rsa root@194.37.80.72`

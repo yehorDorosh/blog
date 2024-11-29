@@ -1,0 +1,44 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy application
+        run: |
+          ssh -o StrictHostKeyChecking=no root@194.37.80.72 << 'EOF'
+            # Перейти в директорию приложения
+            cd /root/blog
+
+            # Остановить старую версию (если используется PM2)
+            pm2 stop all || true
+
+            # Обновить код с GitHub
+            git pull origin master
+
+            # Установить зависимости
+            npm install
+
+            # Собрать приложение (если требуется)
+            npm run build || true
+
+            # Запустить приложение с помощью PM2
+            pm2 start dist/blog/proxy-server.mjs --name "blog-site"
+
+            # Сохранить процесс PM2 (автозапуск)
+            pm2 save
+          EOF
