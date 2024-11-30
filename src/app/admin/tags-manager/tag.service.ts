@@ -48,7 +48,7 @@ export class TagService {
       )
       .subscribe({
         next: (response) => {
-          console.log('Tag added', response);
+          if (!environment.production) console.log('Tag added', response);
           this.getTags();
         },
         error: (error) => {
@@ -65,7 +65,7 @@ export class TagService {
       )
       .subscribe({
         next: (response) => {
-          console.log('Tag edited', response);
+          if (!environment.production) console.log('Tag edited', response);
           this.getTags();
         },
         error: (error) => {
@@ -81,7 +81,7 @@ export class TagService {
       )
       .subscribe({
         next: (response) => {
-          console.log('Tag deleted', response);
+          if (!environment.production) console.log('Tag deleted', response);
           this.getTags();
         },
         error: (error) => {

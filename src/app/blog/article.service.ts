@@ -42,16 +42,20 @@ export class ArticleService implements OnInit {
 
   getArticles() {
     this.getArticlesSubscription = this.httpClient
-      .get<BlogArticleResponse>(`${environment.fireBase.apiUrl}/blog.json`)
+      .get<BlogArticleResponse>(
+        `${environment.fireBase.apiUrl}/blog.json?orderBy="date"`
+      )
       .subscribe({
         next: (response) => {
           if (!response) {
             this.articles.set([]);
           } else {
             this.articles.set(
-              Object.keys(response).map((id) => {
-                return { id, ...response[id] };
-              })
+              Object.keys(response)
+                .map((id) => {
+                  return { id, ...response[id] };
+                })
+                .reverse()
             );
           }
         },
@@ -59,7 +63,7 @@ export class ArticleService implements OnInit {
           console.error(error);
         },
         complete: () => {
-          console.log('Get articles completed.');
+          if (!environment.production) console.log('Get articles completed.');
         },
       });
   }
@@ -74,7 +78,8 @@ export class ArticleService implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('Create new empty article.', response);
+          if (!environment.production)
+            console.log('Create new empty article.', response);
           this.articleId.set(response.name);
         },
         error: (error) => {
@@ -106,7 +111,7 @@ export class ArticleService implements OnInit {
         .subscribe({
           next: (response) => {
             this.articleImages.push(imagePath);
-            console.log('Upload image', response);
+            if (!environment.production) console.log('Upload image', response);
             resolve(imagePath);
           },
           error: (error) => {
@@ -150,7 +155,8 @@ export class ArticleService implements OnInit {
               },
             });
             this.editorImages.push(imageUrl);
-            console.log('Image from editor uploaded.');
+            if (!environment.production)
+              console.log('Image from editor uploaded.');
             return modifiedResponse;
           } else {
             console.error('Upload image error', response);
@@ -196,7 +202,7 @@ export class ArticleService implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('Save article', response);
+          if (!environment.production) console.log('Save article', response);
           this.router.navigate(['blog', articleData.articleId], {
             state: { canLeave: true },
           });
@@ -227,7 +233,7 @@ export class ArticleService implements OnInit {
             this.deleteImage(`/api/image/${articleId}`);
           }
 
-          console.log('Delete article', response);
+          if (!environment.production) console.log('Delete article', response);
           this.router.navigate(['../'], {
             replaceUrl: true,
             state: { canLeave: true },
@@ -256,7 +262,7 @@ export class ArticleService implements OnInit {
             (img) => img !== imagePath
           );
           if (articleId) this.getAricleImgs(articleId);
-          console.log('Remove image.', response);
+          if (!environment.production) console.log('Remove image.', response);
         },
         error: (error) => {
           console.error('Remove image error', error);
@@ -277,7 +283,8 @@ export class ArticleService implements OnInit {
       .get<string[]>(`/api/image/${articleId}`, { headers })
       .subscribe({
         next: (response) => {
-          console.log('Get article images', response);
+          if (!environment.production)
+            console.log('Get article images', response);
           this.articleImageList.set(response);
         },
         error: (error) => {

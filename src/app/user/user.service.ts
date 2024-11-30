@@ -6,7 +6,7 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { environment } from '../../environments/environment';
 import { type User } from './user.model';
 
 @Injectable({
@@ -67,7 +67,8 @@ export class UserService {
     this.intervalId = setInterval(() => {
       // console.log((+this.logoutDate! - +new Date())/1000/60);
       if (this.logoutDate && new Date() >= this.logoutDate) {
-        console.log('Token expired. Logging out...');
+        if (!environment.production)
+          console.log('Token expired. Logging out...');
         this.logout();
       }
     }, 1000);
