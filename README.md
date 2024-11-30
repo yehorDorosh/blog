@@ -53,6 +53,19 @@ windows
 
 `pm2 logs blog-site`
 
+### Config
+
+`vim ~/ecosystem.config.js`
+
+### Stop
+
+`pm2 stop all`
+
+### Start
+
+`pm2 start ~/ecosystem.config.js --env production`
+`--no-daemon` - detached
+
 ## ENV
 
 ### Copy to server
