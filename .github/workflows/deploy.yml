@@ -25,9 +25,6 @@ jobs:
             # Перейти в директорию приложения
             cd /root/blog
 
-            # Остановить старую версию (если используется PM2)
-            pm2 stop all || true
-
             # Обновить код с GitHub
             git pull origin master
 
@@ -36,6 +33,9 @@ jobs:
 
             # Собрать приложение (если требуется)
             npm run build || true
+
+            # Остановить старую версию (если используется PM2)
+            pm2 stop all || true
 
             # Запустить приложение с помощью PM2
             pm2 start ~/ecosystem.config.js --env production
