@@ -24,7 +24,6 @@ export class ArticleService implements OnInit {
   private destroyRef = inject(DestroyRef);
   private router = inject(Router);
 
-  private getArticlesSubscription!: Subscription;
   private getArticleImgsSubscription!: Subscription;
 
   articleImages: string[] = [];
@@ -35,18 +34,19 @@ export class ArticleService implements OnInit {
 
   ngOnInit() {
     this.destroyRef.onDestroy(() => {
-      this.getArticlesSubscription.unsubscribe();
       this.getArticleImgsSubscription.unsubscribe();
     });
   }
 
-  getArticles() {
-    this.getArticlesSubscription = this.httpClient
+  async getArticles() {
+    this.httpClient
       .get<BlogArticleResponse>(
         `${environment.fireBase.apiUrl}/blog.json?orderBy="date"`
       )
       .subscribe({
         next: (response) => {
+          if (!environment.production) console.log('Get articles completed.');
+
           if (!response) {
             this.articles.set([]);
           } else {
@@ -61,9 +61,6 @@ export class ArticleService implements OnInit {
         },
         error: (error) => {
           console.error(error);
-        },
-        complete: () => {
-          if (!environment.production) console.log('Get articles completed.');
         },
       });
   }

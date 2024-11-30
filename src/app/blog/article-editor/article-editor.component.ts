@@ -99,7 +99,7 @@ export class ArticleEditorComponent implements OnInit {
 
   ngOnInit() {
     this.tagService.getTags(() => {
-      if (!this.article()) return;
+      if (!this.article() || !this.article()?.tags) return;
       this.tagsList().forEach((tag) => {
         const articleTag = this.article()!.tags.find(
           (articleTag) => articleTag === tag.id

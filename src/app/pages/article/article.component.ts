@@ -45,26 +45,31 @@ export class ArticleComponent implements OnInit {
   });
 
   articleContent = computed<string>(() => {
+    if (!this.article()) return '';
     const content = this.article()!.content;
     return content[this.lang()] ?? content.en;
   });
 
   articleTitle = computed<string>(() => {
+    if (!this.article()) return '';
     const title = this.article()!.title;
     return title[this.lang()] ?? title.en;
   });
 
   tags = computed(() => {
+    if (!this.article() || !this.article()?.tags) return [];
     return this.tagService.tagsList().filter((tag) => {
       return this.article()!.tags.includes(tag.id);
     });
   });
 
   author = computed<string>(() => {
+    if (!this.article()) return '';
     return this.article()!.author;
   });
 
   date = computed<string>(() => {
+    if (!this.article()) return '';
     return this.article()!.date;
   });
 
