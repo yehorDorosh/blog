@@ -41,7 +41,9 @@ export class ArticleService implements OnInit {
   async getArticles() {
     this.httpClient
       .get<BlogArticleResponse>(
-        `${environment.fireBase.apiUrl}/blog.json?orderBy="date"`
+        `${
+          environment.fireBase.apiUrl
+        }/blog.json?orderBy="date"&cache=${new Date().getTime()}`
       )
       .subscribe({
         next: (response) => {
