@@ -99,6 +99,7 @@ export class ArticleEditorComponent implements OnInit {
 
   ngOnInit() {
     this.tagService.getTags(() => {
+      if (!this.article()) return;
       this.tagsList().forEach((tag) => {
         const articleTag = this.article()!.tags.find(
           (articleTag) => articleTag === tag.id
@@ -175,18 +176,22 @@ export class ArticleEditorComponent implements OnInit {
   }
 
   onChangeEditorLang(e: Event) {
-    this.article()!.title[this.langSwitcherService.editorLang()] =
-      this.titleField;
-    this.article()!.content[this.langSwitcherService.editorLang()] =
-      this.contentField;
+    if (this.article()) {
+      this.article()!.title[this.langSwitcherService.editorLang()] =
+        this.titleField;
+      this.article()!.content[this.langSwitcherService.editorLang()] =
+        this.contentField;
+    }
 
     const target = e.target as HTMLSelectElement;
 
     this.langSwitcherService.editorLang.set(target.value as LangList);
 
-    this.titleField =
-      this.article()!.title[this.langSwitcherService.editorLang()];
-    this.contentField =
-      this.article()!.content[this.langSwitcherService.editorLang()];
+    if (this.article()) {
+      this.titleField =
+        this.article()!.title[this.langSwitcherService.editorLang()];
+      this.contentField =
+        this.article()!.content[this.langSwitcherService.editorLang()];
+    }
   }
 }

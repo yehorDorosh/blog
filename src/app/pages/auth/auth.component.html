@@ -5,7 +5,7 @@
   <app-login-form />
   }
 
-  <button class="btn" (click)="onSwitchForm()">
+  <button class="btn" (click)="onSwitchForm()" *ngif="false">
     Switch to {{ formSwitcher() === "signup" ? "login" : "signup" }}
   </button>
 </app-page>
