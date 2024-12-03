@@ -1,6 +1,7 @@
-import { Component, inject, signal, HostListener } from '@angular/core';
+import { Component, inject, signal, HostListener, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { LangSwitcherService } from './lang-switcher.service';
+import { LangList } from './lang-switcher.model';
 
 @Component({
   selector: 'app-lang-switcher',
@@ -12,6 +13,9 @@ import { LangSwitcherService } from './lang-switcher.service';
 export class LangSwitcherComponent {
   router = inject(Router);
   langSwitcherService = inject(LangSwitcherService);
+  providedLangs = input<LangList[] | undefined>(
+    this.langSwitcherService.langList
+  );
   openSwitcher = signal(false);
 
   changeLanguageHandler(lang: string) {

@@ -4,6 +4,10 @@ export type TranslatableContent = {
   [key in LangList]: string;
 };
 
+export type TranslatableCheckbox = {
+  [key in LangList]: boolean;
+};
+
 export interface BlogArticle {
   id?: string;
   title: TranslatableContent;
@@ -12,7 +16,7 @@ export interface BlogArticle {
     pageHero: string;
     editorImages: string[];
   };
-  published: boolean;
+  published: TranslatableCheckbox;
   date: string;
   author: string;
   tags: TagId[];

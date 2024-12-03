@@ -17,11 +17,10 @@ export class ArticlePreviewComponent {
 
   article = input.required<BlogArticle>();
   simple = input<boolean>(false);
-  lang = this.langSwitcherService.lang();
 
   articleTitle = computed<string>(() => {
     const title = this.article().title;
-    return title[this.lang] ?? title.en;
+    return title[this.langSwitcherService.lang()];
   });
 
   articleImg = computed<string>(() => {

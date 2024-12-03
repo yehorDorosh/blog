@@ -45,6 +45,8 @@ export function app(): express.Express {
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
+    res.set('Content-Language', lang);
+
     commonEngine
       .render({
         bootstrap,

@@ -10,7 +10,7 @@
     >
     <button class="btn" (click)="onLogout()">Logout</button>
     }
-    <app-lang-switcher />
+    <app-lang-switcher [providedLangs]="providedLangs()" />
     <app-close-button class="close-button" (click)="onCloseNavMenu()" />
   </nav>
   <app-burger

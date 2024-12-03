@@ -40,7 +40,12 @@ export class ArticleEditorComponent implements OnInit {
   };
   contentField = '';
   pageHeroPath = '';
-  published = false;
+  published = {
+    en: false,
+    ru: false,
+    uk: false,
+  };
+  publishedField = false;
   author = 'admin';
   date: string = new Date().toISOString().split('T')[0];
 
@@ -117,6 +122,8 @@ export class ArticleEditorComponent implements OnInit {
         this.article()!.content[this.langSwitcherService.editorLang()];
       this.pageHeroPath = this.article()!.img.pageHero;
       this.published = this.article()!.published;
+      this.publishedField =
+        this.article()!.published[this.langSwitcherService.editorLang()];
       this.author = this.article()!.author;
       this.date = new Date(this.article()!.date).toISOString().split('T')[0];
       this.articleService.articleId.set(this.article()!.id!);
@@ -136,6 +143,10 @@ export class ArticleEditorComponent implements OnInit {
 
   onContentFieldChange() {
     this.content[this.langSwitcherService.editorLang()] = this.contentField;
+  }
+
+  onPublishedFieldChange() {
+    this.published[this.langSwitcherService.editorLang()] = this.publishedField;
   }
 
   async onPageHeroSelected(event: Event) {
@@ -181,6 +192,8 @@ export class ArticleEditorComponent implements OnInit {
         this.titleField;
       this.article()!.content[this.langSwitcherService.editorLang()] =
         this.contentField;
+      this.article()!.published[this.langSwitcherService.editorLang()] =
+        this.publishedField;
     }
 
     const target = e.target as HTMLSelectElement;
@@ -192,6 +205,8 @@ export class ArticleEditorComponent implements OnInit {
         this.article()!.title[this.langSwitcherService.editorLang()];
       this.contentField =
         this.article()!.content[this.langSwitcherService.editorLang()];
+      this.publishedField =
+        this.article()!.published[this.langSwitcherService.editorLang()];
     }
   }
 }

@@ -6,6 +6,7 @@ import { LangSwitcherComponent } from '../../lang-switcher/lang-switcher.compone
 import { BurgerComponent } from '../../ui/burger/burger.component';
 import { SiteLogoComponent } from '../../ui/site-logo/site-logo.component';
 import { CloseButtonComponent } from '../../ui/close-button/close-button.component';
+import { LangList } from '../../lang-switcher/lang-switcher.model';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +26,7 @@ import { CloseButtonComponent } from '../../ui/close-button/close-button.compone
 export class HeaderComponent {
   userService = inject(UserService);
   paramNodeId = input<string>();
+  providedLangs = input<LangList[]>();
   openNavMenu = signal(false);
 
   onLogout() {

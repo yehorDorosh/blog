@@ -1,6 +1,13 @@
-import { Injectable, inject, signal, afterNextRender } from '@angular/core';
+import {
+  Injectable,
+  inject,
+  signal,
+  afterNextRender,
+  PLATFORM_ID,
+  LOCALE_ID,
+} from '@angular/core';
 import { LangList } from './lang-switcher.model';
-import { Location } from '@angular/common';
+import { Location, isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -12,17 +19,26 @@ export class LangSwitcherService {
   setLang = () => {};
 
   private location = inject(Location);
+  private platformId = inject(PLATFORM_ID);
 
   constructor() {
-    afterNextRender(() => {
-      this.setLang = () => {
-        const lang = this.location
-          .prepareExternalUrl('/')
-          .replace(/\//g, '') as LangList;
-        this.editorLang.set(lang);
-        this.lang.set(lang);
-      };
-    });
+    if (!isPlatformBrowser(this.platformId)) {
+      const localeId = inject(LOCALE_ID, { optional: true }) as LangList;
+      if (localeId) {
+        this.lang.set(localeId);
+        this.editorLang.set(localeId);
+      }
+    } else {
+      afterNextRender(() => {
+        this.setLang = () => {
+          const lang = this.location
+            .prepareExternalUrl('/')
+            .replace(/\//g, '') as LangList;
+          this.editorLang.set(lang);
+          this.lang.set(lang);
+        };
+      });
+    }
   }
 
   changeLanguage(lang: string) {

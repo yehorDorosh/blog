@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
+import { LangList } from '../../lang-switcher/lang-switcher.model';
 
 @Component({
   selector: 'app-page',
@@ -10,4 +11,5 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class PageComponent {
   paramNodeId = input<string>();
+  providedLangs = input<LangList[]>();
 }

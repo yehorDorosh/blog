@@ -59,7 +59,8 @@
       type="checkbox"
       id="published"
       name="is-published"
-      [(ngModel)]="published"
+      [(ngModel)]="publishedField"
+      (ngModelChange)="onPublishedFieldChange()"
     />
     <label class="label" for="published">Published</label>
   </div>

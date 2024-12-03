@@ -7,8 +7,9 @@ import {
   type BlogArticle,
   type BlogArticleResponse,
   isR2Response,
-  TranslatableContent,
-  TagId,
+  type TranslatableContent,
+  type TagId,
+  type TranslatableCheckbox,
 } from './blog.model';
 import { map, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -172,7 +173,7 @@ export class ArticleService implements OnInit {
     title: TranslatableContent;
     content: TranslatableContent;
     pageHeroPath: string;
-    published: boolean;
+    published: TranslatableCheckbox;
     author: string;
     date: Date;
     tags: TagId[];

@@ -3,7 +3,7 @@
     {{ langSwitcherService.lang() }}
   </p>
   <ul class="lang-switcher__list" [class.open]="openSwitcher()">
-    @for (lang of langSwitcherService.langList; track lang) {
+    @for (lang of providedLangs() ?? langSwitcherService.langList; track lang) {
     <li class="lang-switcher__item">
       <button
         class="btn lang-switcher__btn"

@@ -34,6 +34,13 @@ export class ArticleComponent implements OnInit {
     return this.langSwitcherService.lang();
   });
 
+  providedLangs = computed<LangList[] | undefined>(() => {
+    if (!this.article()) return;
+    return Object.entries(this.article()!.published)
+      .filter(([key, value]) => value === true)
+      .map(([key, value]) => key) as LangList[];
+  });
+
   article = computed<BlogArticle | undefined>(() => {
     return this.articles().find(
       (article) => article.id === this.paramArticleId()
