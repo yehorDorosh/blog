@@ -177,6 +177,8 @@ export class ArticleService implements OnInit {
     author: string;
     date: Date;
     tags: TagId[];
+    url: string;
+    autoUrl: boolean;
   }) {
     if (!this.userService.getToken) return;
 
@@ -198,12 +200,14 @@ export class ArticleService implements OnInit {
           author: articleData.author,
           date: articleData.date.toDateString(),
           tags: articleData.tags,
+          url: articleData.url,
+          autoUrl: articleData.autoUrl,
         }
       )
       .subscribe({
         next: (response) => {
           if (!environment.production) console.log('Save article', response);
-          this.router.navigate(['blog', articleData.articleId], {
+          this.router.navigate(['blog', articleData.url], {
             state: { canLeave: true },
           });
         },

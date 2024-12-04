@@ -25,7 +25,7 @@ import { LangList } from '../../lang-switcher/lang-switcher.model';
 })
 export class HeaderComponent {
   userService = inject(UserService);
-  paramNodeId = input<string>();
+  nodeId = input<string>();
   providedLangs = input<LangList[]>();
   openNavMenu = signal(false);
 

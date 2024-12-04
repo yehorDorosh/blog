@@ -11,6 +11,7 @@ import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import { LangList } from '../../lang-switcher/lang-switcher.model';
 import { CommonModule } from '@angular/common';
 import { TagService } from '../../admin/tags-manager/tag.service';
+import translit from '../../utils/translit';
 
 @Component({
   selector: 'app-article-editor',
@@ -48,6 +49,9 @@ export class ArticleEditorComponent implements OnInit {
   publishedField = false;
   author = 'admin';
   date: string = new Date().toISOString().split('T')[0];
+  url = '';
+  autoUrl = true;
+  isUrlNotunique = false;
 
   tagsList = computed(() => {
     return this.tagService.tagsList().map((tag) => {
@@ -128,6 +132,8 @@ export class ArticleEditorComponent implements OnInit {
       this.date = new Date(this.article()!.date).toISOString().split('T')[0];
       this.articleService.articleId.set(this.article()!.id!);
       this.articleService.editorImages = this.article()!.img.editorImages || [];
+      this.url = this.article()!.url;
+      this.autoUrl = this.article()!.autoUrl;
     }
   }
 
@@ -139,6 +145,12 @@ export class ArticleEditorComponent implements OnInit {
 
   onTitleFieldChange() {
     this.title[this.langSwitcherService.editorLang()] = this.titleField;
+
+    if (this.autoUrl) {
+      this.url = translit(
+        this.title[this.langSwitcherService.editorLang()].toLowerCase()
+      );
+    }
   }
 
   onContentFieldChange() {
@@ -147,6 +159,18 @@ export class ArticleEditorComponent implements OnInit {
 
   onPublishedFieldChange() {
     this.published[this.langSwitcherService.editorLang()] = this.publishedField;
+  }
+
+  onAutoUrlChange() {
+    if (this.autoUrl) {
+      this.url = translit(
+        this.title[this.langSwitcherService.editorLang()].toLowerCase()
+      );
+    }
+  }
+
+  onUrlChange() {
+    this.isUrlNotunique = false;
   }
 
   async onPageHeroSelected(event: Event) {
@@ -167,7 +191,15 @@ export class ArticleEditorComponent implements OnInit {
 
   onSubmit() {
     const id = this.articleService.articleId();
-    if (!id) return;
+    const articles = this.articleService
+      .articles()
+      ?.filter((article) => article.id !== id);
+    this.isUrlNotunique = articles?.some(
+      (someArticle) => someArticle.url === this.url
+    );
+
+    if (!id || this.isUrlNotunique) return;
+
     this.articleService.saveArticle({
       articleId: id,
       title: this.title,
@@ -179,6 +211,8 @@ export class ArticleEditorComponent implements OnInit {
       tags: this.tagsList()
         .filter((tag) => tag.selected)
         .map((tag) => tag.id),
+      url: this.url,
+      autoUrl: this.autoUrl,
     });
   }
 

@@ -10,6 +10,6 @@ import { LangList } from '../../lang-switcher/lang-switcher.model';
   styleUrl: './page.component.scss',
 })
 export class PageComponent {
-  paramNodeId = input<string>();
+  nodeId = input<string>();
   providedLangs = input<LangList[]>();
 }

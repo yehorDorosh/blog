@@ -1,9 +1,7 @@
-@if (userService.isLoggedIn() && paramNodeId()) {
+@if (userService.isLoggedIn() && nodeId()) {
 <div class="admin-panel">
-  <a [routerLink]="['/blog', paramNodeId()]" class="admin-panel-link"
-    >Preview</a
-  >
-  <a [routerLink]="['/admin', 'node', paramNodeId()]" class="admin-panel-link"
+  <a [routerLink]="['/blog', nodeId()]" class="admin-panel-link">Preview</a>
+  <a [routerLink]="['/admin', 'node', nodeId()]" class="admin-panel-link"
     >Edit</a
   >
   <button (click)="onDeleteArticle()" class="admin-panel-link btn btn--danger">

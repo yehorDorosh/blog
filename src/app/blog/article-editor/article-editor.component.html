@@ -102,6 +102,34 @@
   </div>
 
   <div class="form-group">
+    <input
+      type="checkbox"
+      id="autourl"
+      name="autourl"
+      [(ngModel)]="autoUrl"
+      (ngModelChange)="onAutoUrlChange()"
+    />
+    <label class="label" for="autourl">Set URL automaticly: </label>
+  </div>
+
+  <div class="form-group form-group--column">
+    <label class="label" for="url">URL: </label>
+    <input
+      id="url"
+      type="text"
+      class="form-control input"
+      name="url"
+      [(ngModel)]="url"
+      [disabled]="autoUrl"
+      (ngModelChange)="onUrlChange()"
+    />
+  </div>
+
+  @if (isUrlNotunique) {
+  <p class="color-danger">This URL: "{{ url }}" already exist!</p>
+  }
+
+  <div class="form-group">
     <button type="submit" class="btn">Save</button>
     <button type="button" class="btn" (click)="onCancel()">Cancel</button>
   </div>

@@ -16,12 +16,12 @@ export class AdminToolsComponent {
   articleService = inject(ArticleService);
   router = inject(Router);
 
-  paramNodeId = input<string>();
+  nodeId = input<string>();
 
   onDeleteArticle() {
     const article = this.articleService
       .articles()
-      .find((article) => article.id === this.paramNodeId());
+      .find((article) => article.id === this.nodeId());
     if (article) {
       this.articleService.deleteArticle(article.id!);
     }

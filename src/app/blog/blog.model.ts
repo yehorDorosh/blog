@@ -20,6 +20,8 @@ export interface BlogArticle {
   date: string;
   author: string;
   tags: TagId[];
+  url: string;
+  autoUrl: boolean;
 }
 
 export type TagId = string;

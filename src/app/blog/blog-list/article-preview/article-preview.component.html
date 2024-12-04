@@ -1,9 +1,9 @@
 @if (simple()) {
-<a class="link-simple" [routerLink]="['/blog', article().id]">
+<a class="link-simple" [routerLink]="['/blog', article().url]">
   <span>{{ articleDate() }} </span> <span>{{ articleTitle() }}</span>
 </a>
 } @else {
-<a class="article__link" [routerLink]="['/blog', article().id]">
+<a class="article__link" [routerLink]="['/blog', article().url]">
   <img class="article__img" [src]="articleImg()" [alt]="articleTitle()" />
   <div class="article__txt">
     <h2 class="article__title">{{ articleTitle() }}</h2>

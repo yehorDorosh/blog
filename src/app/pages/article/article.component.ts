@@ -43,7 +43,7 @@ export class ArticleComponent implements OnInit {
 
   article = computed<BlogArticle | undefined>(() => {
     return this.articles().find(
-      (article) => article.id === this.paramArticleId()
+      (article) => article.url === this.paramArticleId()
     );
   });
 

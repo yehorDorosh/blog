@@ -1,4 +1,4 @@
-<app-page [paramNodeId]="paramArticleId()" [providedLangs]="providedLangs()">
+<app-page [nodeId]="article()?.id" [providedLangs]="providedLangs()">
   <div class="pagehero" ngProjectAs="top-content">
     @if (article()) {
     <img
