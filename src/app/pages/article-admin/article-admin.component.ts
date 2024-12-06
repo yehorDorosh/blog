@@ -4,6 +4,7 @@ import { type BlogArticle } from '../../blog/blog.model';
 import { Router } from '@angular/router';
 import { ArticleEditorComponent } from '../../blog/article-editor/article-editor.component';
 import { PageComponent } from '../../layout/page/page.component';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-article-admin',
@@ -15,6 +16,8 @@ import { PageComponent } from '../../layout/page/page.component';
 export class ArticleAdminComponent {
   router = inject(Router);
   articleService = inject(ArticleService);
+  meta = inject(Meta);
+  title = inject(Title);
 
   paramNodeId = input.required<string>();
 
@@ -35,6 +38,8 @@ export class ArticleAdminComponent {
   ngOnInit(): void {
     this.articleService.getArticles();
     this.articleService.getAricleImgs(this.paramNodeId());
+    this.title.setTitle('Article editor');
+    this.meta.addTag({ name: 'description', content: 'Article editor' });
   }
 
   onDeleteImageListItem(imagePath: string) {

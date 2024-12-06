@@ -11,6 +11,7 @@ export type TranslatableCheckbox = {
 export interface BlogArticle {
   id?: string;
   title: TranslatableContent;
+  summary: TranslatableContent;
   content: TranslatableContent;
   img: {
     pageHero: string;
@@ -22,6 +23,8 @@ export interface BlogArticle {
   tags: TagId[];
   url: string;
   autoUrl: boolean;
+  metaTitle: TranslatableContent;
+  metaDescription: TranslatableContent;
 }
 
 export type TagId = string;

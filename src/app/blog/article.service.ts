@@ -171,6 +171,7 @@ export class ArticleService implements OnInit {
   saveArticle(articleData: {
     articleId: string;
     title: TranslatableContent;
+    summary: TranslatableContent;
     content: TranslatableContent;
     pageHeroPath: string;
     published: TranslatableCheckbox;
@@ -179,6 +180,8 @@ export class ArticleService implements OnInit {
     tags: TagId[];
     url: string;
     autoUrl: boolean;
+    metaTitle: TranslatableContent;
+    metaDescription: TranslatableContent;
   }) {
     if (!this.userService.getToken) return;
 
@@ -191,6 +194,7 @@ export class ArticleService implements OnInit {
         `${environment.fireBase.apiUrl}/blog/${articleData.articleId}.json?auth=${this.userService.getToken}`,
         {
           title: articleData.title,
+          summary: articleData.summary,
           content: articleData.content,
           img: {
             pageHero: articleData.pageHeroPath,
@@ -202,6 +206,8 @@ export class ArticleService implements OnInit {
           tags: articleData.tags,
           url: articleData.url,
           autoUrl: articleData.autoUrl,
+          metaTitle: articleData.metaTitle,
+          metaDescription: articleData.metaDescription,
         }
       )
       .subscribe({

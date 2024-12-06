@@ -34,6 +34,12 @@ export class ArticleEditorComponent implements OnInit {
     uk: '',
   };
   titleField = '';
+  summary: TranslatableContent = {
+    en: '',
+    ru: '',
+    uk: '',
+  };
+  summaryField = '';
   content: TranslatableContent = {
     en: '',
     ru: '',
@@ -52,6 +58,18 @@ export class ArticleEditorComponent implements OnInit {
   url = '';
   autoUrl = true;
   isUrlNotunique = false;
+  metaTitle: TranslatableContent = {
+    en: '',
+    ru: '',
+    uk: '',
+  };
+  metaTitleField = '';
+  metaDescription: TranslatableContent = {
+    en: '',
+    ru: '',
+    uk: '',
+  };
+  metaDescriptionField = '';
 
   tagsList = computed(() => {
     return this.tagService.tagsList().map((tag) => {
@@ -107,6 +125,7 @@ export class ArticleEditorComponent implements OnInit {
   };
 
   ngOnInit() {
+    const editorLang = this.langSwitcherService.editorLang();
     this.tagService.getTags(() => {
       if (!this.article() || !this.article()?.tags) return;
       this.tagsList().forEach((tag) => {
@@ -119,21 +138,24 @@ export class ArticleEditorComponent implements OnInit {
 
     if (this.article && this.article() && this.article()?.id) {
       this.title = this.article()!.title;
-      this.titleField =
-        this.article()!.title[this.langSwitcherService.editorLang()];
+      this.titleField = this.article()!.title[editorLang];
+      this.summary = this.article()!.summary;
+      this.summaryField = this.article()!.summary[editorLang];
       this.content = this.article()!.content;
-      this.contentField =
-        this.article()!.content[this.langSwitcherService.editorLang()];
+      this.contentField = this.article()!.content[editorLang];
       this.pageHeroPath = this.article()!.img.pageHero;
       this.published = this.article()!.published;
-      this.publishedField =
-        this.article()!.published[this.langSwitcherService.editorLang()];
+      this.publishedField = this.article()!.published[editorLang];
       this.author = this.article()!.author;
       this.date = new Date(this.article()!.date).toISOString().split('T')[0];
       this.articleService.articleId.set(this.article()!.id!);
       this.articleService.editorImages = this.article()!.img.editorImages || [];
       this.url = this.article()!.url;
       this.autoUrl = this.article()!.autoUrl;
+      this.metaTitle = this.article()!.metaTitle;
+      this.metaTitleField = this.article()!.metaTitle[editorLang];
+      this.metaDescription = this.article()!.metaDescription;
+      this.metaDescriptionField = this.article()!.metaDescription[editorLang];
     }
   }
 
@@ -146,11 +168,19 @@ export class ArticleEditorComponent implements OnInit {
   onTitleFieldChange() {
     this.title[this.langSwitcherService.editorLang()] = this.titleField;
 
-    if (this.autoUrl) {
+    if (this.autoUrl && !this.article()?.url) {
       this.url = translit(
         this.title[this.langSwitcherService.editorLang()].toLowerCase()
       );
     }
+
+    if (!this.article()?.metaTitle) {
+      this.metaTitleField = this.titleField;
+    }
+  }
+
+  onSummaryFieldChange() {
+    this.summary[this.langSwitcherService.editorLang()] = this.summaryField;
   }
 
   onContentFieldChange() {
@@ -171,6 +201,15 @@ export class ArticleEditorComponent implements OnInit {
 
   onUrlChange() {
     this.isUrlNotunique = false;
+  }
+
+  onMetaTitleFieldChange() {
+    this.metaTitle[this.langSwitcherService.editorLang()] = this.metaTitleField;
+  }
+
+  onMetaDescriptionFieldChange() {
+    this.metaDescription[this.langSwitcherService.editorLang()] =
+      this.metaDescriptionField;
   }
 
   async onPageHeroSelected(event: Event) {
@@ -203,6 +242,7 @@ export class ArticleEditorComponent implements OnInit {
     this.articleService.saveArticle({
       articleId: id,
       title: this.title,
+      summary: this.summary,
       content: this.content,
       pageHeroPath: this.pageHeroPath,
       published: this.published,
@@ -213,6 +253,8 @@ export class ArticleEditorComponent implements OnInit {
         .map((tag) => tag.id),
       url: this.url,
       autoUrl: this.autoUrl,
+      metaTitle: this.metaTitle,
+      metaDescription: this.metaDescription,
     });
   }
 
@@ -224,10 +266,16 @@ export class ArticleEditorComponent implements OnInit {
     if (this.article()) {
       this.article()!.title[this.langSwitcherService.editorLang()] =
         this.titleField;
+      this.article()!.summary[this.langSwitcherService.editorLang()] =
+        this.summaryField;
       this.article()!.content[this.langSwitcherService.editorLang()] =
         this.contentField;
       this.article()!.published[this.langSwitcherService.editorLang()] =
         this.publishedField;
+      this.article()!.metaTitle[this.langSwitcherService.editorLang()] =
+        this.metaTitleField;
+      this.article()!.metaDescription[this.langSwitcherService.editorLang()] =
+        this.metaDescriptionField;
     }
 
     const target = e.target as HTMLSelectElement;
@@ -237,10 +285,16 @@ export class ArticleEditorComponent implements OnInit {
     if (this.article()) {
       this.titleField =
         this.article()!.title[this.langSwitcherService.editorLang()];
+      this.summaryField =
+        this.article()!.summary[this.langSwitcherService.editorLang()];
       this.contentField =
         this.article()!.content[this.langSwitcherService.editorLang()];
       this.publishedField =
         this.article()!.published[this.langSwitcherService.editorLang()];
+      this.metaTitleField =
+        this.article()!.metaTitle[this.langSwitcherService.editorLang()];
+      this.metaDescriptionField =
+        this.article()!.metaDescription[this.langSwitcherService.editorLang()];
     }
   }
 }

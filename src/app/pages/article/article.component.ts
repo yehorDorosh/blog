@@ -14,6 +14,8 @@ import { LangList } from '../../lang-switcher/lang-switcher.model';
 import { TagService } from '../../admin/tags-manager/tag.service';
 import { DatePipe } from '@angular/common';
 import { PageComponent } from '../../layout/page/page.component';
+import { Meta, Title } from '@angular/platform-browser';
+import metaTranslations from '../../../locale/meta';
 
 @Component({
   selector: 'app-article',
@@ -27,6 +29,8 @@ export class ArticleComponent implements OnInit {
   articleService = inject(ArticleService);
   langSwitcherService = inject(LangSwitcherService);
   tagService = inject(TagService);
+  meta = inject(Meta);
+  title = inject(Title);
 
   paramArticleId = input.required<string>();
 
@@ -42,9 +46,22 @@ export class ArticleComponent implements OnInit {
   });
 
   article = computed<BlogArticle | undefined>(() => {
-    return this.articles().find(
+    const article = this.articles().find(
       (article) => article.url === this.paramArticleId()
     );
+    if (article) {
+      this.title.setTitle(
+        article.metaTitle[this.lang()] ||
+          metaTranslations.article.title[this.lang()]
+      );
+      this.meta.addTag({
+        name: 'description',
+        content:
+          article.metaDescription[this.lang()] ||
+          metaTranslations.article.description[this.lang()],
+      });
+    }
+    return article;
   });
 
   articles = computed<BlogArticle[]>(() => {
@@ -54,13 +71,13 @@ export class ArticleComponent implements OnInit {
   articleContent = computed<string>(() => {
     if (!this.article()) return '';
     const content = this.article()!.content;
-    return content[this.lang()] ?? content.en;
+    return content[this.lang()];
   });
 
   articleTitle = computed<string>(() => {
     if (!this.article()) return '';
     const title = this.article()!.title;
-    return title[this.lang()] ?? title.en;
+    return title[this.lang()];
   });
 
   tags = computed(() => {

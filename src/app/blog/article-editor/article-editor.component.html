@@ -27,6 +27,39 @@
     />
   </div>
 
+  <div class="form-group form-group--column">
+    <label class="label" for="summary">Summary: </label>
+    <textarea
+      type="text"
+      class="form-control input input--long"
+      name="summary"
+      [(ngModel)]="summaryField"
+      (ngModelChange)="onSummaryFieldChange()"
+    ></textarea>
+  </div>
+
+  <div class="form-group form-group--column">
+    <label class="label" for="metaTitle">Meta Title: </label>
+    <input
+      type="text"
+      class="form-control input input--long"
+      name="metaTitle"
+      [(ngModel)]="metaTitleField"
+      (ngModelChange)="onMetaTitleFieldChange()"
+    />
+  </div>
+
+  <div class="form-group form-group--column">
+    <label class="label" for="metaDescription">Meta description: </label>
+    <textarea
+      type="text"
+      class="form-control input input--long"
+      name="metaDescription"
+      [(ngModel)]="metaDescriptionField"
+      (ngModelChange)="onMetaDescriptionFieldChange()"
+    ></textarea>
+  </div>
+
   <div class="form-group">
     <label class="label" for="author">Page Hero Image: </label>
     @if (pageHeroPath) {
