@@ -173,10 +173,6 @@ export class ArticleEditorComponent implements OnInit {
         this.title[this.langSwitcherService.editorLang()].toLowerCase()
       );
     }
-
-    if (!this.article()?.metaTitle) {
-      this.metaTitleField = this.titleField;
-    }
   }
 
   onSummaryFieldChange() {

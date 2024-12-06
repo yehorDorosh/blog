@@ -24,13 +24,12 @@ export class TagService {
       .get<GetTagsResponse>(`${environment.fireBase.apiUrl}/tags.json`)
       .subscribe({
         next: (response) => {
-          const tags: Tags = [];
-          for (const key in response) {
-            tags.push({
-              id: key,
-              label: response[key].label,
-            });
-          }
+          const tags: Tag[] = Object.keys(response).flatMap((localId) =>
+            Object.keys(response[localId]).map((tagId) => ({
+              id: tagId,
+              label: response[localId][tagId].label,
+            }))
+          );
           this.tagsList.set(tags);
           if (cb) cb();
         },
@@ -43,7 +42,9 @@ export class TagService {
   addTag(tag: TranslatableContent) {
     const subscription = this.httpClient
       .post<FireBaseResponse>(
-        `${environment.fireBase.apiUrl}/tags.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/tags/${
+          this.userService.user()?.localId
+        }.json?auth=${this.userService.getToken}`,
         { label: tag }
       )
       .subscribe({
@@ -60,7 +61,9 @@ export class TagService {
   editTag(tag: Tag) {
     const subscription = this.httpClient
       .patch(
-        `${environment.fireBase.apiUrl}/tags/${tag.id}.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/tags/${
+          this.userService.user()?.localId
+        }/${tag.id}.json?auth=${this.userService.getToken}`,
         { label: tag.label }
       )
       .subscribe({
@@ -77,7 +80,9 @@ export class TagService {
   deleteTag(tagId: string) {
     const subscription = this.httpClient
       .delete(
-        `${environment.fireBase.apiUrl}/tags/${tagId}.json?auth=${this.userService.getToken}`
+        `${environment.fireBase.apiUrl}/tags/${
+          this.userService.user()?.localId
+        }/${tagId}.json?auth=${this.userService.getToken}`
       )
       .subscribe({
         next: (response) => {

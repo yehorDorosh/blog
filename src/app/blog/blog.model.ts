@@ -37,11 +37,15 @@ export interface Tag {
 export type Tags = Tag[];
 
 export interface GetTagsResponse {
-  [tagId: string]: Tag;
+  [localId: string]: {
+    [tagId: string]: Tag;
+  };
 }
 
 export interface BlogArticleResponse {
-  [blogId: string]: BlogArticle;
+  [localId: string]: {
+    [blogId: string]: BlogArticle;
+  };
 }
 
 export interface FireBaseResponse {

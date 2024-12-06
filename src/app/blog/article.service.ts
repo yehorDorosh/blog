@@ -53,13 +53,17 @@ export class ArticleService implements OnInit {
           if (!response) {
             this.articles.set([]);
           } else {
-            this.articles.set(
-              Object.keys(response)
-                .map((id) => {
-                  return { id, ...response[id] };
+            const articlesArray = Object.keys(response)
+              .flatMap((localId) =>
+                Object.keys(response[localId]).map((articleId) => {
+                  return {
+                    id: articleId,
+                    ...response[localId][articleId],
+                  };
                 })
-                .reverse()
-            );
+              )
+              .reverse();
+            this.articles.set(articlesArray);
           }
         },
         error: (error) => {
@@ -73,7 +77,9 @@ export class ArticleService implements OnInit {
 
     const subscription = this.httpClient
       .post<FireBaseResponse>(
-        `${environment.fireBase.apiUrl}/blog.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/blog/${
+          this.userService.user()?.localId
+        }.json?auth=${this.userService.getToken}`,
         {}
       )
       .subscribe({
@@ -191,7 +197,9 @@ export class ArticleService implements OnInit {
 
     const subscription = this.httpClient
       .patch(
-        `${environment.fireBase.apiUrl}/blog/${articleData.articleId}.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/blog/${
+          this.userService.user()?.localId
+        }/${articleData.articleId}.json?auth=${this.userService.getToken}`,
         {
           title: articleData.title,
           summary: articleData.summary,
@@ -232,7 +240,9 @@ export class ArticleService implements OnInit {
 
     const subscription = this.httpClient
       .delete<null>(
-        `${environment.fireBase.apiUrl}/blog/${articleId}.json?auth=${this.userService.getToken}`
+        `${environment.fireBase.apiUrl}/blog/${
+          this.userService.user()?.localId
+        }/${articleId}.json?auth=${this.userService.getToken}`
       )
       .subscribe({
         next: (response) => {
