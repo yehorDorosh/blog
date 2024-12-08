@@ -1,5 +1,15 @@
 <app-page [nodeId]="article()?.id" [providedLangs]="providedLangs()">
   <div class="pagehero" ngProjectAs="top-content">
+    <div class="pagehero__back">
+      <a routerLink="/">
+        <img
+          class="back-icon"
+          src="assets/images/arrows/back-arrow.svg"
+          alt="Back"
+        />
+        <span i18n>Back</span>
+      </a>
+    </div>
     @if (article()) {
     <img
       class="pagehero__banner"

@@ -16,11 +16,12 @@ import { DatePipe } from '@angular/common';
 import { PageComponent } from '../../layout/page/page.component';
 import { Meta, Title } from '@angular/platform-browser';
 import metaTranslations from '../../../locale/meta';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [SanitizeHtmlPipe, DatePipe, PageComponent],
+  imports: [SanitizeHtmlPipe, DatePipe, PageComponent, RouterLink],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss',
   encapsulation: ViewEncapsulation.None,
