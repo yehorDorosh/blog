@@ -57,7 +57,7 @@ jobs:
 
             # Проверить работоспособность приложения
             echo "Checking application health..."
-            curl -f http://194.37.80.72/ || { echo 'Application is not running'; exit 1; }
+            curl -s -o /dev/null -w "%{http_code}" http://194.37.80.72/ | grep -q "200" && echo 'Application is running' || { echo 'Application is not running'; exit 1; }
 
             # Сохранить процесс PM2 (автозапуск)
             echo "Saving PM2 state..."
