@@ -22,28 +22,46 @@ jobs:
       - name: Deploy application
         run: |
           set -e
-          ssh -o StrictHostKeyChecking=no root@194.37.80.72 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@194.37.80.72 << 'EOF'
+            set -e
+
+            echo "Starting deployment process..."
+
             # Перейти в директорию приложения
-            cd /root/blog
+            cd /root/blog || { echo 'Failed to change directory'; exit 1; }
 
             # Обновить код с GitHub
+            echo "Pulling latest code..."
             git pull origin master || { echo 'git pull failed'; exit 1; }
 
             # Установить зависимости
+            echo "Installing dependencies..."
             npm install || { echo 'npm install failed'; exit 1; }
 
-            # Собрать приложение (если требуется)
+            # Собрать приложение
+            echo "Building the application..."
             npm run build || { echo 'build failed'; exit 1; }
 
-            # Остановить старую версию (если используется PM2)
+            # Остановить старую версию приложения
+            echo "Stopping old processes..."
             pm2 stop all || true
 
             # Запустить приложение с помощью PM2
-            pm2 start ~/ecosystem.config.js --env production
+            echo "Starting the application with PM2..."
+            pm2 start /root/blog/ecosystem.config.js --env production || { echo 'PM2 start failed'; exit 1; }
 
-            pm2 wait-ready || { echo 'pm2 process did not start'; exit 1; }
+            # Проверить статус процессов PM2
+            echo "Checking PM2 process status..."
+            sleep 5  # Задержка, чтобы дать процессам время на старт
+            pm2 status || { echo 'PM2 processes are not running'; exit 1; }
+
+            # Проверить работоспособность приложения
+            echo "Checking application health..."
             curl -f http://194.37.80.72/ || { echo 'Application is not running'; exit 1; }
 
             # Сохранить процесс PM2 (автозапуск)
-            pm2 save
+            echo "Saving PM2 state..."
+            pm2 save || { echo 'PM2 save failed'; exit 1; }
+
+            echo "Deployment successful!"
           EOF
