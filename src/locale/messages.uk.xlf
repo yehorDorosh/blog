@@ -8,13 +8,17 @@
       </trans-unit>
       <trans-unit id="homepage.headline" datatype="html">
         <source> Life&apos;s Secrets:<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Montenegro &amp; Portugal </source>
-        <target state="new"> Секрети життя в<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Чорногорії та Португалії </target>
+        <target> Секрети життя в<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br /&gt;"/>Чорногорії та Португалії </target>
         <note priority="1" from="description">An introduction header for this sample</note>
         <note priority="1" from="meaning">site header</note>
       </trans-unit>
       <trans-unit id="3973931101896534797" datatype="html">
         <source>Date</source>
         <target>Дата</target>
+      </trans-unit>
+      <trans-unit id="8890553633144307762" datatype="html">
+        <source>Back</source>
+        <target>Повернутися</target>
       </trans-unit>
     </body>
   </file>

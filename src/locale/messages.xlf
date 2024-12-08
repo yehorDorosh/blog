@@ -13,6 +13,9 @@
       <trans-unit id="3973931101896534797" datatype="html">
         <source>Date</source>
       </trans-unit>
+      <trans-unit id="8890553633144307762" datatype="html">
+        <source>Back</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -16,6 +16,10 @@
         <source>Date</source>
         <target>Дата</target>
       </trans-unit>
+      <trans-unit id="8890553633144307762" datatype="html">
+        <source>Back</source>
+        <target>Назад</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

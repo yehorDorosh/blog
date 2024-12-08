@@ -1,5 +1,4 @@
-import express, { RequestHandler } from 'express';
-import { initializeApp, applicationDefault } from 'firebase-admin/app';
+import { RequestHandler } from 'express';
 import admin from 'firebase-admin';
 
 const isAuth: RequestHandler = async (req, res, next) => {
