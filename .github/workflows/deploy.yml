@@ -48,7 +48,7 @@ jobs:
 
             # Запустить приложение с помощью PM2
             echo "Starting the application with PM2..."
-            pm2 start /root/blog/ecosystem.config.js --env production || { echo 'PM2 start failed'; exit 1; }
+            pm2 start ~/ecosystem.config.js --env production || { echo 'PM2 start failed'; exit 1; }
 
             # Проверить статус процессов PM2
             echo "Checking PM2 process status..."
