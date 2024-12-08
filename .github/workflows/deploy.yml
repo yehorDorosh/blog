@@ -21,24 +21,28 @@ jobs:
 
       - name: Deploy application
         run: |
+          set -e
           ssh -o StrictHostKeyChecking=no root@194.37.80.72 << 'EOF'
             # Перейти в директорию приложения
             cd /root/blog
 
             # Обновить код с GitHub
-            git pull origin master
+            git pull origin master || { echo 'git pull failed'; exit 1; }
 
             # Установить зависимости
-            npm install
+            npm install || { echo 'npm install failed'; exit 1; }
 
             # Собрать приложение (если требуется)
-            npm run build || true
+            npm run build || { echo 'build failed'; exit 1; }
 
             # Остановить старую версию (если используется PM2)
             pm2 stop all || true
 
             # Запустить приложение с помощью PM2
             pm2 start ~/ecosystem.config.js --env production
+
+            pm2 wait-ready || { echo 'pm2 process did not start'; exit 1; }
+            curl -f http://194.37.80.72/ || { echo 'Application is not running'; exit 1; }
 
             # Сохранить процесс PM2 (автозапуск)
             pm2 save
