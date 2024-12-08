@@ -33,6 +33,8 @@ export const getImage: RequestHandler = async (req, res) => {
     if (Body instanceof Readable) {
       res.writeHead(200, {
         'Content-Type': ContentType || 'application/octet-stream',
+        'Cache-Control': 'public, max-age=60',
+        ETag: req.params['key'],
       });
       Body.pipe(res);
     } else {
