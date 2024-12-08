@@ -5,10 +5,14 @@
 <ul [class]="{ list: !simple(), 'list-simple': simple() }">
   @for (article of articlesList(); track article.id) {
   <li
-    [class]="{ article: !simple(), 'article-simple': simple() }"
+    [class]="{
+      article: !simple(),
+      'article-simple': simple()
+    }"
     appArticlePreview
     [article]="article"
     [simple]="simple()"
+    [order]="$odd ? 'odd' : 'even'"
   ></li>
   }
 </ul>

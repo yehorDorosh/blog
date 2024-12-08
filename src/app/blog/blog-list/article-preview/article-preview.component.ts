@@ -17,6 +17,7 @@ export class ArticlePreviewComponent {
 
   article = input.required<BlogArticle>();
   simple = input<boolean>(false);
+  order = input<'odd' | 'even'>('odd');
 
   articleTitle = computed<string>(() => {
     const title = this.article().title;
@@ -29,5 +30,10 @@ export class ArticlePreviewComponent {
 
   articleDate = computed<string>(() => {
     return new Date(this.article().date).toLocaleDateString();
+  });
+
+  articleSummary = computed<string>(() => {
+    const summary = this.article().summary;
+    return summary[this.langSwitcherService.lang()];
   });
 }

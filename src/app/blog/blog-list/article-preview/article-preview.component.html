@@ -3,10 +3,16 @@
   <span>{{ articleDate() }} </span> <span>{{ articleTitle() }}</span>
 </a>
 } @else {
-<a class="article__link" [routerLink]="['/blog', article().url]">
+<a
+  class="article__link"
+  [routerLink]="['/blog', article().url]"
+  [class]="{ odd: order() === 'odd', even: order() === 'even' }"
+>
   <img class="article__img" [src]="articleImg()" [alt]="articleTitle()" />
   <div class="article__txt">
+    <span class="article__date">{{ articleDate() }}</span>
     <h2 class="article__title">{{ articleTitle() }}</h2>
+    <p class="article__summary">{{ articleSummary() }}</p>
   </div>
 </a>
 }

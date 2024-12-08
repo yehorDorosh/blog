@@ -4,6 +4,22 @@
   text-decoration: none;
   color: var(--black);
   display: block;
+
+  @include desk {
+    display: flex;
+    justify-content: space-between;
+
+    &.odd {
+      flex-direction: row-reverse;
+
+      & .article__img {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+    }
+  }
 }
 
 .article__title {
@@ -15,12 +31,44 @@
 .article__img {
   display: block;
   width: 100%;
-  height: 30vw;
+  height: 200px;
   object-fit: cover;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
+
+  @include tab {
+    height: 250px;
+  }
+
+  @include desk {
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    height: 300px;
+    width: 50%;
+  }
 }
 
 .article__txt {
   padding: 2rem;
+
+  @include desk {
+    width: 50%;
+    box-sizing: border-box;
+  }
+}
+
+.article__summary {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+
+  @include desk {
+    -webkit-line-clamp: 7;
+    line-clamp: 7;
+  }
 }

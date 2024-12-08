@@ -1,3 +1,5 @@
+@import "../../../../styles/breakpoints.scss";
+
 .splide {
   &__slide img {
     width: 100%;
@@ -23,5 +25,10 @@
     color: var(--white);
     font-size: 5rem;
     text-align: center;
+    padding-inline: 3rem;
+
+    @include tab {
+      padding-inline: 0;
+    }
   }
 }
