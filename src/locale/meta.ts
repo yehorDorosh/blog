@@ -1,6 +1,6 @@
 import { type TranslatableContent } from '../app/blog/blog.model';
 
-type Pages = 'home' | 'article';
+type Pages = 'home' | 'article' | 'not-found';
 type MetaKeys = 'title' | 'description';
 
 const metaTranslations: {
@@ -30,6 +30,18 @@ const metaTranslations: {
       en: 'Article',
       ru: 'Статья',
       uk: 'Стаття',
+    },
+  },
+  'not-found': {
+    title: {
+      en: '404 Not Found',
+      ru: '404 Страница не найдена',
+      uk: '404 Сторінка не знайдена',
+    },
+    description: {
+      en: '404 Not Found',
+      ru: '404 Страница не найдена',
+      uk: '404 Сторінка не знайдена',
     },
   },
 };

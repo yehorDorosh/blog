@@ -5,7 +5,12 @@ import { AuthComponent } from '../pages/auth/auth.component';
 import { AdminPanelComponent } from '../pages/admin-panel/admin-panel.component';
 import { NewArticleAdminComponent } from '../pages/new-article-admin/new-article-admin.component';
 import { ArticleAdminComponent } from '../pages/article-admin/article-admin.component';
-import { canDeactivateFnEditor, isLogedInFn } from './routes.guard';
+import {
+  canDeactivateFnEditor,
+  isLogedInFn,
+  isArticlePathExist,
+} from './routes.guard';
+import { NotFoundComponent } from '../pages/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -15,6 +20,7 @@ export const routes: Routes = [
   {
     path: 'blog/:paramArticleId',
     component: ArticleComponent,
+    canActivate: [isArticlePathExist],
   },
   {
     path: 'user',
@@ -36,5 +42,13 @@ export const routes: Routes = [
     component: ArticleAdminComponent,
     canDeactivate: [canDeactivateFnEditor],
     canActivate: [isLogedInFn],
+  },
+  {
+    path: '404',
+    component: NotFoundComponent,
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
   },
 ];
