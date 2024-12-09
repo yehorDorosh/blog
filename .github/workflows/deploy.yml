@@ -42,6 +42,14 @@ jobs:
             echo "Building the application..."
             npm run build || { echo 'build failed'; exit 1; }
 
+            # Очистить папку prod
+            echo "Cleaning prod directory..."
+            rm -rf /root/blog/prod/* || { echo 'Failed to clean prod directory'; exit 1; }
+
+            # Скопировать содержимое dist в prod
+            echo "Copying dist to prod directory..."
+            cp -r /root/blog/dist/* /root/blog/prod/ || { echo 'Failed to copy dist to prod'; exit 1; }
+
             # Остановить старую версию приложения
             echo "Stopping old processes..."
             pm2 stop all || true
