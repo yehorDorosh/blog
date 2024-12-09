@@ -28,19 +28,32 @@
     grid-row: 1;
     grid-column: 1 / 4;
     z-index: 1;
-    padding: 1rem;
+    padding-left: 2rem;
+
+    @include desk {
+      padding: 1rem 2rem;
+    }
 
     & a {
-      font-size: 2rem;
+      font-size: 1.5rem;
+      line-height: 1;
       color: var(--white);
       font-weight: 700;
+
+      @include desk {
+        font-size: 2rem;
+      }
     }
 
     & .back-icon {
       margin-inline-end: 1rem;
-      width: 1.5rem;
+      width: 1.2rem;
       height: auto;
       filter: invert(1);
+
+      @include desk {
+        width: 1.5rem;
+      }
     }
   }
 
