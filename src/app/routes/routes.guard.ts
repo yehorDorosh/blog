@@ -3,7 +3,6 @@ import { ArticleAdminComponent } from '../pages/article-admin/article-admin.comp
 import { CanActivateFn, CanDeactivateFn, Router } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { ArticleService } from '../blog/article.service';
-import { BlogArticle } from '../blog/blog.model';
 
 export const canDeactivateFnEditor: CanDeactivateFn<
   ArticleAdminComponent

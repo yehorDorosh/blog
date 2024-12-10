@@ -60,7 +60,12 @@ export function app(): express.Express {
           { provide: REQUEST, useValue: req },
         ],
       })
-      .then((html) => res.send(html))
+      .then((html) => {
+        if (originalUrl.includes('404')) {
+          return res.status(404).send(html);
+        }
+        return res.send(html);
+      })
       .catch((err) => next(err));
   });
 

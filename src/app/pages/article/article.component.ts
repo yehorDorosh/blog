@@ -5,6 +5,7 @@ import {
   OnInit,
   computed,
   ViewEncapsulation,
+  PLATFORM_ID,
 } from '@angular/core';
 import { type BlogArticle } from '../../blog/blog.model';
 import { ArticleService } from '../../blog/article.service';
@@ -12,11 +13,11 @@ import { SanitizeHtmlPipe } from '../../pipes/sanitize-html.pipe';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import { LangList } from '../../lang-switcher/lang-switcher.model';
 import { TagService } from '../../admin/tags-manager/tag.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { PageComponent } from '../../layout/page/page.component';
 import { Meta, Title } from '@angular/platform-browser';
 import metaTranslations from '../../../locale/meta';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-article',
@@ -32,7 +33,7 @@ export class ArticleComponent implements OnInit {
   tagService = inject(TagService);
   meta = inject(Meta);
   title = inject(Title);
-  router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
 
   paramArticleId = input.required<string>();
 
@@ -52,8 +53,12 @@ export class ArticleComponent implements OnInit {
       (article) => article.url === this.paramArticleId()
     );
 
-    if (!article && this.articles()?.length) {
-      this.router.navigate(['/404'], { replaceUrl: true });
+    if (
+      !article &&
+      this.articles()?.length &&
+      isPlatformBrowser(this.platformId)
+    ) {
+      window.location.href = `/${this.lang()}/404`;
     }
 
     if (article) {

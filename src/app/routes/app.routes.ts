@@ -11,12 +11,16 @@ import {
   isArticlePathExist,
 } from './routes.guard';
 import { NotFoundComponent } from '../pages/not-found/not-found.component';
+import { Redirect404Component } from './redirect-404/redirect-404.component';
+import redirectRoutes from './redirect';
 
 export const routes: Routes = [
+  ...redirectRoutes,
   {
     path: '',
     component: HomeComponent,
   },
+
   {
     path: 'blog/:paramArticleId',
     component: ArticleComponent,
@@ -49,6 +53,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    component: NotFoundComponent,
+    component: Redirect404Component,
   },
 ];

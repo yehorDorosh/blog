@@ -15,7 +15,7 @@ if (fs.existsSync(sourcePath)) {
         if (err) {
             console.error('Error copying the file:', err);
         } else {
-            console.log('File copied successfully.');
+            console.log('proxy-server.mjs copied successfully.');
         }
     });
 } else {
