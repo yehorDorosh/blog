@@ -1,5 +1,5 @@
+@if (isAdminMode()) {
 <li>
-  <!-- <span>{{ tag().id }}</span> -->
   @for (lang of langList(); track lang) {
   <span class="bold">{{ lang }}: </span><span>{{ tag().label[lang] }}; </span>
   }
@@ -14,3 +14,14 @@
   <app-edit-tag-form [tag]="tag()" (onEditTag)="onOpenEditor()" />
   }
 </li>
+} @else {
+<li>
+  <button
+    class="btn"
+    (click)="onTagClick(tag().id)"
+    [class]="{ 'btn--inactive': !tagActive() }"
+  >
+    {{ tag().label[lang()] }}
+  </button>
+</li>
+}

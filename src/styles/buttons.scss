@@ -20,6 +20,14 @@
       background-color: var(--dark);
     }
   }
+
+  &--inactive {
+    background-color: var(--secondary);
+
+    &:hover {
+      background-color: var(--light);
+    }
+  }
 }
 
 a.btn {

@@ -1,14 +1,11 @@
-<app-add-tag-form />
-
-<h3>Tags:</h3>
-
 <ul class="list">
   @for (tag of tags(); track tag.id) {
   <app-tag-list-item
     [tag]="tag"
     [langList]="langList()"
-    [isAdminMode]="true"
+    [isAdminMode]="false"
     [lang]="lang"
+    (onSelected)="onTagSelected($event)"
   />
   }
 </ul>

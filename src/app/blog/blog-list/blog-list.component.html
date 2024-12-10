@@ -2,6 +2,8 @@
 <h2>Articles</h2>
 }
 
+<app-tags (onSelected)="onTagSelected($event)" />
+
 <ul [class]="{ list: !simple(), 'list-simple': simple() }">
   @for (article of articlesList(); track article.id) {
   <li

@@ -1,4 +1,4 @@
-import { Component, input, inject, signal } from '@angular/core';
+import { Component, input, inject, signal, output } from '@angular/core';
 import { Tag } from '../../../blog/blog.model';
 import { LangList } from '../../../lang-switcher/lang-switcher.model';
 import { TagService } from '../tag.service';
@@ -14,10 +14,14 @@ import { EditTagFormComponent } from '../edit-tag-form/edit-tag-form.component';
 export class TagListItemComponent {
   tag = input.required<Tag>();
   langList = input.required<LangList[]>();
+  isAdminMode = input<boolean>(false);
+  lang = input.required<LangList>();
+  onSelected = output<string>();
 
   tagService = inject(TagService);
 
   isEditorOpened = signal(false);
+  tagActive = signal(false);
 
   onDeleteTag() {
     this.tagService.deleteTag(this.tag().id);
@@ -25,5 +29,10 @@ export class TagListItemComponent {
 
   onOpenEditor() {
     this.isEditorOpened.update((val) => !val);
+  }
+
+  onTagClick(id: string) {
+    this.onSelected.emit(id);
+    this.tagActive.update((val) => !val);
   }
 }

@@ -17,6 +17,7 @@ export class TagsManagerComponent {
 
   tags = computed(() => this.tagService.tagsList());
   langList = signal(this.langSwitcherService.langList);
+  lang = this.langSwitcherService.lang();
 
   ngOnInit() {
     this.tagService.getTags();
