@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
 import { PageComponent } from '../../layout/page/page.component';
 import { Meta, Title } from '@angular/platform-browser';
 import metaTranslations from '../../../locale/meta';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-article',
@@ -32,6 +32,7 @@ export class ArticleComponent implements OnInit {
   tagService = inject(TagService);
   meta = inject(Meta);
   title = inject(Title);
+  router = inject(Router);
 
   paramArticleId = input.required<string>();
 
@@ -50,6 +51,11 @@ export class ArticleComponent implements OnInit {
     const article = this.articles().find(
       (article) => article.url === this.paramArticleId()
     );
+
+    if (!article && this.articles()?.length) {
+      this.router.navigate(['/404'], { replaceUrl: true });
+    }
+
     if (article) {
       this.title.setTitle(
         article.metaTitle[this.lang()] ||
@@ -62,6 +68,7 @@ export class ArticleComponent implements OnInit {
           metaTranslations.article.description[this.lang()],
       });
     }
+
     return article;
   });
 
@@ -99,7 +106,6 @@ export class ArticleComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.articleService.getArticles();
     this.tagService.getTags();
   }
 }

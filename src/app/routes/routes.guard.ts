@@ -3,6 +3,7 @@ import { ArticleAdminComponent } from '../pages/article-admin/article-admin.comp
 import { CanActivateFn, CanDeactivateFn, Router } from '@angular/router';
 import { UserService } from '../user/user.service';
 import { ArticleService } from '../blog/article.service';
+import { BlogArticle } from '../blog/blog.model';
 
 export const canDeactivateFnEditor: CanDeactivateFn<
   ArticleAdminComponent
@@ -42,18 +43,9 @@ export const isLogedInFn: CanActivateFn = () => {
   }
 };
 
-export const isArticlePathExist: CanActivateFn = (_, state) => {
+export const isArticlePathExist: CanActivateFn = async (_, state) => {
   const articleService = inject(ArticleService);
-  const router = inject(Router);
-  const currentPath = state.url;
-  const articleURL = currentPath.split('/').at(-1);
-  const articles = articleService.articles();
-  const article = articles.find((article) => article.url === articleURL);
+  await articleService.getArticlesPromise();
 
-  if (article) {
-    return true;
-  } else {
-    router.navigate(['404'], { replaceUrl: true });
-    return false;
-  }
+  return true;
 };

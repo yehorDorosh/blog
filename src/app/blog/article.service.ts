@@ -39,7 +39,10 @@ export class ArticleService implements OnInit {
     });
   }
 
-  async getArticles() {
+  getArticles(
+    resolve?: (value: BlogArticle[]) => void,
+    reject?: (reason?: any) => void
+  ) {
     this.httpClient
       .get<BlogArticleResponse>(
         `${
@@ -52,6 +55,7 @@ export class ArticleService implements OnInit {
 
           if (!response) {
             this.articles.set([]);
+            if (resolve) resolve([]);
           } else {
             const articlesArray = Object.keys(response)
               .flatMap((localId) =>
@@ -64,12 +68,20 @@ export class ArticleService implements OnInit {
               )
               .reverse();
             this.articles.set(articlesArray);
+            if (resolve) resolve(articlesArray);
           }
         },
         error: (error) => {
           console.error(error);
+          if (reject) reject(error);
         },
       });
+  }
+
+  getArticlesPromise() {
+    return new Promise<BlogArticle[]>((resolve, reject) => {
+      this.getArticles(resolve, reject);
+    });
   }
 
   createEmptyArticle() {
