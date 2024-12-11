@@ -21,15 +21,26 @@ export class BlogListComponent {
   activeTags = signal<string[]>([]);
 
   articlesList = computed(() => {
-    return this.articleService.articles().filter(
-      (article) =>
-        (article.published[this.langSwitcherService.lang()] &&
-          this.activeTags().length === 0) ||
-        article.tags.some((articleTag) => {
-          return this.activeTags().includes(articleTag);
-        }) ||
-        this.isAdminAccess()
-    );
+    return this.articleService
+      .articles()
+      .filter(
+        (article) =>
+          (article.published[this.langSwitcherService.lang()] &&
+            this.activeTags().length === 0) ||
+          article.tags.some((articleTag) => {
+            return this.activeTags().includes(articleTag);
+          }) ||
+          this.isAdminAccess()
+      )
+      .sort((a, b) => {
+        if (a.top && !b.top) {
+          return -1;
+        }
+        if (!a.top && b.top) {
+          return 1;
+        }
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
   });
 
   ngOnInit(): void {

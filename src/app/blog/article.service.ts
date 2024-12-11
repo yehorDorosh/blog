@@ -200,6 +200,7 @@ export class ArticleService implements OnInit {
     autoUrl: boolean;
     metaTitle: TranslatableContent;
     metaDescription: TranslatableContent;
+    top: boolean;
   }) {
     if (!this.userService.getToken) return;
 
@@ -228,6 +229,7 @@ export class ArticleService implements OnInit {
           autoUrl: articleData.autoUrl,
           metaTitle: articleData.metaTitle,
           metaDescription: articleData.metaDescription,
+          top: articleData.top,
         }
       )
       .subscribe({

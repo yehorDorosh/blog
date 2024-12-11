@@ -25,6 +25,7 @@ export interface BlogArticle {
   autoUrl: boolean;
   metaTitle: TranslatableContent;
   metaDescription: TranslatableContent;
+  top: boolean;
 }
 
 export type TagId = string;

@@ -70,6 +70,7 @@ export class ArticleEditorComponent implements OnInit {
     uk: '',
   };
   metaDescriptionField = '';
+  top = false;
 
   tagsList = computed(() => {
     return this.tagService.tagsList().map((tag) => {
@@ -152,6 +153,7 @@ export class ArticleEditorComponent implements OnInit {
       this.articleService.editorImages = this.article()!.img.editorImages || [];
       this.url = this.article()!.url;
       this.autoUrl = this.article()!.autoUrl;
+      this.top = this.article()!.top;
       this.metaTitle = this.article()!.metaTitle;
       this.metaTitleField = this.article()!.metaTitle[editorLang];
       this.metaDescription = this.article()!.metaDescription;
@@ -251,6 +253,7 @@ export class ArticleEditorComponent implements OnInit {
       autoUrl: this.autoUrl,
       metaTitle: this.metaTitle,
       metaDescription: this.metaDescription,
+      top: this.top,
     });
   }
 
