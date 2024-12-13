@@ -62,6 +62,7 @@ export class ArticleService implements OnInit {
                 Object.keys(response[localId]).map((articleId) => {
                   return {
                     id: articleId,
+                    userId: localId,
                     ...response[localId][articleId],
                   };
                 })
@@ -188,6 +189,7 @@ export class ArticleService implements OnInit {
 
   saveArticle(articleData: {
     articleId: string;
+    userId: string;
     title: TranslatableContent;
     summary: TranslatableContent;
     content: TranslatableContent;
@@ -211,7 +213,7 @@ export class ArticleService implements OnInit {
     const subscription = this.httpClient
       .patch(
         `${environment.fireBase.apiUrl}/blog/${
-          this.userService.user()?.localId
+          articleData.userId || this.userService.user()?.localId
         }/${articleData.articleId}.json?auth=${this.userService.getToken}`,
         {
           title: articleData.title,
@@ -250,13 +252,15 @@ export class ArticleService implements OnInit {
   }
 
   deleteArticle(articleId: string) {
-    if (!this.userService.getToken) return;
+    const userId = this.articles().find(
+      (article) => article.id === articleId
+    )?.userId;
+
+    if (!this.userService.getToken || !userId) return;
 
     const subscription = this.httpClient
       .delete<null>(
-        `${environment.fireBase.apiUrl}/blog/${
-          this.userService.user()?.localId
-        }/${articleId}.json?auth=${this.userService.getToken}`
+        `${environment.fireBase.apiUrl}/blog/${userId}/${articleId}.json?auth=${this.userService.getToken}`
       )
       .subscribe({
         next: (response) => {

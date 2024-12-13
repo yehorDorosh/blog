@@ -21,12 +21,22 @@ export class TagService {
 
   getTags(cb?: () => void) {
     const subscription = this.httpClient
-      .get<GetTagsResponse>(`${environment.fireBase.apiUrl}/tags.json`)
+      .get<GetTagsResponse>(
+        `${
+          environment.fireBase.apiUrl
+        }/tags.json?&cache=${new Date().getTime()}`
+      )
       .subscribe({
         next: (response) => {
+          if (!response) {
+            this.tagsList.set([]);
+            return;
+          }
+
           const tags: Tag[] = Object.keys(response).flatMap((localId) =>
             Object.keys(response[localId]).map((tagId) => ({
               id: tagId,
+              userId: localId,
               label: response[localId][tagId].label,
             }))
           );
@@ -61,9 +71,7 @@ export class TagService {
   editTag(tag: Tag) {
     const subscription = this.httpClient
       .patch(
-        `${environment.fireBase.apiUrl}/tags/${
-          this.userService.user()?.localId
-        }/${tag.id}.json?auth=${this.userService.getToken}`,
+        `${environment.fireBase.apiUrl}/tags/${tag.userId}/${tag.id}.json?auth=${this.userService.getToken}`,
         { label: tag.label }
       )
       .subscribe({
@@ -78,11 +86,13 @@ export class TagService {
   }
 
   deleteTag(tagId: string) {
+    const userId = this.tagsList().find((tag) => tag.id === tagId)?.userId;
+
+    if (!userId) return;
+
     const subscription = this.httpClient
       .delete(
-        `${environment.fireBase.apiUrl}/tags/${
-          this.userService.user()?.localId
-        }/${tagId}.json?auth=${this.userService.getToken}`
+        `${environment.fireBase.apiUrl}/tags/${userId}/${tagId}.json?auth=${this.userService.getToken}`
       )
       .subscribe({
         next: (response) => {

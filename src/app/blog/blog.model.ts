@@ -10,6 +10,7 @@ export type TranslatableCheckbox = {
 
 export interface BlogArticle {
   id?: string;
+  userId?: string;
   title: TranslatableContent;
   summary: TranslatableContent;
   content: TranslatableContent;
@@ -32,6 +33,7 @@ export type TagId = string;
 
 export interface Tag {
   id: TagId;
+  userId: string;
   label: TranslatableContent;
 }
 

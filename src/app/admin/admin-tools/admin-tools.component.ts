@@ -1,4 +1,4 @@
-import { Component, input, inject } from '@angular/core';
+import { Component, input, inject, computed } from '@angular/core';
 import { UserService } from '../../user/user.service';
 import { RouterLink } from '@angular/router';
 import { ArticleService } from '../../blog/article.service';
@@ -26,4 +26,11 @@ export class AdminToolsComponent {
       this.articleService.deleteArticle(article.id!);
     }
   }
+
+  isEditable = computed(() => {
+    const article = this.articleService
+      .articles()
+      .find((article) => article.id === this.nodeId());
+    return article?.userId === this.userService.user()?.localId;
+  });
 }

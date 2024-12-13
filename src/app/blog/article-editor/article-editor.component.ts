@@ -239,6 +239,7 @@ export class ArticleEditorComponent implements OnInit {
 
     this.articleService.saveArticle({
       articleId: id,
+      userId: this.article()?.userId || '',
       title: this.title,
       summary: this.summary,
       content: this.content,
