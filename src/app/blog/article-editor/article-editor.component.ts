@@ -308,10 +308,18 @@ export class ArticleEditorComponent implements OnInit {
     const doc = parser.parseFromString(html, 'text/html');
 
     const links = doc.querySelectorAll('a');
+    const images = doc.querySelectorAll('img');
 
     links.forEach((link) => {
       if (link.hostname !== window.location.hostname) {
         link.setAttribute('rel', 'nofollow noopener');
+      }
+    });
+
+    images.forEach((image) => {
+      if (image.src.includes(window.location.hostname)) {
+        const url = new URL(image.src);
+        image.src = url.pathname;
       }
     });
 
