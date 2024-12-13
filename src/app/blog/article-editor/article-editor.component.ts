@@ -84,7 +84,7 @@ export class ArticleEditorComponent implements OnInit {
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    height: 'auto',
+    height: '80vh',
     minHeight: '0',
     maxHeight: 'auto',
     width: 'auto',
@@ -242,7 +242,11 @@ export class ArticleEditorComponent implements OnInit {
       userId: this.article()?.userId || '',
       title: this.title,
       summary: this.summary,
-      content: this.content,
+      content: {
+        en: this.htmlParser(this.content.en),
+        ru: this.htmlParser(this.content.ru),
+        uk: this.htmlParser(this.content.uk),
+      },
       pageHeroPath: this.pageHeroPath,
       published: this.published,
       author: this.author,
@@ -296,5 +300,21 @@ export class ArticleEditorComponent implements OnInit {
       this.metaDescriptionField =
         this.article()!.metaDescription[this.langSwitcherService.editorLang()];
     }
+  }
+
+  htmlParser(html: string) {
+    if (!html) return html;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const links = doc.querySelectorAll('a');
+
+    links.forEach((link) => {
+      if (link.hostname !== window.location.hostname) {
+        link.setAttribute('rel', 'nofollow noopener');
+      }
+    });
+
+    return doc.body.innerHTML;
   }
 }

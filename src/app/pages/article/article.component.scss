@@ -61,12 +61,11 @@
     grid-row: 1 / 4;
     grid-column: 1 / 4;
     display: block;
-    max-width: 100%;
+    object-fit: cover;
+    width: 100%;
     max-height: calc(100vh * 0.8 - 7rem);
 
     @include tab {
-      width: 100%;
-      object-fit: cover;
       max-height: calc(100vh * 0.8 - 8rem);
     }
   }
@@ -78,20 +77,10 @@
     align-items: center;
     justify-content: center;
     color: var(--white);
-    font-size: 3rem;
-    font-weight: 700;
     z-index: 1;
     text-align: center;
     margin: 0;
     text-shadow: 0 0 1px var(--white);
-
-    @include tab {
-      font-size: 4rem;
-    }
-
-    @include desk {
-      font-size: 5rem;
-    }
   }
 }
 
@@ -114,10 +103,18 @@
 }
 
 .post {
+  @include tab {
+    font-size: 2rem;
+  }
+
   & img {
     max-width: 100%;
     height: auto;
     margin-inline: auto;
     display: block;
+  }
+
+  h4 {
+    color: var(--secondary);
   }
 }

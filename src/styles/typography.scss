@@ -1,3 +1,5 @@
+@import "./breakpoints.scss";
+
 html {
   font-size: 62.5%;
   line-height: 1.4;
@@ -17,4 +19,70 @@ html {
 
 .bold {
   font-weight: 700;
+}
+
+h1 {
+  font-size: 4rem;
+  line-height: 1.2;
+  font-weight: 700;
+
+  @include tab {
+    font-size: 5rem;
+  }
+
+  @include desk {
+    font-size: 6rem;
+  }
+}
+
+h2 {
+  font-size: 3rem;
+  line-height: 1.2;
+  font-weight: 700;
+
+  @include tab {
+    font-size: 4rem;
+  }
+
+  @include desk {
+    font-size: 5rem;
+  }
+}
+
+h3 {
+  font-size: 2rem;
+  line-height: 1.4;
+  font-weight: 700;
+
+  @include tab {
+    font-size: 3rem;
+  }
+
+  @include desk {
+    font-size: 4rem;
+  }
+}
+
+h4 {
+  font-size: 1.6rem;
+  line-height: 1.4;
+  font-weight: 700;
+
+  @include tab {
+    font-size: 2rem;
+  }
+
+  @include desk {
+    font-size: 3rem;
+  }
+}
+
+h5 {
+  font-size: 1.6rem;
+  line-height: 1.4;
+  font-weight: 700;
+
+  @include tab {
+    font-size: 1.8rem;
+  }
 }
