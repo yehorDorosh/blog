@@ -20,6 +20,10 @@
         <source>Back</source>
         <target>Повернутися</target>
       </trans-unit>
+      <trans-unit id="1506941739988289207" datatype="html">
+        <source>To top</source>
+        <target>К початку</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

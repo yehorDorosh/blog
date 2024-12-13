@@ -115,7 +115,18 @@
     display: block;
   }
 
+  h2 {
+    text-align: center;
+  }
+
   h4 {
     color: var(--secondary);
   }
+}
+
+.totop {
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 10;
 }

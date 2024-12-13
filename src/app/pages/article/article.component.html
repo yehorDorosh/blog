@@ -37,9 +37,13 @@
       </p>
     </div>
     <div
+      id="top"
       class="article__body post"
       [innerHTML]="articleContent() | sanitizeHtml"
     ></div>
     }
   </article>
+  <a [routerLink]="[]" fragment="top" class="btn btn--primary totop" i18n
+    >To top</a
+  >
 </app-page>
