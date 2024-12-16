@@ -1,22 +1,5 @@
 <form (ngSubmit)="onSubmit()" class="editor">
   <div class="form-group form-group--column">
-    <label class="label" for="articleLang">Language: </label>
-    <select
-      class="form-control input"
-      name="articleLang"
-      (change)="onChangeEditorLang($event)"
-    >
-      <option
-        *ngFor="let lang of langSwitcherService.langList"
-        [value]="lang"
-        [selected]="langSwitcherService.editorLang() === lang"
-      >
-        {{ lang }}
-      </option>
-    </select>
-  </div>
-
-  <div class="form-group form-group--column">
     <label class="label" for="title">Title: </label>
     <input
       type="text"
@@ -159,6 +142,23 @@
   <div class="form-group">
     <button type="submit" class="btn">Save</button>
     <button type="button" class="btn" (click)="onCancel()">Cancel</button>
+  </div>
+
+  <div class="form-group form-group--column">
+    <label class="label" for="articleLang">Language: </label>
+    <select
+      class="form-control input"
+      name="articleLang"
+      (change)="onChangeEditorLang($event)"
+    >
+      <option
+        *ngFor="let lang of langSwitcherService.langList"
+        [value]="lang"
+        [selected]="langSwitcherService.editorLang() === lang"
+      >
+        {{ lang }}
+      </option>
+    </select>
   </div>
 
   <div class="form-group form-group--column">

@@ -18,11 +18,18 @@ import { PageComponent } from '../../layout/page/page.component';
 import { Meta, Title } from '@angular/platform-browser';
 import metaTranslations from '../../../locale/meta';
 import { RouterLink } from '@angular/router';
+import { TableOfContentComponent } from '../../blog/table-of-content/table-of-content.component';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [SanitizeHtmlPipe, DatePipe, PageComponent, RouterLink],
+  imports: [
+    SanitizeHtmlPipe,
+    DatePipe,
+    PageComponent,
+    RouterLink,
+    TableOfContentComponent,
+  ],
   templateUrl: './article.component.html',
   styleUrl: './article.component.scss',
   encapsulation: ViewEncapsulation.None,

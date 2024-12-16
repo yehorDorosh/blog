@@ -1,0 +1,13 @@
+<h4 class="table-of-content__title" i18n>Table of content</h4>
+<ul class="table-of-content">
+  @for (header of headers; track header.id) {
+  <li class="table-of-content__item">
+    <a
+      class="table-of-content__link"
+      [routerLink]="[]"
+      fragment="{{ header.id }}"
+      >{{ header.textContent }}</a
+    >
+  </li>
+  }
+</ul>

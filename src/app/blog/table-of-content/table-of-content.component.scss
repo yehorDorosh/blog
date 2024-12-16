@@ -1,0 +1,13 @@
+.table-of-content {
+  &__title {
+    margin-bottom: 0;
+  }
+
+  &__item {
+    padding-block: 1rem;
+  }
+
+  &__link {
+    font-size: 2rem;
+  }
+}

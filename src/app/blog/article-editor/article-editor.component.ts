@@ -84,7 +84,7 @@ export class ArticleEditorComponent implements OnInit {
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
-    height: '80vh',
+    height: '70vh',
     minHeight: '0',
     maxHeight: 'auto',
     width: 'auto',

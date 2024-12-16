@@ -24,6 +24,10 @@
         <source>To top</source>
         <target>К початку</target>
       </trans-unit>
+      <trans-unit id="8965493437207343684" datatype="html">
+        <source>Table of content</source>
+        <target>Зміст</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

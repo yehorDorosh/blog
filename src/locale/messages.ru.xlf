@@ -24,6 +24,10 @@
         <source>To top</source>
         <target>Вверх</target>
       </trans-unit>
+      <trans-unit id="8965493437207343684" datatype="html">
+        <source>Table of content</source>
+        <target>Оглавление</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
