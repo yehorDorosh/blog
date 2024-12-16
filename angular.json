@@ -60,7 +60,8 @@
             "allowedCommonJsDependencies": [
               "multer",
               "fast-xml-parser",
-              "firebase-admin"
+              "firebase-admin",
+              "morgan"
             ]
           },
           "configurations": {

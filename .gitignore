@@ -45,3 +45,4 @@ environment.development.ts
 environment.ts
 /uploads
 /server/security
+error.log

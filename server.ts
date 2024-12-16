@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve, basename } from 'node:path';
 import bootstrap from './src/main.server';
@@ -9,6 +9,9 @@ import { LOCALE_ID } from '@angular/core';
 import { REQUEST, RESPONSE } from './src/express.tokens';
 import admin from 'firebase-admin';
 import { environment } from './src/environments/environment';
+import morgan from 'morgan';
+import fs from 'fs';
+import path from 'path';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -18,8 +21,22 @@ export function app(): express.Express {
   const langPath = `/${lang}/`;
   const browserDistFolder = resolve(serverDistFolder, `../../browser/${lang}`);
   const indexHtml = join(serverDistFolder, 'index.server.html');
+  const accessLogStream = fs.createWriteStream(
+    path.join(serverDistFolder, '../../../..', 'logs', 'error.log'),
+    { flags: 'a' }
+  );
 
   const commonEngine = new CommonEngine();
+
+  // logs
+  server.use(
+    morgan('combined', {
+      stream: accessLogStream,
+      skip(req, res) {
+        return res.statusCode < 400;
+      },
+    })
+  );
 
   if (!admin.apps.length) {
     admin.initializeApp({
@@ -68,6 +85,13 @@ export function app(): express.Express {
       })
       .catch((err) => next(err));
   });
+
+  server.use(
+    (error: unknown, req: Request, res: Response, next: NextFunction) => {
+      console.log(error);
+      res.status(500).json(error);
+    }
+  );
 
   return server;
 }
