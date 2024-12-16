@@ -12,6 +12,9 @@ import { environment } from './src/environments/environment';
 import morgan from 'morgan';
 import fs from 'fs';
 import path from 'path';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import { IpFilter } from 'express-ipfilter';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -25,6 +28,13 @@ export function app(): express.Express {
     path.join(serverDistFolder, '../../../..', 'logs', 'error.log'),
     { flags: 'a' }
   );
+  const limiter = rateLimit({
+    windowMs: +(process.env['RATE_LIMIT_WINDOW'] || 10) * 60 * 1000,
+    limit: +(process.env['RATE_LIMIT'] || 10000),
+    standardHeaders: 'draft-7',
+    legacyHeaders: false,
+  });
+  const ips = process.env['IP_BLACK_LIST']?.split(',') ?? [];
 
   const commonEngine = new CommonEngine();
 
@@ -37,6 +47,21 @@ export function app(): express.Express {
       },
     })
   );
+
+  // security
+  if (process.env['NODE_ENV'] === 'production') {
+    server.use(IpFilter(ips, { log: false }));
+    server.use(limiter);
+    server.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            'script-src': ["'self'", "'unsafe-inline'"],
+          },
+        },
+      })
+    );
+  }
 
   if (!admin.apps.length) {
     admin.initializeApp({

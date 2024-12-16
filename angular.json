@@ -61,7 +61,8 @@
               "multer",
               "fast-xml-parser",
               "firebase-admin",
-              "morgan"
+              "morgan",
+              "express-ipfilter"
             ]
           },
           "configurations": {
