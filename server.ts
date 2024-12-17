@@ -83,6 +83,22 @@ export function app(): express.Express {
 
   server.use('/api', imageRouter);
 
+  // ssl verification
+  server.get(
+    '/.well-known/pki-validation/BE0CA1297599AF707C91221906681710.txt',
+    (req, res) => {
+      res.sendFile(
+        resolve(
+          serverDistFolder,
+          '../../../..',
+          'server',
+          'security',
+          'BE0CA1297599AF707C91221906681710.txt'
+        )
+      );
+    }
+  );
+
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
