@@ -10,6 +10,7 @@ import { REQUEST, RESPONSE } from './src/express.tokens';
 import admin from 'firebase-admin';
 import { environment } from './src/environments/environment';
 import fs from 'fs';
+import path from 'path';
 import morgan from 'morgan';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -20,9 +21,12 @@ export function app(): express.Express {
   const langPath = `/${lang}/`;
   const browserDistFolder = resolve(serverDistFolder, `../../browser/${lang}`);
   const indexHtml = join(serverDistFolder, 'index.server.html');
-  const accessLogStream = fs.createWriteStream('/root/blog/logs/error.log', {
-    flags: 'a',
-  });
+  const accessLogStream = fs.createWriteStream(
+    path.join(serverDistFolder, '../../../..', 'logs', 'error.log'),
+    {
+      flags: 'a',
+    }
+  );
 
   const commonEngine = new CommonEngine();
 
