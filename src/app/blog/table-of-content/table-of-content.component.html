@@ -8,6 +8,34 @@
       fragment="{{ header.id }}"
       >{{ header.textContent }}</a
     >
+    @if (header?.headers?.length) {
+    <ul class="table-of-content__sublist">
+      @for (header of header.headers; track header.id) {
+      <li class="table-of-content__subitem">
+        <a
+          class="table-of-content__link"
+          [routerLink]="[]"
+          fragment="{{ header.id }}"
+          >{{ header.textContent }}</a
+        >
+        @if (header?.headers?.length) {
+        <ul class="table-of-content__sublist">
+          @for (header of header.headers; track header.id) {
+          <li class="table-of-content__subitem">
+            <a
+              class="table-of-content__link"
+              [routerLink]="[]"
+              fragment="{{ header.id }}"
+              >{{ header.textContent }}</a
+            >
+          </li>
+          }
+        </ul>
+        }
+      </li>
+      }
+    </ul>
+    }
   </li>
   }
 </ul>
