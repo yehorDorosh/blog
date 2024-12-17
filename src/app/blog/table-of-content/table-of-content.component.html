@@ -9,7 +9,7 @@
       >{{ header.textContent }}</a
     >
     @if (header?.headers?.length) {
-    <ul class="table-of-content__sublist">
+    <ul class="table-of-content__sublist-h3">
       @for (header of header.headers; track header.id) {
       <li class="table-of-content__subitem">
         <a
@@ -19,7 +19,7 @@
           >{{ header.textContent }}</a
         >
         @if (header?.headers?.length) {
-        <ul class="table-of-content__sublist">
+        <ul class="table-of-content__sublist-h4">
           @for (header of header.headers; track header.id) {
           <li class="table-of-content__subitem">
             <a

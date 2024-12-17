@@ -137,7 +137,7 @@ const translit = (word: string) => {
     }
   }
 
-  return answer;
+  return answer.trim();
 };
 
 export default translit;

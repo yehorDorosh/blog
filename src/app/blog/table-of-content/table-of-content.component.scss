@@ -1,13 +1,47 @@
+@import "../../../styles/breakpoints.scss";
+
 .table-of-content {
   &__title {
     margin-bottom: 0;
   }
 
   &__item {
-    padding-block: 1rem;
+    padding-bottom: 0.6rem;
+
+    @include desk {
+      padding-bottom: 1rem;
+    }
+  }
+
+  &__subitem {
+    padding-bottom: 0.4rem;
+
+    @include desk {
+      padding-bottom: 0.8rem;
+    }
   }
 
   &__link {
-    font-size: 2rem;
+    font-size: 1.4rem;
+
+    @include desk {
+      font-size: 2rem;
+    }
+  }
+
+  &__sublist-h3 {
+    display: none;
+
+    @include tab {
+      display: block;
+    }
+  }
+
+  &__sublist-h4 {
+    display: none;
+
+    @include desk {
+      display: block;
+    }
   }
 }

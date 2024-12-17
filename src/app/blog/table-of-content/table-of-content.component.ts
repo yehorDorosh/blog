@@ -20,20 +20,24 @@ export class TableOfContentComponent {
     if (isPlatformBrowser(this.platformId)) {
       const h2 = document.querySelectorAll('h2');
 
-      h2.forEach((header) => {
-        const id = translit(header.textContent || uid());
-        header.id = id;
+      h2.forEach((h2, h2Index) => {
+        const id = translit(h2.textContent || uid()) + h2Index;
+        h2.id = id;
         this.headers.push({
-          textContent: header.textContent || '',
+          textContent: h2.textContent || '',
           id,
-          headers: this.getSubTitles(header, 'H3').map((h3) => {
-            const id = translit(h3.textContent || uid());
+          headers: this.getSubTitles(h2, 'H3').map((h3, h3Index) => {
+            const id = translit(h3.textContent || uid()) + h2Index + h3Index;
             h3.id = id;
             return {
               textContent: h3.textContent || '',
               id,
-              headers: this.getSubTitles(h3, 'H4').map((h4) => {
-                const id = translit(h4.textContent || uid());
+              headers: this.getSubTitles(h3, 'H4').map((h4, h4Index) => {
+                const id =
+                  translit(h4.textContent || uid()) +
+                  h2Index +
+                  h3Index +
+                  h4Index;
                 h4.id = id;
                 return {
                   textContent: h4.textContent || '',

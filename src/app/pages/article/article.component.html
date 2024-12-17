@@ -36,7 +36,7 @@
         <span>{{ date() | date : "dd.MM.yyyy" }}</span>
       </p>
     </div>
-    <app-table-of-content id="top" />
+    <app-table-of-content id="top" class="article__table-of-content" />
     <div
       class="article__body post"
       [innerHTML]="articleContent() | sanitizeHtml"
