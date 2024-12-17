@@ -22,6 +22,9 @@
       <trans-unit id="8965493437207343684" datatype="html">
         <source>Table of content</source>
       </trans-unit>
+      <trans-unit id="5945986349492910662" datatype="html">
+        <source>Contacts</source>
+      </trans-unit>
     </body>
   </file>
 </xliff>

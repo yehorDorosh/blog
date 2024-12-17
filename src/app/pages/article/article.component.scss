@@ -135,6 +135,8 @@
     @include desk {
       grid-column: 1;
       grid-row: 3;
+      border-right: 1px solid #dedcdc;
+      padding-right: 2rem;
     }
   }
 }

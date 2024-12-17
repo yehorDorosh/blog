@@ -28,6 +28,10 @@
         <source>Table of content</source>
         <target>Оглавление</target>
       </trans-unit>
+      <trans-unit id="5945986349492910662" datatype="html">
+        <source>Contacts</source>
+        <target>Контакты</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
