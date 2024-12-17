@@ -1,8 +1,6 @@
 import express from 'express';
 import https from 'https';
 import fs from 'fs';
-import morgan from 'morgan';
-import path from 'path';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { IpFilter } from 'express-ipfilter';
@@ -14,10 +12,6 @@ function run() {
   const port = process.env.PORT || 4000;
   const server = express();
 
-  const accessLogStream = fs.createWriteStream(
-    '/root/blog/logs/error.log',
-    { flags: 'a' }
-  );
   const limiter = rateLimit({
     windowMs: +(process.env['RATE_LIMIT_WINDOW'] || 10) * 60 * 1000,
     limit: +(process.env['RATE_LIMIT'] || 10000),
@@ -30,16 +24,6 @@ function run() {
   server.use('/ru', serverRu());
   server.use('/en', serverEn());
   server.use('/', serverEn());
-
-  // logs
-  server.use(
-    morgan('combined', {
-      stream: accessLogStream,
-      skip(req, res) {
-        return res.statusCode < 400;
-      },
-    })
-  );
 
   if (process.env.NODE_ENV === 'production') {
     server.use(IpFilter(ips, { log: false }));
