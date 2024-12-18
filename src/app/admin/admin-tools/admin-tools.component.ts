@@ -23,7 +23,15 @@ export class AdminToolsComponent {
       .articles()
       .find((article) => article.id === this.nodeId());
     if (article) {
-      this.articleService.deleteArticle(article.id!);
+      if (
+        confirm(
+          `Are you sure you want to delete this article? ${
+            article.title.en || article.title.ru || article.title.uk
+          }`
+        )
+      ) {
+        this.articleService.deleteArticle(article.id!);
+      }
     }
   }
 

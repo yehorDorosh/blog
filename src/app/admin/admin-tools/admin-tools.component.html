@@ -1,6 +1,5 @@
 @if (userService.isLoggedIn() && nodeId() && isEditable()) {
 <div class="admin-panel">
-  <a [routerLink]="['/blog', nodeId()]" class="admin-panel-link">Preview</a>
   <a [routerLink]="['/admin', 'node', nodeId()]" class="admin-panel-link"
     >Edit</a
   >
