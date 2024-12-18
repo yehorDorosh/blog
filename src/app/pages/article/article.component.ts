@@ -79,6 +79,20 @@ export class ArticleComponent implements OnInit {
           article.metaDescription[this.lang()] ||
           metaTranslations.article.description[this.lang()],
       });
+      this.meta.addTag({
+        property: 'og:image',
+        content: article.img.pageHero
+          ? `https://waves-and-mountains.blog${article.img.pageHero}`
+          : 'https://waves-and-mountains.blog/assets/images/opengraph/DJI_0041.jpg',
+      });
+      this.meta.addTag({
+        property: 'og:url',
+        content: 'https://waves-and-mountains.blog/',
+      });
+      this.meta.addTag({
+        property: 'og:type',
+        content: 'article',
+      });
     }
 
     return article;

@@ -25,5 +25,18 @@ export class HomeComponent implements OnInit {
       name: 'description',
       content: metaTranslations.home.description[lang],
     });
+    this.meta.addTag({
+      property: 'og:image',
+      content:
+        'https://waves-and-mountains.blog/assets/images/opengraph/DJI_0041.jpg',
+    });
+    this.meta.addTag({
+      property: 'og:url',
+      content: 'https://waves-and-mountains.blog/',
+    });
+    this.meta.addTag({
+      property: 'og:type',
+      content: 'website',
+    });
   }
 }
