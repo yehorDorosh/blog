@@ -164,4 +164,12 @@
   right: 2rem;
   bottom: 2rem;
   z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }

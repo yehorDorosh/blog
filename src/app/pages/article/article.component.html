@@ -45,7 +45,12 @@
     ></div>
     }
   </article>
-  <a [routerLink]="[]" fragment="top" class="btn btn--primary totop" i18n
+  <a
+    [routerLink]="[]"
+    fragment="top"
+    class="btn btn--primary totop"
+    [class.visible]="showToTopBtn()"
+    i18n
     >To top</a
   >
 </app-page>

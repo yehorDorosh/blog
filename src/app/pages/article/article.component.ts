@@ -6,6 +6,7 @@ import {
   computed,
   ViewEncapsulation,
   PLATFORM_ID,
+  signal,
 } from '@angular/core';
 import { type BlogArticle } from '../../blog/blog.model';
 import { ArticleService } from '../../blog/article.service';
@@ -43,6 +44,10 @@ export class ArticleComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
 
   paramArticleId = input.required<string>();
+
+  showToTopBtn = signal(false);
+
+  private timer?: NodeJS.Timeout;
 
   lang = computed<LangList>(() => {
     return this.langSwitcherService.lang();
@@ -131,7 +136,33 @@ export class ArticleComponent implements OnInit {
     return this.article()!.date;
   });
 
+  scrollHandler = () => {
+    const targetElement = document.getElementById('top');
+    if (targetElement) {
+      const rect = targetElement.getBoundingClientRect();
+      const topPosition = rect.top + window.scrollY;
+      if (document.documentElement.scrollTop > topPosition) {
+        this.showToTopBtn.set(true);
+      } else {
+        this.showToTopBtn.set(false);
+      }
+    }
+  };
+
   ngOnInit(): void {
     this.tagService.getTags();
+
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('scroll', () => {
+        clearTimeout(this.timer);
+        this.timer = setTimeout(this.scrollHandler, 100);
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timer);
+    if (isPlatformBrowser(this.platformId))
+      window.removeEventListener('scroll', this.scrollHandler);
   }
 }
