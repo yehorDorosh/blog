@@ -3,3 +3,5 @@ Disallow: */user/*
 Disallow: */admin/*
 Disallow: */node/*
 Allow: /
+
+Sitemap: https://waves-and-mountains.blog/sitemap.xml
