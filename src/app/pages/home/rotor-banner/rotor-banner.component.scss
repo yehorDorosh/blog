@@ -3,8 +3,9 @@
 .splide {
   &__slide img {
     width: 100%;
-    height: calc(100vh - 9rem);
+    height: 600px;
     object-fit: cover;
+    object-position: top;
   }
 }
 
