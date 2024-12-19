@@ -1,5 +1,5 @@
 import express from 'express';
-import https from 'https';
+import http2 from 'http2';
 import fs from 'fs';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -48,7 +48,7 @@ function run() {
       ca: ca
     };
 
-    const httpsServer = https.createServer(credentials, server);
+    const httpsServer = http2.createServer(credentials, server);
 
     httpsServer.listen(port, () => {
       console.log(`Node HTTPS server listening on port ${port}`);
