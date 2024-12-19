@@ -320,6 +320,9 @@ export class ArticleEditorComponent implements OnInit {
       if (image.src.includes(window.location.hostname)) {
         const url = new URL(image.src);
         image.src = url.pathname;
+        image.setAttribute('width', 'auto');
+        image.setAttribute('height', '500px');
+        image.removeAttribute('style');
       }
     });
 
