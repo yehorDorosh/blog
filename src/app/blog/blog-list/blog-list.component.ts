@@ -27,7 +27,7 @@ export class BlogListComponent {
         (article) =>
           (article.published[this.langSwitcherService.lang()] &&
             this.activeTags().length === 0) ||
-          article.tags.some((articleTag) => {
+          article.tags?.some((articleTag) => {
             return this.activeTags().includes(articleTag);
           }) ||
           this.isAdminAccess()
