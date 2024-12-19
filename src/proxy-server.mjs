@@ -1,9 +1,9 @@
 import express from 'express';
-import https from 'https';
 import fs from 'fs';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { IpFilter } from 'express-ipfilter';
+import spdy from 'spdy';
 import { app as serverEn } from './server/en/server.mjs';
 import { app as serverRu } from './server/ru/server.mjs';
 import { app as serverUk } from './server/uk/server.mjs';
@@ -48,7 +48,8 @@ function run() {
       ca: ca
     };
 
-    const httpsServer = https.createServer(credentials, server);
+    //spdy HTTP2
+    const httpsServer = spdy.createServer(credentials, server);
 
     httpsServer.listen(port, () => {
       console.log(`Node HTTPS server listening on port ${port}`);
