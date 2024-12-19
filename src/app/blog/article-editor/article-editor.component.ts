@@ -3,8 +3,10 @@ import { FormsModule } from '@angular/forms';
 import { ArticleService } from '../article.service';
 import { BlogArticle, TranslatableContent } from '../blog.model';
 import { HttpClientModule } from '@angular/common/http';
-import { AngularEditorModule } from '@kolkov/angular-editor';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
+import {
+  AngularEditorModule,
+  AngularEditorConfig,
+} from '@kolkov/angular-editor';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
