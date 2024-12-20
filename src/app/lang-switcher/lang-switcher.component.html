@@ -5,12 +5,9 @@
   <ul class="lang-switcher__list" [class.open]="openSwitcher()">
     @for (lang of providedLangs() ?? langSwitcherService.langList; track lang) {
     <li class="lang-switcher__item">
-      <button
-        class="btn lang-switcher__btn"
-        (click)="changeLanguageHandler(lang)"
-      >
+      <a class="lang-switcher__btn" [href]="'/' + lang + url()">
         {{ lang }}
-      </button>
+      </a>
     </li>
     }
   </ul>

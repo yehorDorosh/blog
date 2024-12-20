@@ -58,11 +58,14 @@
     text-align: center;
   }
 
-  button.lang-switcher__btn {
-    padding: 0;
-    background-color: transparent;
+  a.lang-switcher__btn {
     transition: color 0.3s;
     user-select: none;
+    text-decoration: none;
+    color: var(--white);
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
 
     &:hover {
       color: var(--primary);
