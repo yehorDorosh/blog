@@ -39,7 +39,7 @@ export class LangSwitcherComponent {
       path.splice(1, 1);
       return path.join('/');
     }
-    return this.req?.url;
+    return this.req?.url || '';
   });
 
   changeLanguageHandler(event: MouseEvent, lang: string) {
