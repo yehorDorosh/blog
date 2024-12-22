@@ -5,6 +5,7 @@ import { RotorBannerComponent } from './rotor-banner/rotor-banner.component';
 import { Meta, Title } from '@angular/platform-browser';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import metaTranslations from '../../../locale/meta';
+import { PagesService } from '../pages.service';
 
 @Component({
   selector: 'app-home',
@@ -14,8 +15,9 @@ import metaTranslations from '../../../locale/meta';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
-  meta = inject(Meta);
-  title = inject(Title);
+  private meta = inject(Meta);
+  private title = inject(Title);
+  private pageService = inject(PagesService);
   langSwitcherService = inject(LangSwitcherService);
 
   ngOnInit() {

@@ -20,6 +20,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import metaTranslations from '../../../locale/meta';
 import { RouterLink } from '@angular/router';
 import { TableOfContentComponent } from '../../blog/table-of-content/table-of-content.component';
+import { PagesService } from '../pages.service';
 
 @Component({
   selector: 'app-article',
@@ -39,8 +40,9 @@ export class ArticleComponent implements OnInit {
   articleService = inject(ArticleService);
   langSwitcherService = inject(LangSwitcherService);
   tagService = inject(TagService);
-  meta = inject(Meta);
-  title = inject(Title);
+  private meta = inject(Meta);
+  private title = inject(Title);
+  private pageService = inject(PagesService);
   private platformId = inject(PLATFORM_ID);
 
   paramArticleId = input.required<string>();

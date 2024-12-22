@@ -38,7 +38,6 @@ export function app(): express.Express {
   }
 
   server.use((req, res, next) => {
-    console.log(req.hostname, req.originalUrl);
     if (req.hostname.startsWith('www.')) {
       const newUrl = `https://${req.hostname.replace('www.', '')}${
         req.originalUrl
