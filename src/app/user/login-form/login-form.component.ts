@@ -35,12 +35,15 @@ export class LoginFormComponent {
       )
       .subscribe({
         next: (response) => {
+          if (!environment.production) console.log(response);
+
           this.userService.setUser({
             email: response.email,
             idToken: response.idToken,
             expiresIn: response.expiresIn,
             localId: response.localId,
             logOutDate: null,
+            refreshToken: response.refreshToken,
           });
           this.router.navigate(['/']);
         },

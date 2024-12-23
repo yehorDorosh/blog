@@ -8,7 +8,9 @@
     <a routerLink="/admin" class="header-link" routerLinkActive="active"
       >Admin Panel</a
     >
-    <button class="btn" (click)="onLogout()">Logout</button>
+    <button class="btn" (click)="onLogout()">
+      Logout {{ timeToLogout() }}
+    </button>
     }
     <app-lang-switcher [providedLangs]="providedLangs()" />
     <app-close-button class="close-button" (click)="onCloseNavMenu()" />

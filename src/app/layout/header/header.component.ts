@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, signal, computed } from '@angular/core';
 import { UserService } from '../../user/user.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AdminToolsComponent } from '../../admin/admin-tools/admin-tools.component';
@@ -29,6 +29,13 @@ export class HeaderComponent {
   providedLangs = input<LangList[]>();
   openNavMenu = signal(false);
 
+  timeToLogout = computed(() => {
+    const totalMinutes = this.userService.timeToLogout();
+    const minutes = Math.floor(totalMinutes);
+    const seconds = Math.floor((totalMinutes - minutes) * 60);
+    return `${this.padZero(minutes)}:${this.padZero(seconds)}`;
+  });
+
   onLogout() {
     this.userService.logout();
   }
@@ -39,5 +46,9 @@ export class HeaderComponent {
 
   onCloseNavMenu() {
     this.openNavMenu.set(false);
+  }
+
+  private padZero(value: number): string {
+    return value.toString().padStart(2, '0');
   }
 }

@@ -39,6 +39,7 @@ export class SignupFormComponent {
             expiresIn: response.expiresIn,
             localId: response.localId,
             logOutDate: null,
+            refreshToken: response.refreshToken,
           });
         },
         error: (error) => {
