@@ -1,4 +1,4 @@
-import { Routes, CanDeactivateFn } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from '../pages/home/home.component';
 import { ArticleComponent } from '../pages/article/article.component';
 import { AuthComponent } from '../pages/auth/auth.component';
@@ -11,7 +11,6 @@ import {
   isArticlePathExist,
 } from './routes.guard';
 import { NotFoundComponent } from '../pages/not-found/not-found.component';
-import { Redirect404Component } from './redirect-404/redirect-404.component';
 import redirectRoutes from './redirect';
 
 export const routes: Routes = [
@@ -48,11 +47,7 @@ export const routes: Routes = [
     canActivate: [isLogedInFn],
   },
   {
-    path: '404',
-    component: NotFoundComponent,
-  },
-  {
     path: '**',
-    component: Redirect404Component,
+    component: NotFoundComponent,
   },
 ];

@@ -1,9 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, PLATFORM_ID } from '@angular/core';
 import { PageComponent } from '../../layout/page/page.component';
 import { Meta, Title } from '@angular/platform-browser';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import metaTranslations from '../../../locale/meta';
 import { RouterLink } from '@angular/router';
+import { isPlatformServer } from '@angular/common';
+import { RESPONSE } from '../../../express.tokens';
 
 @Component({
   selector: 'app-not-found',
@@ -16,6 +18,8 @@ export class NotFoundComponent implements OnInit {
   meta = inject(Meta);
   title = inject(Title);
   langSwitcherService = inject(LangSwitcherService);
+  platformId = inject(PLATFORM_ID);
+  res = inject(RESPONSE, { optional: true });
 
   ngOnInit() {
     const lang = this.langSwitcherService.lang();
@@ -24,5 +28,9 @@ export class NotFoundComponent implements OnInit {
       name: 'description',
       content: metaTranslations.home.description[lang],
     });
+
+    if (isPlatformServer(this.platformId)) {
+      this.res?.status(404);
+    }
   }
 }

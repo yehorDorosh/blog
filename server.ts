@@ -107,9 +107,6 @@ export function app(): express.Express {
         ],
       })
       .then((html) => {
-        if (originalUrl.includes('404')) {
-          return res.status(404).send(html);
-        }
         return res.send(html);
       })
       .catch((err) => next(err));
