@@ -159,15 +159,26 @@
   }
 
   & .col-2 {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
-
     & > * {
-      width: 50%;
-      box-sizing: border-box;
+      padding-block: 1rem;
     }
+
+    @include desk {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+
+      & > * {
+        width: 50%;
+        box-sizing: border-box;
+        padding-block: 0;
+      }
+    }
+  }
+
+  iframe {
+    max-width: 100%;
   }
 }
 
