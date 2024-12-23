@@ -157,6 +157,18 @@
   h4 {
     color: var(--secondary);
   }
+
+  & .col-2 {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+
+    & > * {
+      width: 50%;
+      box-sizing: border-box;
+    }
+  }
 }
 
 .totop {

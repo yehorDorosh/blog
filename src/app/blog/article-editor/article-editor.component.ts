@@ -118,6 +118,11 @@ export class ArticleEditorComponent implements OnInit {
         class: 'titleText',
         tag: 'h1',
       },
+      {
+        name: 'col-2',
+        class: 'col-2',
+        tag: 'p',
+      },
     ],
     uploadUrl: 'v1/image',
     upload: this.uploadEditorImage.bind(this),
