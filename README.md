@@ -75,3 +75,9 @@ windows
 ### Copy to server
 
 `scp src\environments\environment.ts root@194.37.80.72:/root/blog/src/environments/`
+
+## Logs
+
+### Copy from server
+
+`scp root@194.37.80.72:/root/blog/logs/error.log ./`
