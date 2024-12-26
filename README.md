@@ -51,7 +51,7 @@ windows
 
 ### Show logs of the process
 
-`pm2 logs blog-site`
+`pm2 logs blog-site --lines 100`
 
 ### Config
 

@@ -41,7 +41,12 @@ export const getImage: RequestHandler = async (req, res) => {
       res.status(500).send('Error fetching image');
     }
   } catch (err) {
-    console.error('Error fetching image:', err);
+    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    console.error(
+      `Error fetching image: ${req.params['id']}/${req.params['key']}`,
+      clientIp
+    );
+    console.error(err);
     res.status(500).send('Error fetching image');
   }
 };
