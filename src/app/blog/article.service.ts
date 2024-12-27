@@ -173,7 +173,7 @@ export class ArticleService implements OnInit {
                 imageUrl,
               },
             });
-            this.editorImages.push(imageUrl);
+            // this.editorImages.push(imageUrl);
             if (!environment.production)
               console.log('Image from editor uploaded.');
             return modifiedResponse;
@@ -324,6 +324,9 @@ export class ArticleService implements OnInit {
           if (!environment.production)
             console.log('Get article images', response);
           this.articleImageList.set(response);
+          this.editorImages = response.map(
+            (imgPath) => `/api/image/${imgPath}`
+          );
         },
         error: (error) => {
           console.error('Get article images error', error);
