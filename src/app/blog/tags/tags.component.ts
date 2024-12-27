@@ -19,12 +19,11 @@ import { TagListItemComponent } from '../../admin/tags-manager/tag-list-item/tag
 })
 export class TagsComponent implements OnInit {
   private tagService = inject(TagService);
-  private langSwitcherService = inject(LangSwitcherService);
+  langSwitcherService = inject(LangSwitcherService);
   onSelected = output<string>();
 
   tags = computed(() => this.tagService.tagsList());
   langList = signal(this.langSwitcherService.langList);
-  lang = this.langSwitcherService.lang();
 
   ngOnInit() {
     this.tagService.getTags();

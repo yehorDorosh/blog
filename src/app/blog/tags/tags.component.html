@@ -4,7 +4,7 @@
     [tag]="tag"
     [langList]="langList()"
     [isAdminMode]="false"
-    [lang]="lang"
+    [lang]="langSwitcherService.lang()"
     (onSelected)="onTagSelected($event)"
   />
   }
