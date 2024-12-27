@@ -81,3 +81,11 @@ windows
 ### Copy from server
 
 `scp root@194.37.80.72:/root/blog/logs/error.log ./`
+
+## UPD proxy server on PROD
+
+`scp src\proxy-server.mjs root@194.37.80.72:/root/blog/src/proxy-server.mjs`
+`node copy-proxy-server.js`
+`cp -r /root/blog/dist/* /root/blog/prod/`
+`pm2 restart ~/ecosystem.config.js --env production --update-env`
+`pm2 logs blog-site --lines 100`
