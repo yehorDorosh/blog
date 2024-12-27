@@ -43,7 +43,9 @@ export const getImage: RequestHandler = async (req, res) => {
   } catch (err) {
     const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     console.error(
-      `Error fetching image: ${req.params['id']}/${req.params['key']}`,
+      `${new Date().getDate()}-${new Date().getMonth()} Error fetching image: ${
+        req.params['id']
+      }/${req.params['key']}`,
       clientIp
     );
     console.error(err);

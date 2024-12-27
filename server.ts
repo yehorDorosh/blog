@@ -38,7 +38,7 @@ export function app(): express.Express {
   }
 
   server.use((req, res, next) => {
-    if (req.hostname.startsWith('www.')) {
+    if (req.hostname?.startsWith('www.')) {
       const newUrl = `https://${req.hostname.replace('www.', '')}${
         req.originalUrl
       }`;
@@ -114,7 +114,12 @@ export function app(): express.Express {
 
   server.use(
     (error: unknown, req: Request, res: Response, next: NextFunction) => {
-      console.log(error);
+      if (!req.url?.startsWith('/cgi-bin')) {
+        console.error(
+          `${new Date().getDate()}-${new Date().getMonth()} Server error: `,
+          error
+        );
+      }
       res.status(500).json(error);
     }
   );
