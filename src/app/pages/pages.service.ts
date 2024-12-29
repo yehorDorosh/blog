@@ -24,6 +24,11 @@ export class PagesService {
     let link: HTMLLinkElement = this.doc.createElement('link');
     link.setAttribute('rel', 'canonical');
     this.doc.head.appendChild(link);
-    link.setAttribute('href', `https://${host}${path}`);
+    console.log('path', path);
+    if (path === '/') {
+      link.setAttribute('href', `https://${host}${path}en`);
+    } else {
+      link.setAttribute('href', `https://${host}${path}`);
+    }
   }
 }
