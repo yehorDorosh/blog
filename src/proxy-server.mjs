@@ -21,14 +21,7 @@ function run() {
   });
   const ips = process.env['IP_BLACK_LIST']?.split(',') ?? [];
 
-  app.use('/uk', appUk());
-  app.use('/ru', appRu());
-  app.use('/en', appEn());
-  app.use('/', appEn());
-
   if (process.env.NODE_ENV === 'production') {
-    app.use(IpFilter(ips, { log: false }));
-    app.use(limiter);
     app.use(
       helmet({
         contentSecurityPolicy: {
@@ -38,7 +31,16 @@ function run() {
         },
       })
     );
+    app.use(IpFilter(ips, { log: false }));
+    app.use(limiter);
+  }
 
+  app.use('/uk', appUk());
+  app.use('/ru', appRu());
+  app.use('/en', appEn());
+  app.use('/', appEn());
+
+  if (process.env.NODE_ENV === 'production') {
     const privateKey = fs.readFileSync('/root/blog/server/security/private.key', 'utf8');
     const certificate = fs.readFileSync('/root/blog/server/security/certificate.crt', 'utf8');
     const ca = fs.readFileSync('/root/blog/server/security/ca_bundle.crt', 'utf8');
