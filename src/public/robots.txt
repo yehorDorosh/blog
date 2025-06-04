@@ -2,7 +2,6 @@ User-agent: *
 Disallow: */user/*
 Disallow: */admin/*
 Disallow: */node/*
-Disallow: /api/image/
 Allow: /
 
 Sitemap: https://waves-and-mountains.blog/sitemap.xml
