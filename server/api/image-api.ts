@@ -1,7 +1,6 @@
 import { Readable } from 'stream';
 import {
   GetObjectCommand,
-  S3Client,
   PutObjectCommand,
   ListObjectsV2Command,
   DeleteObjectCommand,
@@ -10,16 +9,7 @@ import {
 import { environment } from '../../src/environments/environment.js';
 import { RequestHandler } from 'express';
 import fs from 'fs';
-
-// Cloudflare R2 Storage
-const s3 = new S3Client({
-  region: 'auto',
-  credentials: {
-    accessKeyId: environment.r2.accessKeyId,
-    secretAccessKey: environment.r2.secretAccessKey,
-  },
-  endpoint: environment.r2.endpoint,
-});
+import s3 from './s3-client'; // Cloudflare R2 Storage
 
 export const getImage: RequestHandler = async (req, res) => {
   const command = new GetObjectCommand({
