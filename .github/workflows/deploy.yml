@@ -31,12 +31,16 @@ jobs:
             cd /root/blog || { echo 'Failed to change directory'; exit 1; }
 
             # Обновить код с GitHub
+            # reset --hard вместо pull: на сервере отслеживаемые файлы не правятся вручную,
+            # а локальные изменения (например, package-lock.json) не должны ломать деплой.
+            # Неотслеживаемые и игнорируемые файлы (logs, uploads, сертификаты) не затрагиваются.
             echo "Pulling latest code..."
-            git pull origin master || { echo 'git pull failed'; exit 1; }
+            git fetch origin master || { echo 'git fetch failed'; exit 1; }
+            git reset --hard origin/master || { echo 'git reset failed'; exit 1; }
 
-            # Установить зависимости
+            # Установить зависимости строго по package-lock.json (npm ci его не изменяет)
             echo "Installing dependencies..."
-            npm install || { echo 'npm install failed'; exit 1; }
+            npm ci || { echo 'npm ci failed'; exit 1; }
 
             # Собрать приложение
             echo "Building the application..."
