@@ -19,12 +19,7 @@ function run() {
     standardHeaders: 'draft-7',
     legacyHeaders: false,
   });
-  const ips = process.env['IP_BLACK_LIST']?.split(',') ?? [];
-
-  app.use('/uk', appUk());
-  app.use('/ru', appRu());
-  app.use('/en', appEn());
-  app.use('/', appEn());
+  const ips = process.env['IP_BLACK_LIST']?.split(',').map((ip) => ip.trim()).filter(Boolean) ?? [];
 
   if (process.env.NODE_ENV === 'production') {
     app.use(
@@ -36,7 +31,13 @@ function run() {
         },
       })
     );
-    app.use(IpFilter(ips, { log: false }));
+    app.use(
+      IpFilter(ips, {
+        log: false,
+        // Node reports IPv4 clients as ::ffff:x.x.x.x, which never matches plain IPv4 entries
+        detectIp: (req) => req.socket.remoteAddress?.replace(/^::ffff:/, '') ?? '',
+      })
+    );
     app.use(limiter);
 
     const privateKey = fs.readFileSync('/root/blog/server/security/private.key', 'utf8');
@@ -63,6 +64,11 @@ function run() {
       console.log(`Node Express server listening on http://localhost:${port}`);
     });
   }
+
+  app.use('/uk', appUk());
+  app.use('/ru', appRu());
+  app.use('/en', appEn());
+  app.use('/', appEn());
 }
 
 run();
