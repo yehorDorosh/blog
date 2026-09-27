@@ -27,7 +27,7 @@ function run() {
       helmet({
         contentSecurityPolicy: {
           directives: {
-            'script-src': ["'self'", "'unsafe-inline'"],
+            'script-src': ["'self'", "'unsafe-inline'", 'https://static.cloudflareinsights.com'],
             // Angular SSR loads styles via inline onload handlers
             'script-src-attr': ["'unsafe-inline'"],
             'connect-src': [
@@ -36,6 +36,8 @@ function run() {
               'wss://*.firebasedatabase.app',
               'https://identitytoolkit.googleapis.com',
               'https://securetoken.googleapis.com',
+              // Cloudflare Web Analytics beacon endpoint
+              'https://cloudflareinsights.com',
             ],
             'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
             'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
