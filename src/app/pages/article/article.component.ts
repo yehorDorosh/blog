@@ -21,6 +21,9 @@ import metaTranslations from '../../../locale/meta';
 import { RouterLink } from '@angular/router';
 import { TableOfContentComponent } from '../../blog/table-of-content/table-of-content.component';
 import { PagesService } from '../pages.service';
+import { CookieConsentService } from '../../cookie-consent/cookie-consent.service';
+
+const IFRAME_RE = /<iframe\b[^>]*>[\s\S]*?<\/iframe>/gi;
 
 @Component({
   selector: 'app-article',
@@ -44,6 +47,7 @@ export class ArticleComponent implements OnInit {
   private title = inject(Title);
   private pageService = inject(PagesService);
   private platformId = inject(PLATFORM_ID);
+  private cookieConsent = inject(CookieConsentService);
 
   paramArticleId = input.required<string>();
 
@@ -111,9 +115,23 @@ export class ArticleComponent implements OnInit {
 
   articleContent = computed<string>(() => {
     if (!this.article()) return '';
-    const content = this.article()!.content;
-    return content[this.lang()];
+    const content = this.article()!.content[this.lang()] ?? '';
+    if (this.cookieConsent.mediaAllowed()) return content;
+
+    // third-party embeds set cookies, so they stay blocked until the visitor consents
+    const t = this.cookieConsent.texts;
+    return content.replace(
+      IFRAME_RE,
+      `<div class="consent-placeholder"><p>${t.placeholder}</p>` +
+        `<button type="button" class="btn btn--primary" data-consent-accept>${t.placeholderBtn}</button></div>`
+    );
   });
+
+  onContentClick(event: MouseEvent) {
+    if ((event.target as HTMLElement).closest('[data-consent-accept]')) {
+      this.cookieConsent.acceptMedia();
+    }
+  }
 
   articleTitle = computed<string>(() => {
     if (!this.article()) return '';

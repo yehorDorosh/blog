@@ -42,6 +42,7 @@
     <div
       class="article__body post"
       [innerHTML]="articleContent() | sanitizeHtml"
+      (click)="onContentClick($event)"
     ></div>
     }
   </article>

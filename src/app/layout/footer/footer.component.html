@@ -4,5 +4,8 @@
       <span i18n>Contacts</span>:
       <a href="mailto:yehor.dorosh@ukr.net">yehor.dorosh&#64;ukr.net</a>
     </p>
+    <button type="button" class="cookie-settings" (click)="cookieConsent.showPreferences()">
+      {{ cookieConsent.texts.settingsLink }}
+    </button>
   </div>
 </footer>

@@ -7,6 +7,38 @@
 @import "./styles/layout.scss";
 @import "./styles/form.scss";
 @import "@splidejs/splide/css";
+@import "vanilla-cookieconsent/dist/cookieconsent";
+
+#cc-main {
+  --cc-font-family: "Ysabeau", "Roboto", sans-serif;
+  --cc-btn-primary-bg: var(--primary);
+  --cc-btn-primary-border-color: var(--primary);
+  --cc-btn-primary-hover-bg: #0062cc;
+  --cc-btn-primary-hover-border-color: #0062cc;
+  --cc-toggle-on-bg: var(--primary);
+}
+
+// replaces third-party iframes in articles until the visitor consents
+.consent-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  margin-inline: auto;
+  padding: 2rem;
+  box-sizing: border-box;
+  background-color: var(--dark);
+  color: var(--white);
+  text-align: center;
+  font-size: 1.6rem;
+
+  & p {
+    margin: 0;
+  }
+}
 
 body {
   font-family: "Ysabeau", "Roboto", sans-serif;

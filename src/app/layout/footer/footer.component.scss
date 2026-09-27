@@ -6,4 +6,15 @@ footer {
   & a {
     color: var(--primary);
   }
+
+  & .cookie-settings {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--light);
+    font: inherit;
+    font-size: 1.4rem;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
