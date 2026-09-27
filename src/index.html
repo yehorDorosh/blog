@@ -13,8 +13,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Ysabeau:ital,wght@0,1..1000;1,1..1000&display=swap"
     rel="stylesheet" />
   <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
-    data-cf-beacon='{"token": "2d868d8bdd724cf1a78b93a803baceb5"}'></script>
+  <script>
+    if (!['localhost', '127.0.0.1'].includes(location.hostname)) {
+      const s = document.createElement('script');
+      s.defer = true;
+      s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+      s.dataset.cfBeacon = '{"token": "2d868d8bdd724cf1a78b93a803baceb5"}';
+      document.head.appendChild(s);
+    }
+  </script>
   <!-- End Cloudflare Web Analytics -->
 </head>
 
