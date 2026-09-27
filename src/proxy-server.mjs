@@ -27,6 +27,20 @@ function run() {
         contentSecurityPolicy: {
           directives: {
             'script-src': ["'self'", "'unsafe-inline'"],
+            // Angular SSR loads styles via inline onload handlers
+            'script-src-attr': ["'unsafe-inline'"],
+            'connect-src': [
+              "'self'",
+              'https://*.firebasedatabase.app',
+              'wss://*.firebasedatabase.app',
+              'https://identitytoolkit.googleapis.com',
+              'https://securetoken.googleapis.com',
+            ],
+            'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+            'font-src': ["'self'", 'https://fonts.gstatic.com', 'data:'],
+            'img-src': ["'self'", 'data:', 'blob:', 'https:'],
+            // embeds (YouTube, Google Maps) inside article content
+            'frame-src': ["'self'", 'https://www.youtube.com', 'https://www.youtube-nocookie.com', 'https://www.google.com'],
           },
         },
       })
