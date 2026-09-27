@@ -12,6 +12,7 @@ import { app as appUk } from './server/uk/server.mjs';
 function run() {
   const port = process.env.PORT || 4000;
   const app = express();
+  app.disable('x-powered-by');
 
   const limiter = rateLimit({
     windowMs: +(process.env['RATE_LIMIT_WINDOW'] || 10) * 60 * 1000,

@@ -16,6 +16,7 @@ import morgan from 'morgan';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
+  server.disable('x-powered-by');
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const lang = basename(serverDistFolder);
   const langPath = `/${lang}/`;
