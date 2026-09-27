@@ -101,7 +101,7 @@
 .article {
   @include desk {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     grid-template-rows: auto auto auto;
     gap: 0 1rem;
   }
@@ -184,11 +184,15 @@
   table {
     border-collapse: collapse;
     border: 1px solid var(--light);
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
 
     & td,
     & th {
       padding: 8px;
       border: 1px solid var(--light);
+      overflow-wrap: break-word;
     }
 
     & p {
