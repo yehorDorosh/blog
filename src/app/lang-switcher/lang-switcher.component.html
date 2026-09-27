@@ -1,6 +1,24 @@
 <div class="lang-switcher">
-  <p class="lang-switcher__current" (click)="toggleSwitcherHandler()">
+  <p
+    class="lang-switcher__current"
+    [class.open]="openSwitcher()"
+    (click)="toggleSwitcherHandler()"
+  >
     {{ langSwitcherService.lang() }}
+    <svg
+      class="lang-switcher__arrow"
+      viewBox="0 0 12 8"
+      aria-hidden="true"
+    >
+      <path
+        d="M1 1.5l5 5 5-5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
   </p>
   <ul class="lang-switcher__list" [class.open]="openSwitcher()">
     @for (lang of providedLangs() ?? langSwitcherService.langList; track lang) {

@@ -16,10 +16,25 @@
     transition: color 0.3s;
     text-align: center;
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 
     &:hover {
       color: var(--primary);
     }
+
+    &.open .lang-switcher__arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__arrow {
+    width: 1.2rem;
+    height: 0.8rem;
+    flex-shrink: 0;
+    transition: transform 0.3s;
   }
 
   &__list {
