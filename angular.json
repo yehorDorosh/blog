@@ -46,6 +46,11 @@
                 "glob": "**/*",
                 "input": "src/public",
                 "output": "."
+              },
+              {
+                "glob": "jodit.min.css",
+                "input": "node_modules/jodit/es2021",
+                "output": "jodit"
               }
             ],
             "styles": [

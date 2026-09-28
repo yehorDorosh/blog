@@ -43,31 +43,39 @@ export const getImage: RequestHandler = async (req, res) => {
   }
 };
 
-export const uploadImage: RequestHandler = async (req, res, next) => {
+export const uploadImage: RequestHandler = async (req, res) => {
   const articleId = req.query['id'] as string;
+  const file = req.file;
 
-  if (!req.file || !articleId) {
+  if (!file) {
     return res.status(422).send('No file uploaded.');
   }
 
-  const fileContent = fs.readFileSync(req.file.path);
+  // Multer's temp file must go away whatever happens with the upload
+  const removeTempFile = () =>
+    fs.unlink(file.path, (err) => {
+      if (err) console.error('Error removing temp file:', err);
+    });
 
-  const command = new PutObjectCommand({
-    Bucket: environment.r2.bucket,
-    Key: `${articleId}/${req.file.originalname}`,
-    Body: fileContent,
-    ContentType: req.file.mimetype,
-  });
+  if (!articleId) {
+    removeTempFile();
+    return res.status(422).send('No file uploaded.');
+  }
 
   try {
-    const response = await s3.send(command);
-    fs.unlink(req.file.path, (err) => {
-      next(err);
+    const command = new PutObjectCommand({
+      Bucket: environment.r2.bucket,
+      Key: `${articleId}/${file.originalname}`,
+      Body: fs.readFileSync(file.path),
+      ContentType: file.mimetype,
     });
+    const response = await s3.send(command);
     return res.send(response);
   } catch (err) {
     console.error('Error uploading file:', err);
     return res.status(500).send('Error uploading file.');
+  } finally {
+    removeTempFile();
   }
 };
 

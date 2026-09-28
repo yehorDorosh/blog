@@ -21,7 +21,8 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname);
+    // Unique temp name so parallel uploads don't overwrite each other
+    cb(null, `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 1e9)}`);
   },
 });
 

@@ -169,12 +169,12 @@
 
   <div class="form-group form-group--column">
     <label class="label" for="content">Content</label>
-    <angular-editor
+    <app-html-editor
       name="content"
-      [placeholder]="'Enter text here...'"
       [(ngModel)]="contentField"
-      [config]="editorConfig"
+      [uploadImage]="uploadEditorImage"
+      (imageDeleted)="onEditorImageDeleted($event)"
       (ngModelChange)="onContentFieldChange()"
-    ></angular-editor>
+    ></app-html-editor>
   </div>
 </form>

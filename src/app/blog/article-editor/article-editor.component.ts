@@ -3,22 +3,18 @@ import { FormsModule } from '@angular/forms';
 import { ArticleService } from '../article.service';
 import { BlogArticle, TranslatableContent } from '../blog.model';
 import { HttpClientModule } from '@angular/common/http';
-import {
-  AngularEditorModule,
-  AngularEditorConfig,
-} from '@kolkov/angular-editor';
-import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { LangSwitcherService } from '../../lang-switcher/lang-switcher.service';
 import { LangList } from '../../lang-switcher/lang-switcher.model';
 import { CommonModule } from '@angular/common';
 import { TagService } from '../../admin/tags-manager/tag.service';
 import translit from '../../utils/translit';
+import { HtmlEditorComponent } from '../../ui/html-editor/html-editor.component';
 
 @Component({
   selector: 'app-article-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, AngularEditorModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, HtmlEditorComponent],
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
 })
@@ -83,55 +79,6 @@ export class ArticleEditorComponent implements OnInit {
     });
   });
 
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '70vh',
-    minHeight: '0',
-    maxHeight: 'auto',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder: 'Enter text here...',
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    defaultFontSize: '',
-    fonts: [
-      { class: 'arial', name: 'Arial' },
-      { class: 'times-new-roman', name: 'Times New Roman' },
-      { class: 'calibri', name: 'Calibri' },
-      { class: 'comic-sans-ms', name: 'Comic Sans MS' },
-    ],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText',
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h1',
-      },
-      {
-        name: 'col-2',
-        class: 'col-2',
-        tag: 'p',
-      },
-    ],
-    uploadUrl: 'v1/image',
-    upload: this.uploadEditorImage.bind(this),
-    uploadWithCredentials: false,
-    sanitize: false,
-    toolbarPosition: 'top',
-    toolbarHiddenButtons: [['bold', 'italic'], ['fontSize']],
-  };
-
   ngOnInit() {
     const editorLang = this.langSwitcherService.editorLang();
     this.tagService.getTags(() => {
@@ -168,10 +115,33 @@ export class ArticleEditorComponent implements OnInit {
     }
   }
 
-  uploadEditorImage(file: File) {
+  uploadEditorImage = (file: File) => {
     const id = this.articleService.articleId();
-    if (!id) return throwError(() => new Error('Article ID not found'));
-    return this.articleService.uploadImageEditor(id, file);
+    if (!id) return Promise.reject(new Error('Article ID not found'));
+    return this.articleService.uploadImage(id, file);
+  };
+
+  onEditorImageDeleted(src: string) {
+    const id = this.articleService.articleId();
+    const url = new URL(src, window.location.origin);
+    const path = decodeURI(url.pathname);
+    if (
+      !id ||
+      url.origin !== window.location.origin ||
+      !path.startsWith(`/api/image/${id}/`)
+    )
+      return;
+
+    // Keep the file if another language version or the page hero still uses it
+    const editorLang = this.langSwitcherService.editorLang();
+    const usedElsewhere =
+      this.pageHeroPath === path ||
+      this.langSwitcherService.langList.some(
+        (lang) => lang !== editorLang && this.content[lang]?.includes(path)
+      );
+    if (usedElsewhere) return;
+
+    this.articleService.deleteImage(path, id);
   }
 
   onTitleFieldChange() {
@@ -327,9 +297,6 @@ export class ArticleEditorComponent implements OnInit {
       if (image.src.includes(window.location.hostname)) {
         const url = new URL(image.src);
         image.src = url.pathname;
-        image.setAttribute('width', 'auto');
-        image.setAttribute('height', '500px');
-        image.removeAttribute('style');
       }
     });
 

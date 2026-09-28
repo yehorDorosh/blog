@@ -1,20 +1,17 @@
 import { Injectable, inject, signal, DestroyRef, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserService } from '../user/user.service';
 import {
   type FireBaseResponse,
   type BlogArticle,
   type BlogArticleResponse,
-  isR2Response,
   type TranslatableContent,
   type TagId,
   type TranslatableCheckbox,
 } from './blog.model';
-import { map, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { UploadResponse } from '@kolkov/angular-editor';
-import { HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -144,47 +141,6 @@ export class ArticleService implements OnInit {
     });
 
     return promise;
-  }
-
-  uploadImageEditor(articleId: string, file: File) {
-    const formData = new FormData();
-    formData.append('image', file);
-
-    const headers = new HttpHeaders().set(
-      'Authorization',
-      `Bearer ${this.userService.getToken}`
-    );
-
-    const observer = this.httpClient
-      .post<HttpEvent<UploadResponse>>(
-        `/api/upload-image?id=${articleId}`,
-        formData,
-        { headers }
-      )
-      .pipe(
-        map((response) => {
-          if (
-            isR2Response(response) &&
-            response.$metadata.httpStatusCode === 200
-          ) {
-            const imageUrl = `/api/image/${articleId}/${file.name}`;
-            const modifiedResponse = new HttpResponse({
-              body: {
-                imageUrl,
-              },
-            });
-            // this.editorImages.push(imageUrl);
-            if (!environment.production)
-              console.log('Image from editor uploaded.');
-            return modifiedResponse;
-          } else {
-            console.error('Upload image error', response);
-            return response;
-          }
-        })
-      );
-
-    return observer;
   }
 
   saveArticle(articleData: {

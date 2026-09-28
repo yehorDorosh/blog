@@ -48,9 +48,7 @@ body {
   background-color: var(--white);
 }
 
-.angular-editor-textarea {
-  & img {
-    max-width: 25%;
-    height: auto;
-  }
+.jodit-wysiwyg img {
+  max-width: 100%;
+  height: auto;
 }
