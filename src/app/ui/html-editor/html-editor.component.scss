@@ -2,3 +2,12 @@
   display: block;
   width: 100%;
 }
+
+// Jodit's source textarea "autosize" collapses it on every click, which resets
+// the container's scroll to the top. Pin it to the container and let it scroll itself.
+:host ::ng-deep .jodit-source__mirror {
+  position: absolute;
+  inset: 0;
+  height: 100% !important;
+}
+

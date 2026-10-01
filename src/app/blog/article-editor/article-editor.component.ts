@@ -9,6 +9,7 @@ import { LangList } from '../../lang-switcher/lang-switcher.model';
 import { CommonModule } from '@angular/common';
 import { TagService } from '../../admin/tags-manager/tag.service';
 import translit from '../../utils/translit';
+import { toDateInputValue } from '../../utils/date';
 import { HtmlEditorComponent } from '../../ui/html-editor/html-editor.component';
 
 @Component({
@@ -52,7 +53,7 @@ export class ArticleEditorComponent implements OnInit {
   };
   publishedField = false;
   author = 'admin';
-  date: string = new Date().toISOString().split('T')[0];
+  date: string = toDateInputValue(new Date());
   url = '';
   autoUrl = true;
   isUrlNotunique = false;
@@ -102,7 +103,7 @@ export class ArticleEditorComponent implements OnInit {
       this.published = this.article()!.published;
       this.publishedField = this.article()!.published[editorLang];
       this.author = this.article()!.author;
-      this.date = new Date(this.article()!.date).toISOString().split('T')[0];
+      this.date = toDateInputValue(new Date(this.article()!.date));
       this.articleService.articleId.set(this.article()!.id!);
       this.articleService.editorImages = this.article()!.img.editorImages || [];
       this.url = this.article()!.url;
@@ -227,7 +228,8 @@ export class ArticleEditorComponent implements OnInit {
       pageHeroPath: this.pageHeroPath,
       published: this.published,
       author: this.author,
-      date: new Date(this.date),
+      // No "Z": parsed as local midnight, so the day doesn't shift by timezone
+      date: new Date(`${this.date}T00:00`),
       tags: this.tagsList()
         .filter((tag) => tag.selected)
         .map((tag) => tag.id),
