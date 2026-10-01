@@ -289,7 +289,7 @@ export class ArticleEditorComponent implements OnInit {
 
     links.forEach((link) => {
       if (link.hostname !== window.location.hostname) {
-        link.setAttribute('rel', 'nofollow noopener');
+        link.setAttribute('rel', 'noreferrer noopener');
       }
     });
 
