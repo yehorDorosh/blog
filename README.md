@@ -82,6 +82,34 @@ windows
 
 `scp root@194.37.80.72:/root/blog/logs/error.log ./`
 
+## Update IP blacklist on PROD
+
+Local source of truth: `IP_BLACK_LIST` line in `server\security\ecosystem.env_production.txt` (only the `env_production` fragment, not the whole config, so only that line is replaced on the server).
+
+### Copy the fragment to server
+
+`scp server\security\ecosystem.env_production.txt root@194.37.80.72:/root/ecosystem.env_production.txt`
+
+### On the server
+
+`ssh -i C:\Users\Egor\.ssh\id_rsa root@194.37.80.72`
+`cp ~/ecosystem.config.js ~/ecosystem.config.js.bak` - backup
+`LINE=$(grep "IP_BLACK_LIST:" ~/ecosystem.env_production.txt)`
+`awk -v line="$LINE" '/IP_BLACK_LIST:/{print line; next} {print}' ~/ecosystem.config.js > /tmp/ecosystem.config.js && mv /tmp/ecosystem.config.js ~/ecosystem.config.js`
+
+### Check
+
+`grep -o "IP_BLACK_LIST: '[^']*'" ~/ecosystem.config.js | tr ',' '\n' | wc -l` - number of entries, must match local
+`node -e "require('/root/ecosystem.config.js')"` - no output means the config is valid JS
+
+If something is wrong: `cp ~/ecosystem.config.js.bak ~/ecosystem.config.js`
+
+### Apply
+
+`pm2 restart ~/ecosystem.config.js --env production --update-env`
+`pm2 logs blog-site --lines 100`
+`rm ~/ecosystem.env_production.txt`
+
 ## UPD proxy server on PROD
 
 `scp src\proxy-server.mjs root@194.37.80.72:/root/blog/src/proxy-server.mjs`
